@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/kogito-editors-java/static/css/main.a3b38bc1.chunk.css",
-    "main.js": "/kogito-editors-java/static/js/main.af468500.chunk.js",
-    "main.js.map": "/kogito-editors-java/static/js/main.af468500.chunk.js.map",
+    "main.css": "/kogito-editors-java/static/css/main.a9ee81aa.chunk.css",
+    "main.js": "/kogito-editors-java/static/js/main.dde6e189.chunk.js",
+    "main.js.map": "/kogito-editors-java/static/js/main.dde6e189.chunk.js.map",
     "runtime-main.js": "/kogito-editors-java/static/js/runtime-main.40c8af77.js",
     "runtime-main.js.map": "/kogito-editors-java/static/js/runtime-main.40c8af77.js.map",
     "static/css/2.6658f764.chunk.css": "/kogito-editors-java/static/css/2.6658f764.chunk.css",
-    "static/js/2.1b10e744.chunk.js": "/kogito-editors-java/static/js/2.1b10e744.chunk.js",
-    "static/js/2.1b10e744.chunk.js.map": "/kogito-editors-java/static/js/2.1b10e744.chunk.js.map",
+    "static/js/2.25d012a8.chunk.js": "/kogito-editors-java/static/js/2.25d012a8.chunk.js",
+    "static/js/2.25d012a8.chunk.js.map": "/kogito-editors-java/static/js/2.25d012a8.chunk.js.map",
     "index.html": "/kogito-editors-java/index.html",
     "static/css/2.6658f764.chunk.css.map": "/kogito-editors-java/static/css/2.6658f764.chunk.css.map",
-    "static/css/main.a3b38bc1.chunk.css.map": "/kogito-editors-java/static/css/main.a3b38bc1.chunk.css.map",
-    "static/js/2.1b10e744.chunk.js.LICENSE.txt": "/kogito-editors-java/static/js/2.1b10e744.chunk.js.LICENSE.txt",
+    "static/css/main.a9ee81aa.chunk.css.map": "/kogito-editors-java/static/css/main.a9ee81aa.chunk.css.map",
+    "static/js/2.25d012a8.chunk.js.LICENSE.txt": "/kogito-editors-java/static/js/2.25d012a8.chunk.js.LICENSE.txt",
     "static/media/base-no-reset.css": "/kogito-editors-java/static/media/pficon.eae21d83.woff",
     "static/media/background-image.css": "/kogito-editors-java/static/media/pfbg_768@2x.eea28e73.jpg",
     "static/media/about-modal-box.css": "/kogito-editors-java/static/media/pfbg_992@2x.30e8d31f.jpg"
@@ -19,8 +19,8 @@
   "entrypoints": [
     "static/js/runtime-main.40c8af77.js",
     "static/css/2.6658f764.chunk.css",
-    "static/js/2.1b10e744.chunk.js",
-    "static/css/main.a3b38bc1.chunk.css",
-    "static/js/main.af468500.chunk.js"
+    "static/js/2.25d012a8.chunk.js",
+    "static/css/main.a9ee81aa.chunk.css",
+    "static/js/main.dde6e189.chunk.js"
   ]
 }
