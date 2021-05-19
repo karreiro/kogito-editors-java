@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/kogito-editors-java/static/css/main.a9ee81aa.chunk.css",
+    "main.css": "/kogito-editors-java/static/css/main.4f2b3645.chunk.css",
     "main.js": "/kogito-editors-java/static/js/main.dde6e189.chunk.js",
     "main.js.map": "/kogito-editors-java/static/js/main.dde6e189.chunk.js.map",
     "runtime-main.js": "/kogito-editors-java/static/js/runtime-main.40c8af77.js",
@@ -10,7 +10,7 @@
     "static/js/2.25d012a8.chunk.js.map": "/kogito-editors-java/static/js/2.25d012a8.chunk.js.map",
     "index.html": "/kogito-editors-java/index.html",
     "static/css/2.6658f764.chunk.css.map": "/kogito-editors-java/static/css/2.6658f764.chunk.css.map",
-    "static/css/main.a9ee81aa.chunk.css.map": "/kogito-editors-java/static/css/main.a9ee81aa.chunk.css.map",
+    "static/css/main.4f2b3645.chunk.css.map": "/kogito-editors-java/static/css/main.4f2b3645.chunk.css.map",
     "static/js/2.25d012a8.chunk.js.LICENSE.txt": "/kogito-editors-java/static/js/2.25d012a8.chunk.js.LICENSE.txt",
     "static/media/base-no-reset.css": "/kogito-editors-java/static/media/pficon.eae21d83.woff",
     "static/media/background-image.css": "/kogito-editors-java/static/media/pfbg_768@2x.eea28e73.jpg",
@@ -20,7 +20,7 @@
     "static/js/runtime-main.40c8af77.js",
     "static/css/2.6658f764.chunk.css",
     "static/js/2.25d012a8.chunk.js",
-    "static/css/main.a9ee81aa.chunk.css",
+    "static/css/main.4f2b3645.chunk.css",
     "static/js/main.dde6e189.chunk.js"
   ]
 }
