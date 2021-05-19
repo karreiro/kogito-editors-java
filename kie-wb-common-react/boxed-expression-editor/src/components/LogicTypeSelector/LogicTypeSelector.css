@@ -37,6 +37,6 @@
 }
 
 .expression-container .logic-type-selector.logic-type-selected {
-  cursor: cell;
+  cursor: default;
   padding: 0.5em;
 }
