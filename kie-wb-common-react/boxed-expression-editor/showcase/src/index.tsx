@@ -36,77 +36,25 @@ export const App: React.FunctionComponent = () => {
   //This definition comes directly from the decision node
   const selectedExpression: ExpressionProps = {
     uid: "id1",
-    logicType: "Context",
     name: "Expression Name",
     dataType: "<Undefined>",
-    contextEntries: [
+    logicType: "Relation",
+    isHeadless: false,
+    columns: [
       {
-        entryInfo: {
-          name: "ContextEntry-1",
-          dataType: "<Undefined>",
-        },
-        entryExpression: {
-          uid: "id1",
-          logicType: "Literal expression",
-        },
-        editInfoPopoverLabel: "Edit Context Entry",
+        name: "column-1",
+        dataType: "<Undefined>",
       },
       {
-        entryInfo: {
-          name: "ContextEntry-2",
-          dataType: "<Undefined>",
-        },
-        entryExpression: {
-          uid: "id3",
-          isHeadless: true,
-          logicType: "Relation",
-          columns: [
-            {
-              name: "column-1",
-              dataType: "<Undefined>",
-              width: 916,
-            },
-          ],
-          rows: [[""]],
-        },
-        editInfoPopoverLabel: "Edit Context Entry",
+        name: "column-2",
+        dataType: "<Undefined>",
       },
       {
-        entryInfo: {
-          name: "ContextEntry-3",
-          dataType: "<Undefined>",
-        },
-        entryExpression: {
-          uid: "id4",
-          logicType: "Function",
-          functionKind: "JAVA",
-          formalParameters: [],
-          parametersWidth: 918,
-          class: "",
-          method: "",
-        },
-        editInfoPopoverLabel: "Edit Context Entry",
+        name: "column-3",
+        dataType: "<Undefined>",
       },
     ],
-    result: {
-      uid: "id2",
-      logicType: "Relation",
-      columns: [
-        {
-          name: "column-1",
-          dataType: "<Undefined>",
-          width: 292,
-        },
-        {
-          name: "column-2",
-          dataType: "<Undefined>",
-          width: 622,
-        },
-      ],
-      rows: [["", ""]],
-    },
-    entryInfoWidth: 410,
-    entryExpressionWidth: 994,
+    rows: [["eee", "eee", "eeeee"]],
   } as ExpressionProps;
 
   const [updatedExpression, setUpdatedExpression] = useState(selectedExpression);

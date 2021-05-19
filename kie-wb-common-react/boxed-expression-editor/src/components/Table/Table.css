@@ -97,7 +97,7 @@
 }
 
 .expression-container .table-component table tbody td {
-  border-style: ridge;
+  border-style: solid;
   padding: 1.1em 0;
   text-align: center;
   overflow: hidden;
