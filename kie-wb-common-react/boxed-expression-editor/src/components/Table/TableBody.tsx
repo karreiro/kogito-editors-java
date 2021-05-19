@@ -65,11 +65,15 @@ export const TableBody: React.FunctionComponent<TableBodyProps> = ({
           onColumnsUpdate?.(tableInstance.columns);
         }
       };
+      console.log(`>> ${cell.value} <<`, cell.getCellProps());
       const cellTemplate =
         cellIndex === 0 ? (
           <>{rowIndex + 1}</>
         ) : (
           <Resizer width={getWidth()} onHorizontalResizeStop={onResize}>
+            {/* <div style={{ backgroundColor: "red", border: "1px solid green" }} className="cell-content">
+              {cell.render("Cell")}
+            </div> */}
             <>{cell.render("Cell")}</>
           </Resizer>
         );

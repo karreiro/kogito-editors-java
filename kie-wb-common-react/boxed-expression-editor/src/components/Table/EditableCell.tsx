@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import "./EditableCell.css";
 import * as React from "react";
 import { ChangeEvent, useCallback, useEffect } from "react";
 import { CellProps } from "../../api";
@@ -45,5 +46,15 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
     onCellUpdate(index, id, value);
   }, [id, index, value, onCellUpdate]);
 
-  return <textarea value={value || ""} onChange={onChange} onBlur={onBlur} />;
+  return (
+    <div className="editable-cell">
+      <span>{value}</span>
+    </div>
+    // <textarea
+    //   style={{ backgroundColor: "red", border: "1px solid blue" }}
+    //   value={value || ""}
+    //   onChange={onChange}
+    //   onBlur={onBlur}
+    // />
+  );
 };
