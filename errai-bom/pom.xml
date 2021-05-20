@@ -5,7 +5,7 @@
 
   <groupId>org.kie.kogito</groupId>
   <artifactId>errai-bom</artifactId>
-  <version>8.1.1</version>
+  <version>8.1.2-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>JBoss Errai BOM</name>
 
