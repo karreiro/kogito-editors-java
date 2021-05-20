@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import "../../__mocks__/ReactWithSupervisor";
 import { render } from "@testing-library/react";
 import { usingTestingBoxedExpressionI18nContext } from "../test-utils";
 import { LogicType } from "../../../api";
@@ -62,22 +63,4 @@ describe("ListExpression tests", () => {
       )
     ).toBeEmpty();
   });
-});
-
-jest.mock("react", () => {
-  const actualReact = jest.requireActual("react");
-
-  function useContext<T>(context: React.Context<T>) {
-    return {
-      ...actualReact.useContext(context),
-      ...{
-        setSupervisorHash: (hash: number) => hash,
-      },
-    };
-  }
-
-  return {
-    ...actualReact,
-    useContext: useContext,
-  };
 });

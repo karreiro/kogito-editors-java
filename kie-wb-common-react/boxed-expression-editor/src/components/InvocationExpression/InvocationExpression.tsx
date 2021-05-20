@@ -108,6 +108,10 @@ export const InvocationExpression: React.FunctionComponent<InvocationProps> = ({
     uid,
   ]);
 
+  const onBlurCallback = useCallback((event) => {
+    setFunctionName(event.target.value);
+  }, []);
+
   const headerCellElement = (
     <div className="function-definition-container">
       <input
@@ -115,7 +119,7 @@ export const InvocationExpression: React.FunctionComponent<InvocationProps> = ({
         type="text"
         placeholder={i18n.enterFunction}
         defaultValue={functionName}
-        onBlur={(e) => setFunctionName(e.target.value)}
+        onBlur={onBlurCallback}
       />
     </div>
   );

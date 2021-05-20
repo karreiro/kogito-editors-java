@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import "../../__mocks__/ReactWithSupervisor";
 import { DataType, LogicType } from "../../../api";
 import { fireEvent, render } from "@testing-library/react";
 import { flushPromises, usingTestingBoxedExpressionI18nContext } from "../test-utils";
@@ -121,21 +122,3 @@ const triggerContextMenu = async (container: HTMLElement, selector: string) => {
 };
 
 jest.useFakeTimers();
-
-jest.mock("react", () => {
-  const actualReact = jest.requireActual("react");
-
-  function useContext<T>(context: React.Context<T>) {
-    return {
-      ...actualReact.useContext(context),
-      ...{
-        setSupervisorHash: (hash: number) => hash,
-      },
-    };
-  }
-
-  return {
-    ...actualReact,
-    useContext: useContext,
-  };
-});

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import "../../__mocks__/ReactWithSupervisor";
 import { render } from "@testing-library/react";
 import {
   checkEntryContent,
@@ -109,21 +110,3 @@ jest.mock("../../../api", () => ({
   ...(jest.requireActual("../../../api") as Record<string, unknown>),
   getHandlerConfiguration: jest.fn(),
 }));
-
-jest.mock("react", () => {
-  const actualReact = jest.requireActual("react");
-
-  function useContext<T>(context: React.Context<T>) {
-    return {
-      ...actualReact.useContext(context),
-      ...{
-        setSupervisorHash: (hash: number) => hash,
-      },
-    };
-  }
-
-  return {
-    ...actualReact,
-    useContext: useContext,
-  };
-});

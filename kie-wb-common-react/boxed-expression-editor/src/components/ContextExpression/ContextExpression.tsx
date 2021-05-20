@@ -56,6 +56,7 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
   entryInfoWidth = DEFAULT_ENTRY_INFO_MIN_WIDTH,
   entryExpressionWidth = DEFAULT_ENTRY_EXPRESSION_MIN_WIDTH,
   isHeadless = false,
+  noHandlerMenu = false,
   onUpdatingRecursiveExpression,
 }) => {
   const { i18n } = useBoxedExpressionEditorI18n();
@@ -167,7 +168,7 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
         rows={rows as DataRecord[]}
         onRowAdding={onRowAdding}
         onRowsUpdate={setRows}
-        handlerConfiguration={getHandlerConfiguration(i18n, i18n.contextEntry)}
+        handlerConfiguration={noHandlerMenu ? undefined : getHandlerConfiguration(i18n, i18n.contextEntry)}
         getRowKey={useCallback(getEntryKey, [])}
         resetRowCustomFunction={useCallback(resetEntry, [])}
       >

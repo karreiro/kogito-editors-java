@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import "../../__mocks__/ReactWithSupervisor";
 import { fireEvent, render } from "@testing-library/react";
 import {
   activateSelector,
@@ -378,21 +379,3 @@ describe("FunctionExpression tests", () => {
 });
 
 jest.useFakeTimers();
-
-jest.mock("react", () => {
-  const actualReact = jest.requireActual("react");
-
-  function useContext<T>(context: React.Context<T>) {
-    return {
-      ...actualReact.useContext(context),
-      ...{
-        setSupervisorHash: (hash: number) => hash,
-      },
-    };
-  }
-
-  return {
-    ...actualReact,
-    useContext: useContext,
-  };
-});

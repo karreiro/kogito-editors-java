@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import "../../__mocks__/ReactWithSupervisor";
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import * as React from "react";
 import { Resizer } from "src/components/Resizer";
@@ -76,15 +77,3 @@ function renderTable() {
     </>
   ).container;
 }
-
-jest.mock("react", () => {
-  const actualReact = jest.requireActual("react");
-  return {
-    ...actualReact,
-    useContext: () => {
-      return {
-        setSupervisorHash: (hash: number) => hash,
-      };
-    },
-  };
-});

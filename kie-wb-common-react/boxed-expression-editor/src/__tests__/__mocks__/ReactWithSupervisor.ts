@@ -14,23 +14,20 @@
  * limitations under the License.
  */
 
-import "./Resizer.css";
-import * as React from "react";
-import { applyDOMSupervisor } from "./dom";
-import { useEffect, useContext } from "react";
-import { BoxedExpressionGlobalContext } from "../../context";
+jest.mock("react", () => {
+  const actualReact = jest.requireActual("react");
 
-export interface ResizerSupervisorProps {
-  children?: React.ReactElement;
-}
+  function useContext<T>(context: React.Context<T>) {
+    return {
+      ...actualReact.useContext(context),
+      ...{
+        setSupervisorHash: (hash: number) => hash,
+      },
+    };
+  }
 
-export const ResizerSupervisor: React.FunctionComponent<ResizerSupervisorProps> = ({ children }) => {
-  const { supervisorHash } = useContext(BoxedExpressionGlobalContext);
-
-  useEffect(() => {
-    const id = setTimeout(applyDOMSupervisor, 0);
-    return () => clearTimeout(id);
-  }, [supervisorHash]);
-
-  return <>{children}</>;
-};
+  return {
+    ...actualReact,
+    useContext: useContext,
+  };
+});

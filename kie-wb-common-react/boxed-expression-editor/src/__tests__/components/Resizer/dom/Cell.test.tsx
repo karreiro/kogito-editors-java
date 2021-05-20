@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-import { Cell, CELL_CSS_SELCTOR } from "src/components/Resizer/dom";
+import "../../../__mocks__/ReactWithSupervisor";
+import { Cell, CELL_CSS_SELECTOR } from "src/components/Resizer/dom";
 import { Resizer } from "src/components/Resizer";
 import { render } from "@testing-library/react";
 import { usingTestingBoxedExpressionI18nContext } from "../../test-utils";
@@ -67,7 +68,7 @@ describe("Cell", () => {
       act(() => {
         createContext();
 
-        const elements = container.querySelectorAll(CELL_CSS_SELCTOR);
+        const elements = container.querySelectorAll(CELL_CSS_SELECTOR);
         const child1 = new Cell(elements.item(1) as HTMLElement, [], 1);
         const child2 = new Cell(elements.item(2) as HTMLElement, [], 1);
 
@@ -86,7 +87,7 @@ describe("Cell", () => {
       act(() => {
         createContext();
 
-        const elements = container.querySelectorAll(CELL_CSS_SELCTOR);
+        const elements = container.querySelectorAll(CELL_CSS_SELECTOR);
         const child1 = new Cell(elements.item(0) as HTMLElement, [], 1);
         const child2 = new Cell(elements.item(1) as HTMLElement, [], 1);
 
@@ -139,7 +140,7 @@ function renderLiteralAtRegularColumn() {
       </>
     ).wrapper
   ).container;
-  element = container.querySelector(CELL_CSS_SELCTOR) as HTMLElement;
+  element = container.querySelector(CELL_CSS_SELECTOR) as HTMLElement;
   cell = new Cell(element, [], 0);
 }
 
@@ -161,13 +162,13 @@ function renderLiteralAtLastColumn() {
       </>
     ).wrapper
   ).container;
-  element = container.querySelector(CELL_CSS_SELCTOR) as HTMLElement;
+  element = container.querySelector(CELL_CSS_SELECTOR) as HTMLElement;
   cell = new Cell(element, [], 0);
 }
 
 function createLiteral() {
   container = render(<Resizer width={250}></Resizer>).container;
-  element = container.querySelector(CELL_CSS_SELCTOR) as HTMLElement;
+  element = container.querySelector(CELL_CSS_SELECTOR) as HTMLElement;
   cell = new Cell(element, [], 0);
 }
 
@@ -239,20 +240,4 @@ function createContext() {
 
 jest.mock("uuid", () => {
   return { v4: () => "0000-1111-2222-3333" };
-});
-
-jest.mock("react", () => {
-  const actualReact = jest.requireActual("react");
-  return {
-    ...actualReact,
-    useContext: () => {
-      return {
-        setSupervisorHash: (hash: number) => hash,
-        i18n: {
-          editContextEntry: "",
-          rowOperations: {},
-        },
-      };
-    },
-  };
 });
