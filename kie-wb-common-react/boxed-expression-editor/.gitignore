@@ -7,3 +7,4 @@ stats.json
 .idea
 /coverage/
 react-app-env.d.ts
+/showcase/.eslintcache
