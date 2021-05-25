@@ -119,7 +119,7 @@ export const LiteralExpression: React.FunctionComponent<LiteralExpressionProps> 
       <EditableCell
         value={literalExpressionContent.current}
         row={{ index: 0 }}
-        column={{ id: "literal" }}
+        column={{ id: uid ?? "-" }}
         onCellUpdate={(_number, _columnId, value) => onContentChange(value)}
       />
     ),
