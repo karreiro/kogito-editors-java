@@ -1,6 +1,5 @@
 {
-  "homepage": "http://vpellegrino.github.io/kogito-editors-java",
-  "name": "boxed-expression-editor-showcase",
+  "name": "import-java-classes-showcase",
   "private": true,
   "scripts": {
     "start": "react-app-rewired start",
