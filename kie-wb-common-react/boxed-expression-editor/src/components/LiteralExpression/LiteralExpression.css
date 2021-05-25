@@ -28,6 +28,9 @@
 
 .expression-container .literal-expression {
   width: 100%;
+  color: var(--pf-c-table--cell--Color);
+  background-color: #ffffff;
+  font-style: normal;
 }
 
 .literal-expression .literal-expression-header .expression-info {
