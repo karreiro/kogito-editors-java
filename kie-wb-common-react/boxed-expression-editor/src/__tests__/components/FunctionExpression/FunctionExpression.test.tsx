@@ -30,6 +30,11 @@ import * as _ from "lodash";
 import { BoxedExpressionGlobalContext } from "../../../context";
 
 describe("FunctionExpression tests", () => {
+  const documentName = "document";
+  const model = "model";
+  const parametersFromModel: EntryInfo[] = [{ name: "p-1", dataType: DataType.Number }];
+  const modelsFromDocument = [{ model, parametersFromModel }];
+
   test("should show a table with two levels visible header, with one row and one column", () => {
     const { container } = render(
       usingTestingBoxedExpressionI18nContext(
@@ -245,22 +250,6 @@ describe("FunctionExpression tests", () => {
       checkFormalParameters(mockedBroadcastDefinition, []);
     });
 
-    function wrapComponentInContext(component: JSX.Element) {
-      return (
-        <BoxedExpressionGlobalContext.Provider
-          value={{
-            supervisorHash: "",
-            setSupervisorHash: jest.fn,
-            boxedExpressionEditorRef: { current: document.body as HTMLDivElement },
-            currentlyOpenedHandlerCallback: jest.fn,
-            setCurrentlyOpenedHandlerCallback: jest.fn,
-          }}
-        >
-          {component}
-        </BoxedExpressionGlobalContext.Provider>
-      );
-    }
-
     function checkFormalParameters(mockedBroadcastDefinition: jest.Mock, formalParameters: EntryInfo[]) {
       expect(mockedBroadcastDefinition).toHaveBeenCalledWith({
         dataType: DataType.Undefined,
@@ -383,23 +372,16 @@ describe("FunctionExpression tests", () => {
     test("should populate parameters list with parameters related to selected PMML model", async () => {
       const mockedBroadcastDefinition = jest.fn();
       mockBroadcastDefinition(mockedBroadcastDefinition);
-      const document = "document";
-      const model = "model";
-      const parametersFromModel: EntryInfo[] = [{ name: "p-1", dataType: DataType.Number }];
-      const modelsFromDocument = [{ model, parametersFromModel }];
 
       const { baseElement, container } = render(
         usingTestingBoxedExpressionI18nContext(
-          <FunctionExpression
-            logicType={LogicType.Function}
-            functionKind={FunctionKind.Pmml}
-            formalParameters={[]}
-            pmmlParams={[{ document, modelsFromDocument }]}
-          />
+          wrapComponentInContext(
+            <FunctionExpression logicType={LogicType.Function} functionKind={FunctionKind.Pmml} formalParameters={[]} />
+          )
         ).wrapper
       );
       await openPMMLLiteralExpressionSelector(container, 0);
-      await selectPMMLElement(baseElement, document);
+      await selectPMMLElement(baseElement, documentName);
       await openPMMLLiteralExpressionSelector(container, 1);
       await selectPMMLElement(baseElement, model);
 
@@ -410,6 +392,23 @@ describe("FunctionExpression tests", () => {
       );
     });
   });
+
+  function wrapComponentInContext(component: JSX.Element) {
+    return (
+      <BoxedExpressionGlobalContext.Provider
+        value={{
+          pmmlParams: [{ document: documentName, modelsFromDocument }],
+          supervisorHash: "",
+          setSupervisorHash: jest.fn,
+          boxedExpressionEditorRef: { current: document.body as HTMLDivElement },
+          currentlyOpenedHandlerCallback: jest.fn,
+          setCurrentlyOpenedHandlerCallback: jest.fn,
+        }}
+      >
+        {component}
+      </BoxedExpressionGlobalContext.Provider>
+    );
+  }
 
   function mockBroadcastDefinition(mockedBroadcastDefinition: jest.Mock) {
     window.beeApi = _.extend(window.beeApi || {}, {

@@ -56,7 +56,7 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
 
   const { i18n } = useBoxedExpressionEditorI18n();
 
-  const { boxedExpressionEditorRef, setSupervisorHash } = useContext(BoxedExpressionGlobalContext);
+  const { boxedExpressionEditorRef, setSupervisorHash, pmmlParams } = useContext(BoxedExpressionGlobalContext);
 
   const [parameters, setParameters] = useState(formalParameters);
 
@@ -140,48 +140,40 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
     [i18n.class, i18n.methodSignature]
   );
 
-  const extractContextEntriesFromPmmlProps = useCallback(
-    (pmmlProps: PmmlFunctionProps & { children?: React.ReactNode }) => {
-      return [
-        {
-          entryInfo: { name: i18n.document, dataType: DataType.String },
-          entryExpression: {
-            noClearAction: true,
-            logicType: LogicType.PMMLLiteralExpression,
-            noOptionsLabel: i18n.pmml.firstSelection,
-            getOptions: () => _.map(pmmlProps.pmmlParams, "document"),
-            selected: document.current,
-          } as PMMLLiteralExpressionProps,
-        },
-        {
-          entryInfo: { name: i18n.model, dataType: DataType.String },
-          entryExpression: {
-            noClearAction: true,
-            logicType: LogicType.PMMLLiteralExpression,
-            noOptionsLabel: i18n.pmml.secondSelection,
-            getOptions: () =>
-              _.map(
-                _.find(pmmlProps.pmmlParams, (param) => param.document === document.current)?.modelsFromDocument,
-                "model"
-              ),
-            selected: model.current,
-          } as PMMLLiteralExpressionProps,
-        },
-      ];
-    },
-    [i18n.document, i18n.model, i18n.pmml.firstSelection, i18n.pmml.secondSelection]
-  );
+  const extractContextEntriesFromPmmlProps = useCallback(() => {
+    return [
+      {
+        entryInfo: { name: i18n.document, dataType: DataType.String },
+        entryExpression: {
+          noClearAction: true,
+          logicType: LogicType.PMMLLiteralExpression,
+          noOptionsLabel: i18n.pmml.firstSelection,
+          getOptions: () => _.map(pmmlParams, "document"),
+          selected: document.current,
+        } as PMMLLiteralExpressionProps,
+      },
+      {
+        entryInfo: { name: i18n.model, dataType: DataType.String },
+        entryExpression: {
+          noClearAction: true,
+          logicType: LogicType.PMMLLiteralExpression,
+          noOptionsLabel: i18n.pmml.secondSelection,
+          getOptions: () =>
+            _.map(_.find(pmmlParams, (param) => param.document === document.current)?.modelsFromDocument, "model"),
+          selected: model.current,
+        } as PMMLLiteralExpressionProps,
+      },
+    ];
+  }, [i18n.document, i18n.model, i18n.pmml.firstSelection, i18n.pmml.secondSelection, pmmlParams]);
 
-  const extractParametersFromPmmlProps = useCallback(
-    (pmmlProps: PmmlFunctionProps & { children?: React.ReactNode }) => {
-      return (
-        _.find(_.find(pmmlProps.pmmlParams, { document: document.current })?.modelsFromDocument, {
-          model: model.current,
-        })?.parametersFromModel || []
-      );
-    },
-    []
-  );
+  const extractParametersFromPmmlProps = useCallback(() => {
+    return (
+      _.find(_.find(pmmlParams, { document: document.current })?.modelsFromDocument, {
+        model: model.current,
+      })?.parametersFromModel || []
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const evaluateRows = useCallback(
     (functionKind: FunctionKind) => {
@@ -201,7 +193,6 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
           ];
         }
         case FunctionKind.Pmml: {
-          const pmmlProps: PropsWithChildren<PmmlFunctionProps> = props as PropsWithChildren<PmmlFunctionProps>;
           return [
             {
               entryExpression: {
@@ -209,7 +200,7 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
                 noClearAction: true,
                 renderResult: false,
                 noHandlerMenu: true,
-                contextEntries: extractContextEntriesFromPmmlProps(pmmlProps),
+                contextEntries: extractContextEntriesFromPmmlProps(),
               },
             } as DataRecord,
           ];
@@ -249,13 +240,13 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
         setParameters([]);
       }
       if (modelHasBeenChanged) {
-        const parametersFromPmmlProps = extractParametersFromPmmlProps(props as PmmlFunctionProps);
+        const parametersFromPmmlProps = extractParametersFromPmmlProps();
         if (!_.isEmpty(parametersFromPmmlProps)) {
           setParameters(parametersFromPmmlProps);
         }
       }
     },
-    [extractParametersFromPmmlProps, props]
+    [extractParametersFromPmmlProps]
   );
 
   const extendDefinitionBasedOnFunctionKind = useCallback(
@@ -377,12 +368,15 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
         onRowsUpdate={setRows}
         headerLevels={1}
         headerVisibility={getHeaderVisibility()}
-        controllerCell={
-          <FunctionKindSelector
-            selectedFunctionKind={selectedFunctionKind}
-            onFunctionKindSelect={onFunctionKindSelect}
-          />
-        }
+        controllerCell={useMemo(
+          () => (
+            <FunctionKindSelector
+              selectedFunctionKind={selectedFunctionKind}
+              onFunctionKindSelect={onFunctionKindSelect}
+            />
+          ),
+          [onFunctionKindSelect, selectedFunctionKind]
+        )}
         defaultCell={{ parameters: ContextEntryExpressionCell }}
         resetRowCustomFunction={resetRowCustomFunction}
       />
