@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/kogito-editors-java/static/css/main.364280b4.chunk.css",
-    "main.js": "/kogito-editors-java/static/js/main.3400c48b.chunk.js",
-    "main.js.map": "/kogito-editors-java/static/js/main.3400c48b.chunk.js.map",
+    "main.js": "/kogito-editors-java/static/js/main.6d79e03d.chunk.js",
+    "main.js.map": "/kogito-editors-java/static/js/main.6d79e03d.chunk.js.map",
     "runtime-main.js": "/kogito-editors-java/static/js/runtime-main.40c8af77.js",
     "runtime-main.js.map": "/kogito-editors-java/static/js/runtime-main.40c8af77.js.map",
     "static/css/2.6658f764.chunk.css": "/kogito-editors-java/static/css/2.6658f764.chunk.css",
-    "static/js/2.8bd60698.chunk.js": "/kogito-editors-java/static/js/2.8bd60698.chunk.js",
-    "static/js/2.8bd60698.chunk.js.map": "/kogito-editors-java/static/js/2.8bd60698.chunk.js.map",
+    "static/js/2.11e68e5b.chunk.js": "/kogito-editors-java/static/js/2.11e68e5b.chunk.js",
+    "static/js/2.11e68e5b.chunk.js.map": "/kogito-editors-java/static/js/2.11e68e5b.chunk.js.map",
     "index.html": "/kogito-editors-java/index.html",
     "static/css/2.6658f764.chunk.css.map": "/kogito-editors-java/static/css/2.6658f764.chunk.css.map",
     "static/css/main.364280b4.chunk.css.map": "/kogito-editors-java/static/css/main.364280b4.chunk.css.map",
-    "static/js/2.8bd60698.chunk.js.LICENSE.txt": "/kogito-editors-java/static/js/2.8bd60698.chunk.js.LICENSE.txt",
+    "static/js/2.11e68e5b.chunk.js.LICENSE.txt": "/kogito-editors-java/static/js/2.11e68e5b.chunk.js.LICENSE.txt",
     "static/media/base-no-reset.css": "/kogito-editors-java/static/media/pficon.eae21d83.woff",
     "static/media/background-image.css": "/kogito-editors-java/static/media/pfbg_768@2x.eea28e73.jpg",
     "static/media/about-modal-box.css": "/kogito-editors-java/static/media/pfbg_992@2x.30e8d31f.jpg"
@@ -19,8 +19,8 @@
   "entrypoints": [
     "static/js/runtime-main.40c8af77.js",
     "static/css/2.6658f764.chunk.css",
-    "static/js/2.8bd60698.chunk.js",
+    "static/js/2.11e68e5b.chunk.js",
     "static/css/main.364280b4.chunk.css",
-    "static/js/main.3400c48b.chunk.js"
+    "static/js/main.6d79e03d.chunk.js"
   ]
 }
