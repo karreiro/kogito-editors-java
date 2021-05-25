@@ -39,6 +39,16 @@ export interface JavaFunctionProps {
   method?: string;
 }
 
+interface PMMLParam {
+  document: string;
+  modelsFromDocument?: {
+    model: string;
+    parametersFromModel?: EntryInfo[];
+  }[];
+}
+
+export type PMMLParams = PMMLParam[];
+
 export interface PmmlFunctionProps {
   /** Pmml Function */
   functionKind: FunctionKind.Pmml;
@@ -46,12 +56,4 @@ export interface PmmlFunctionProps {
   document?: string;
   /** Selected PMML model */
   model?: string;
-  /** Input PMML parameters */
-  pmmlParams?: {
-    document: string;
-    modelsFromDocument?: {
-      model: string;
-      parametersFromModel?: EntryInfo[];
-    }[];
-  }[];
 }
