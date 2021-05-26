@@ -1,46 +1,50 @@
-# Getting Started with Create React App
+# Boxed Expression Editor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This editor provides the possibility to edit the expression related to a Decision Node, or to a Business Knowledge Model's function.
 
-## Available Scripts
+## Static deployed showcase
+[There](https://yesamer.github.io/import-java-classes/) you can access to the static deployed version of the showcase application for this editor. It will be manually updated as soon as new features will be added.
 
-In the project directory, you can run:
+## Structure
+In the `showcase` folder, there is a tiny React application, which represent the Proof Of Value about how it is possible to integrate the `BoxedExpressionEditor` component inside another existing application.
 
-### `yarn start`
+## Scripts
+In the main project (where the components actually live), it is possible to execute, from the root folder, the following scripts (`yarn` is recommended):
+```sh
+# Collect and build dependencies
+yarn
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+# Remove 'dist' folder (such script is automatically called when the build is executed)
+yarn prebuild
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+# Build a production-ready artifact to be deployed
+yarn build
 
-### `yarn test`
+# Execute all tests
+yarn test
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Trigger static code analysis
+yarn lint
 
-### `yarn build`
+# Trigger type checking
+yarn type-check
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+# Perform all the three checks above (tests, lint and type checking)
+yarn quality-checks
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+In the showcase project, only two scripts are available:
+```sh
+# Start a local server to see the 'BoxedExpressionEditor' in action
+yarn start
+# Compiles a production ready showcase application
+yarn build
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Furthermore, there are cypress tests for the showcase project, however they are not automated yet. You can run them as:
+```sh
+# Start a local server to see the 'BoxedExpressionEditor' in action
+yarn start
+# Wait until app is running and execute tests
+yarn cypress run
+```
