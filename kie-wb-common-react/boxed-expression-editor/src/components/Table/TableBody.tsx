@@ -123,16 +123,19 @@ export const TableBody: React.FunctionComponent<TableBodyProps> = ({
     [children]
   );
 
-  return (
-    <Tbody
-      className={`${headerVisibility === TableHeaderVisibility.None ? "missing-header" : ""}`}
-      {...tableInstance.getTableBodyProps()}
-    >
-      {tableInstance.rows.map((row: Row, rowIndex: number) => {
-        tableInstance.prepareRow(row);
-        return renderBodyRow(row, rowIndex);
-      })}
-      {children ? renderAdditiveRow : null}
-    </Tbody>
+  return useMemo(
+    () => (
+      <Tbody
+        className={`${headerVisibility === TableHeaderVisibility.None ? "missing-header" : ""}`}
+        {...tableInstance.getTableBodyProps()}
+      >
+        {tableInstance.rows.map((row: Row, rowIndex: number) => {
+          tableInstance.prepareRow(row);
+          return renderBodyRow(row, rowIndex);
+        })}
+        {children ? renderAdditiveRow : null}
+      </Tbody>
+    ),
+    [tableInstance.rows]
   );
 };
