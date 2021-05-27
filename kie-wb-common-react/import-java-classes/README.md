@@ -1,4 +1,4 @@
-# Boxed Expression Editor
+# Import Java Classes component
 
 This editor provides the possibility to edit the expression related to a Decision Node, or to a Business Knowledge Model's function.
 
@@ -6,7 +6,7 @@ This editor provides the possibility to edit the expression related to a Decisio
 [There](https://yesamer.github.io/import-java-classes/) you can access to the static deployed version of the showcase application for this editor. It will be manually updated as soon as new features will be added.
 
 ## Structure
-In the `showcase` folder, there is a tiny React application, which represent the Proof Of Value about how it is possible to integrate the `BoxedExpressionEditor` component inside another existing application.
+In the `showcase` folder, there is a tiny React application, which represent the Proof Of Value about how it is possible to integrate the `ImportJavaClasses` component inside another existing application.
 
 ## Scripts
 In the main project (where the components actually live), it is possible to execute, from the root folder, the following scripts (`yarn` is recommended):
@@ -35,7 +35,7 @@ yarn quality-checks
 
 In the showcase project, only two scripts are available:
 ```sh
-# Start a local server to see the 'BoxedExpressionEditor' in action
+# Start a local server to see the 'ImportJavaClasses' in action
 yarn start
 # Compiles a production ready showcase application
 yarn build
@@ -43,7 +43,7 @@ yarn build
 
 Furthermore, there are cypress tests for the showcase project, however they are not automated yet. You can run them as:
 ```sh
-# Start a local server to see the 'BoxedExpressionEditor' in action
+# Start a local server to see the 'ImportJavaClasses' in action
 yarn start
 # Wait until app is running and execute tests
 yarn cypress run
