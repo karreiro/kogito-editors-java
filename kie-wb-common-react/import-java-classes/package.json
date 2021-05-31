@@ -61,21 +61,22 @@
     "webpack-cli": "^4.0.0",
     "webpack-dev-server": "3.11.0",
     "webpack-merge": "^5.2.0"
-  },  "dependencies": {
-  "@kogito-tooling/i18n": "^0.7.2-alpha3",
-  "@kogito-tooling/i18n-common-dictionary": "^0.7.2-alpha3",
-  "@patternfly/react-core": "^4.63.3",
-  "@patternfly/react-icons": "^4.7.11",
-  "@patternfly/react-styles": "^4.7.8",
-  "@patternfly/react-table": "^4.19.45",
-  "@types/react-resizable": "^1.7.2",
-  "@types/uuid": "^8.3.0",
-  "lodash": "^4.17.20",
-  "react-id-generator": "^3.0.1",
-  "react-resizable": "^1.11.0",
-  "react-table": "^7.6.2",
-  "uuid": "^8.3.2"
-},
+  },
+  "dependencies": {
+    "@kogito-tooling/i18n": "^0.7.2-alpha3",
+    "@kogito-tooling/i18n-common-dictionary": "^0.7.2-alpha3",
+    "@patternfly/react-core": "^4.63.3",
+    "@patternfly/react-icons": "^4.7.11",
+    "@patternfly/react-styles": "^4.7.8",
+    "@patternfly/react-table": "^4.19.45",
+    "@types/react-resizable": "^1.7.2",
+    "@types/uuid": "^8.3.0",
+    "lodash": "^4.17.20",
+    "react-id-generator": "^3.0.1",
+    "react-resizable": "^1.11.0",
+    "react-table": "^7.6.2",
+    "uuid": "^8.3.2"
+  },
   "peerDependencies": {
     "react": "16.12.0",
     "react-dom": "16.12.0"
