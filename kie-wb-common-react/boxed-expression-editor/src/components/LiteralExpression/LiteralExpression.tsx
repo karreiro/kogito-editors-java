@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-import "./LiteralExpression.css";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DataType, ExpressionProps, LiteralExpressionProps, LogicType } from "../../api";
-import { TextArea } from "@patternfly/react-core";
 import { EditExpressionMenu, EXPRESSION_NAME } from "../EditExpressionMenu";
 import { Resizer } from "../Resizer";
 import { EditableCell } from "../Table";
+import "./LiteralExpression.css";
 
 export const LiteralExpression: React.FunctionComponent<LiteralExpressionProps> = ({
   uid,

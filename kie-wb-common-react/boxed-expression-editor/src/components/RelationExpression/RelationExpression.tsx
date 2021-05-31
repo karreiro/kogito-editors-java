@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import "./RelationExpression.css";
+import "@patternfly/react-styles/css/utilities/Text/text.css";
+import * as _ from "lodash";
 import * as React from "react";
 import { useCallback, useEffect, useRef } from "react";
-import "@patternfly/patternfly/utilities/Text/text.css";
-import { Column as RelationColumn, DataType, RelationProps, Row, TableOperation } from "../../api";
-import { Table } from "../Table";
-import { useBoxedExpressionEditorI18n } from "../../i18n";
-import * as _ from "lodash";
 import { Column, ColumnInstance, DataRecord } from "react-table";
+import { Column as RelationColumn, DataType, RelationProps, Row, TableOperation } from "../../api";
+import { useBoxedExpressionEditorI18n } from "../../i18n";
+import { Table } from "../Table";
+import "./RelationExpression.css";
 
 export const RelationExpression: React.FunctionComponent<RelationProps> = (relationProps: RelationProps) => {
   const FIRST_COLUMN_NAME = "column-1";

@@ -14,6 +14,7 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier"
   ],
@@ -28,7 +29,7 @@
   },
   "settings": {
     "react": {
-      "version": "^16.11.0"
+      "version": "detect"
     }
   },
   // includes the typescript specific rules found here: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#supported-rules
@@ -39,15 +40,20 @@
     "prettier"
   ],
   "rules": {
-    "@typescript-eslint/explicit-function-return-type": "off",
+    "prefer-spread": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
-    "@typescript-eslint/interface-name-prefix": "off",
-    "prettier/prettier": "error",
-    "import/no-unresolved": "off",
-    "import/extensions": "off",
-    "react/prop-types": "off"
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-empty-interface": ["error", { "allowSingleExtends": true }],
+    "@typescript-eslint/no-empty-function": "off",
+    "no-fallthrough": "off",
+    "no-case-declarations": "off",
+    "react/prop-types": "off",
+    "react/display-name": "off",
+    "react/jsx-no-target-blank": "off"
   },
   "env": {
     "browser": true,
