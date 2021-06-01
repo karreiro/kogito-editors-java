@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/kogito-editors-java/static/css/main.896632c0.chunk.css",
-    "main.js": "/kogito-editors-java/static/js/main.b7d153e6.chunk.js",
-    "main.js.map": "/kogito-editors-java/static/js/main.b7d153e6.chunk.js.map",
+    "main.js": "/kogito-editors-java/static/js/main.d9827dd2.chunk.js",
+    "main.js.map": "/kogito-editors-java/static/js/main.d9827dd2.chunk.js.map",
     "runtime-main.js": "/kogito-editors-java/static/js/runtime-main.40c8af77.js",
     "runtime-main.js.map": "/kogito-editors-java/static/js/runtime-main.40c8af77.js.map",
     "static/css/2.62441987.chunk.css": "/kogito-editors-java/static/css/2.62441987.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.62441987.chunk.css",
     "static/js/2.edc61237.chunk.js",
     "static/css/main.896632c0.chunk.css",
-    "static/js/main.b7d153e6.chunk.js"
+    "static/js/main.d9827dd2.chunk.js"
   ]
 }
