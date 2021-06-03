@@ -1,0 +1,62 @@
+{
+  // tells eslint to use the TypeScript parser
+  "parser": "@typescript-eslint/parser",
+  // tell the TypeScript parser that we want to use JSX syntax
+  "parserOptions": {
+    "tsx": true,
+    "jsx": true,
+    "js": true,
+    "useJSXTextNode": true,
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": "."
+  },
+  // we want to use the recommended rules provided from the typescript plugin
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "globals": {
+    "window": "readonly",
+    "describe": "readonly",
+    "test": "readonly",
+    "expect": "readonly",
+    "it": "readonly",
+    "process": "readonly",
+    "document": "readonly"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  // includes the typescript specific rules found here: https://github.com/typescript-eslint/typescript-eslint/tree/master/packages/eslint-plugin#supported-rules
+  "plugins": [
+    "@typescript-eslint",
+    "react-hooks",
+    "eslint-plugin-react-hooks",
+    "prettier"
+  ],
+  "rules": {
+    "prefer-spread": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-inferrable-types": "off",
+    "@typescript-eslint/no-empty-interface": ["error", { "allowSingleExtends": true }],
+    "@typescript-eslint/no-empty-function": "off",
+    "no-fallthrough": "off",
+    "no-case-declarations": "off",
+    "react/prop-types": "off",
+    "react/display-name": "off",
+    "react/jsx-no-target-blank": "off"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}

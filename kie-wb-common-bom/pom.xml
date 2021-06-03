@@ -282,6 +282,12 @@
 
       <dependency>
         <groupId>org.kie.kogito</groupId>
+        <artifactId>kie-wb-common-js</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
         <artifactId>kie-wb-common-stunner</artifactId>
         <version>${project.version}</version>
       </dependency>
