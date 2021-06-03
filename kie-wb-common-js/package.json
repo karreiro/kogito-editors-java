@@ -10,7 +10,9 @@
   ],
   "scripts": {
     "bootstrap": "lerna bootstrap && yarn install --force",
-    "locktt": "locktt"
+    "locktt": "locktt",
+    "build": "lerna run build --stream",
+    "build:dmn": "rimraf dist && webpack --config webpack.dmn.js"
   },
   "dependencies": {
     "@kiegroup/monaco-editor": "2.3.0",
@@ -20,12 +22,21 @@
     "@patternfly/react-icons": "^4.10.2",
     "@patternfly/react-styles": "^4.7.8",
     "@patternfly/react-table": "^4.27.15",
+    "boxed-expression-editor": "0.0.0",
     "lodash": "^4.17.20",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-id-generator": "^3.0.1",
     "react-resizable": "^1.11.0",
     "react-table": "^7.6.2",
-    "uuid": "^8.3.2"
-  }
+    "uuid": "^8.3.2",
+    "webpack": "^5.38.1"
+  },
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react"
+  ],
+  "files": [
+    "dist"
+  ]
 }
