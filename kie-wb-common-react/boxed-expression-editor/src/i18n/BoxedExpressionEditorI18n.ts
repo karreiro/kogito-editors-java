@@ -35,6 +35,7 @@ interface BoxedExpressionEditorDictionary extends ReferenceDictionary<BoxedExpre
   document: string;
   editContextEntry: string;
   editExpression: string;
+  editHitPolicy: string;
   editParameter: string;
   editParameters: string;
   editRelation: string;
