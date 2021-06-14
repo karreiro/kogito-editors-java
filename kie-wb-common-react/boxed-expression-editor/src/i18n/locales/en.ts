@@ -37,6 +37,7 @@ export const en: BoxedExpressionEditorI18n = {
   document: "document",
   editContextEntry: "Edit Context Entry",
   editExpression: "Edit Expression",
+  editHitPolicy: "Edit Hit Policy",
   editParameter: "Edit Parameter",
   editParameters: "Edit parameters",
   editRelation: "Edit Relation",
