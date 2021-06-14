@@ -130,7 +130,7 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
         <Th
           {...headerProps}
           {...thProps}
-          className={`resizable-column ${!column.dataType ? "no-clickable-cell" : null}`}
+          className={`resizable-column ${!column.dataType ? "no-clickable-cell" : ""} ${column.groupType}`}
           key={`${getColumnKey(column)}-${columnIndex}`}
         >
           <Resizer

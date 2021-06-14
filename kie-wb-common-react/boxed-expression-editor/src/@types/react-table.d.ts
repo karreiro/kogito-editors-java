@@ -54,6 +54,8 @@ declare module "react-table" {
   export interface ColumnInstance {
     /** Column identifier */
     accessor: string;
+    /** Column group type */
+    groupType?: string;
     /** Column label */
     label: string | JSX.Element;
     /** Custom Element to be rendered in place of the column label */

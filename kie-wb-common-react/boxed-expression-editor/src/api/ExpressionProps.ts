@@ -96,13 +96,13 @@ export interface DecisionTableProps extends ExpressionProps {
   /** Aggregation policy, when the hit policy supports it */
   aggregation?: BuiltinAggregation;
   /** Annotation columns names */
-  annotations: string[];
+  annotations?: string[];
   /** Input columns definition */
-  input: Clause[];
+  input?: Clause[];
   /** Output columns definition */
-  output: Clause[];
+  output?: Clause[];
   /** Rules represent rows values */
-  rules: DecisionTableRule[];
+  rules?: DecisionTableRule[];
 }
 
 export interface ListProps extends ExpressionProps {
