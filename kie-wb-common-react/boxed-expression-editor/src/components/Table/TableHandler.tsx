@@ -109,24 +109,35 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     ];
   };
 
-  const generateNextAvailableColumnName: (lastIndex: number) => string = useCallback(
-    (lastIndex) => {
-      const candidateName = `${columnPrefix}${lastIndex}`;
+  const generateNextAvailableColumnName: (lastIndex: number, groupType?: string) => string = useCallback(
+    (lastIndex, groupType) => {
+      const candidateName = `${getColumnPrefix(groupType)}${lastIndex}`;
       const columnWithCandidateName = _.find(tableColumns.current, { accessor: candidateName });
-      return columnWithCandidateName ? generateNextAvailableColumnName(lastIndex + 1) : candidateName;
+      return columnWithCandidateName ? generateNextAvailableColumnName(lastIndex + 1, groupType) : candidateName;
     },
-    [columnPrefix, tableColumns]
+    [getColumnPrefix, tableColumns]
   );
+
+  const getLengthOfColumnsByGroupType = useCallback((columns: Column[], groupType: string) => {
+    const columnsByGroupType = _.groupBy(columns, (column: ColumnInstance) => column.groupType);
+    return columnsByGroupType[groupType]?.length;
+  }, []);
 
   const generateNextAvailableColumn = useCallback(
     (columns: Column[]) => {
+      const clickedColumn = columns[selectedColumnIndex] as ColumnInstance;
+      const groupType = clickedColumn?.groupType;
+      const columnsLength = groupType ? getLengthOfColumnsByGroupType(columns, groupType) : columns.length;
+      const nextAvailableColumnName = generateNextAvailableColumnName(columnsLength, groupType);
+
       return {
-        accessor: generateNextAvailableColumnName(columns.length),
-        label: generateNextAvailableColumnName(columns.length),
-        dataType: DataType.Undefined,
+        accessor: nextAvailableColumnName,
+        label: nextAvailableColumnName,
+        ...(clickedColumn.dataType ? { dataType: DataType.Undefined } : {}),
+        groupType,
       } as ColumnInstance;
     },
-    [generateNextAvailableColumnName]
+    [generateNextAvailableColumnName, getLengthOfColumnsByGroupType, selectedColumnIndex]
   );
 
   /** These column operations have impact also on the collection of cells */
