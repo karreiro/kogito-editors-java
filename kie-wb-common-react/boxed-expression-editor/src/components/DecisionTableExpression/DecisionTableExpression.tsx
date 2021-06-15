@@ -67,7 +67,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     }
   }, []);
 
-  const generateColumnConfiguration = useCallback(
+  const generateHandlerConfigurationByColumn = useCallback(
     (groupName: string) => [
       {
         group: groupName,
@@ -92,11 +92,12 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
 
   const getHandlerConfiguration = useMemo(() => {
     const configuration: { [columnGroupType: string]: GroupOperations[] } = {};
-    configuration[DecisionTableColumnType.InputClause] = generateColumnConfiguration(i18n.inputClause);
-    configuration[DecisionTableColumnType.OutputClause] = generateColumnConfiguration(i18n.outputClause);
-    configuration[DecisionTableColumnType.Annotation] = generateColumnConfiguration(i18n.ruleAnnotation);
+    configuration[""] = generateHandlerConfigurationByColumn(i18n.ruleAnnotation);
+    configuration[DecisionTableColumnType.InputClause] = generateHandlerConfigurationByColumn(i18n.inputClause);
+    configuration[DecisionTableColumnType.OutputClause] = generateHandlerConfigurationByColumn(i18n.outputClause);
+    configuration[DecisionTableColumnType.Annotation] = generateHandlerConfigurationByColumn(i18n.ruleAnnotation);
     return configuration;
-  }, [generateColumnConfiguration, i18n.inputClause, i18n.outputClause, i18n.ruleAnnotation]);
+  }, [generateHandlerConfigurationByColumn, i18n.inputClause, i18n.outputClause, i18n.ruleAnnotation]);
 
   const [selectedHitPolicy, setSelectedHitPolicy] = useState(hitPolicy);
   const [selectedAggregation, setSelectedAggregation] = useState(aggregation);
