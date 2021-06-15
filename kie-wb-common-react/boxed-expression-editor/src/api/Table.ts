@@ -76,6 +76,7 @@ export enum TableOperation {
   RowInsertBelow,
   RowDelete,
   RowClear,
+  RowDuplicate,
 }
 
 export interface GroupOperations {
@@ -90,7 +91,9 @@ export interface GroupOperations {
   }[];
 }
 
-export type TableHandlerConfiguration = GroupOperations[];
+export type GroupOperationsByColumnType = { [columnGroupType: string]: GroupOperations[] };
+
+export type TableHandlerConfiguration = GroupOperations[] | GroupOperationsByColumnType;
 
 export type AllowedOperations = TableOperation[];
 
