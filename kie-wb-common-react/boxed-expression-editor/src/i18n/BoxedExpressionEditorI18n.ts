@@ -31,6 +31,7 @@ interface BoxedExpressionEditorDictionary extends ReferenceDictionary<BoxedExpre
   context: string;
   contextEntry: string;
   dataType: string;
+  decisionRule: string;
   decisionTable: string;
   document: string;
   editContextEntry: string;
@@ -42,6 +43,7 @@ interface BoxedExpressionEditorDictionary extends ReferenceDictionary<BoxedExpre
   enterFunction: string;
   delete: string;
   function: string;
+  inputClause: string;
   invocation: string;
   list: string;
   literalExpression: string;
@@ -49,6 +51,7 @@ interface BoxedExpressionEditorDictionary extends ReferenceDictionary<BoxedExpre
   model: string;
   name: string;
   parameters: string;
+  outputClause: string;
   pmml: {
     firstSelection: string;
     secondSelection: string;
@@ -58,9 +61,11 @@ interface BoxedExpressionEditorDictionary extends ReferenceDictionary<BoxedExpre
   rowOperations: {
     clear: string;
     delete: string;
+    duplicate: string;
     insertAbove: string;
     insertBelow: string;
   };
+  ruleAnnotation: string;
   selectExpression: string;
   selectFunctionKind: string;
   selectLogicType: string;
