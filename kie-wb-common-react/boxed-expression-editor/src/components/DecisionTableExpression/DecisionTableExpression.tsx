@@ -21,6 +21,7 @@ import {
   Clause,
   DataType,
   DecisionTableProps,
+  DecisionTableRule,
   GroupOperations,
   HitPolicy,
   LogicType,
@@ -29,7 +30,7 @@ import {
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Table } from "../Table";
-import { ColumnInstance } from "react-table";
+import { ColumnInstance, DataRecord } from "react-table";
 import { HitPolicySelector } from "./HitPolicySelector";
 import * as _ from "lodash";
 import { useBoxedExpressionEditorI18n } from "../../i18n";
@@ -49,6 +50,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   input = [{ name: "input-1", dataType: DataType.Undefined }],
   output = [{ name: "output-1", dataType: DataType.Undefined }],
   annotations = [{ name: "annotation-1" }],
+  rules = [{ inputEntries: ["-"], outputEntries: [""], annotationEntries: [""] }],
 }) => {
   const { i18n } = useBoxedExpressionEditorI18n();
 
@@ -143,12 +145,21 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     return [...inputColumns, ...outputColumns, ...annotationColumns];
   };
 
-  const evaluateRows = () => {
-    return [{}];
-  };
+  const evaluateRows = () =>
+    _.map(rules, (rule) => {
+      const rowArray = [...rule.inputEntries, ...rule.outputEntries, ...rule.annotationEntries];
+      return _.reduce(
+        columns.current,
+        (tableRow: DataRecord, column, columnIndex) => {
+          tableRow[column.accessor] = rowArray[columnIndex] || "";
+          return tableRow;
+        },
+        {}
+      );
+    });
 
   const columns = useRef<ColumnInstance[]>(evaluateColumns());
-  const rows = useRef(evaluateRows());
+  const rows = useRef<DataRecord[]>(evaluateRows());
 
   const spreadDecisionTableExpressionDefinition = useCallback(() => {
     const groupedColumns = _.groupBy(columns.current, (column) => column.groupType);
@@ -166,6 +177,11 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       name: annotation.accessor,
       width: annotation.width,
     }));
+    const rules: DecisionTableRule[] = _.map(rows.current, (row: DataRecord) => ({
+      inputEntries: _.map(input, (inputClause) => row[inputClause.name] as string),
+      outputEntries: _.map(output, (outputClause) => row[outputClause.name] as string),
+      annotationEntries: _.map(annotations, (annotation) => row[annotation.name] as string),
+    }));
 
     const expressionDefinition: DecisionTableProps = {
       logicType: LogicType.DecisionTable,
@@ -175,6 +191,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       input,
       output,
       annotations,
+      rules,
     };
 
     isHeadless
