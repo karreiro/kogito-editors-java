@@ -16,7 +16,13 @@
 
 import * as React from "react";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { DataType, TableHandlerConfiguration, TableOperation } from "../../api";
+import {
+  DataType,
+  GroupOperations,
+  GroupOperationsByColumnType,
+  TableHandlerConfiguration,
+  TableOperation,
+} from "../../api";
 import * as _ from "lodash";
 import { Column, ColumnInstance, DataRecord } from "react-table";
 import { Popover } from "@patternfly/react-core";
@@ -177,6 +183,18 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     ]
   );
 
+  const groupOperationsDoNotDependOnColumn = (
+    handlerConfiguration: GroupOperations[] | GroupOperationsByColumnType
+  ): handlerConfiguration is GroupOperations[] => _.isArray(handlerConfiguration);
+
+  const getHandlerConfiguration = useMemo(() => {
+    if (groupOperationsDoNotDependOnColumn(handlerConfiguration)) {
+      return handlerConfiguration;
+    }
+    const clickedColumn = tableColumns.current[selectedColumnIndex] as ColumnInstance;
+    return handlerConfiguration[clickedColumn.groupType as string];
+  }, [handlerConfiguration, selectedColumnIndex, tableColumns]);
+
   return useMemo(
     () => (
       <Popover
@@ -192,7 +210,7 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
         appendTo={globalContext.boxedExpressionEditorRef?.current ?? undefined}
         bodyContent={
           <TableHandlerMenu
-            handlerConfiguration={handlerConfiguration}
+            handlerConfiguration={getHandlerConfiguration}
             allowedOperations={tableHandlerAllowedOperations}
             onOperation={handlingOperation}
           />
@@ -202,7 +220,7 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     [
       showTableHandler,
       globalContext.boxedExpressionEditorRef,
-      handlerConfiguration,
+      getHandlerConfiguration,
       tableHandlerAllowedOperations,
       handlingOperation,
       setShowTableHandler,
