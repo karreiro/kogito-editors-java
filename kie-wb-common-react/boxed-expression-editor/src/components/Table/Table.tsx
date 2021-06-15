@@ -26,7 +26,7 @@ import {
 } from "react-table";
 import { TableComposable } from "@patternfly/react-table";
 import * as React from "react";
-import { useCallback, useContext, useRef, useState, useEffect } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { EditableCell } from "./EditableCell";
 import { TableHeaderVisibility, TableOperation, TableProps } from "../../api";
 import * as _ from "lodash";
@@ -191,6 +191,18 @@ export const Table: React.FunctionComponent<TableProps> = ({
     setLastSelectedColumnIndex(columnIndex);
   };
 
+  const atLeastTwoColumnsOfTheSameGroupType = (columnIndex: number) => {
+    const groupTypeForCurrentColumn = (tableColumns.current[columnIndex] as ColumnInstance).groupType;
+    const columnsByGroupType = _.groupBy(tableColumns.current, (column: ColumnInstance) => column.groupType);
+    return groupTypeForCurrentColumn
+      ? columnsByGroupType[groupTypeForCurrentColumn].length > 2
+      : tableColumns.current.length > 2;
+  };
+
+  const columnCanBeDeleted = (columnIndex: number) => {
+    return columnIndex > 0 && atLeastTwoColumnsOfTheSameGroupType(columnIndex);
+  };
+
   const getThProps = (column: ColumnInstance, columnIndex: number) => ({
     onContextMenu: (e: ContextMenuEvent) => {
       const target = e.target as HTMLElement;
@@ -200,7 +212,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
         setTableHandlerAllowedOperations([
           TableOperation.ColumnInsertLeft,
           TableOperation.ColumnInsertRight,
-          ...(tableColumns.current.length > 2 && columnIndex > 0 ? [TableOperation.ColumnDelete] : []),
+          ...(columnCanBeDeleted(columnIndex) ? [TableOperation.ColumnDelete] : []),
         ]);
         tableHandlerStateUpdate(target, columnIndex);
       }
@@ -215,7 +227,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
         setTableHandlerAllowedOperations([
           TableOperation.ColumnInsertLeft,
           TableOperation.ColumnInsertRight,
-          ...(tableColumns.current.length > 2 && columnIndex > 0 ? [TableOperation.ColumnDelete] : []),
+          ...(columnCanBeDeleted(columnIndex) ? [TableOperation.ColumnDelete] : []),
           TableOperation.RowInsertAbove,
           TableOperation.RowInsertBelow,
           ...(tableRows.current.length > 1 ? [TableOperation.RowDelete] : []),
