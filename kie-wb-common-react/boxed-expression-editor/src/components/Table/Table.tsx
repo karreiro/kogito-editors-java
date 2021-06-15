@@ -203,17 +203,22 @@ export const Table: React.FunctionComponent<TableProps> = ({
     return columnIndex > 0 && atLeastTwoColumnsOfTheSameGroupType(columnIndex);
   };
 
+  const getColumnOperations = (columnIndex: number) =>
+    columnIndex === 0
+      ? []
+      : [
+          TableOperation.ColumnInsertLeft,
+          TableOperation.ColumnInsertRight,
+          ...(columnCanBeDeleted(columnIndex) ? [TableOperation.ColumnDelete] : []),
+        ];
+
   const getThProps = (column: ColumnInstance, columnIndex: number) => ({
     onContextMenu: (e: ContextMenuEvent) => {
       const target = e.target as HTMLElement;
       const handlerOnHeaderIsAvailable = !column.disableHandlerOnHeader;
       if (contextMenuIsAvailable(target) && handlerOnHeaderIsAvailable) {
         e.preventDefault();
-        setTableHandlerAllowedOperations([
-          TableOperation.ColumnInsertLeft,
-          TableOperation.ColumnInsertRight,
-          ...(columnCanBeDeleted(columnIndex) ? [TableOperation.ColumnDelete] : []),
-        ]);
+        setTableHandlerAllowedOperations(getColumnOperations(columnIndex));
         tableHandlerStateUpdate(target, columnIndex);
       }
     },
@@ -225,9 +230,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
       if (contextMenuIsAvailable(target)) {
         e.preventDefault();
         setTableHandlerAllowedOperations([
-          TableOperation.ColumnInsertLeft,
-          TableOperation.ColumnInsertRight,
-          ...(columnCanBeDeleted(columnIndex) ? [TableOperation.ColumnDelete] : []),
+          ...getColumnOperations(columnIndex),
           TableOperation.RowInsertAbove,
           TableOperation.RowInsertBelow,
           ...(tableRows.current.length > 1 ? [TableOperation.RowDelete] : []),

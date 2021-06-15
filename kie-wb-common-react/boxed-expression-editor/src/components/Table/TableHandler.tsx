@@ -203,7 +203,7 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
       return handlerConfiguration;
     }
     const clickedColumn = tableColumns.current[selectedColumnIndex] as ColumnInstance;
-    return handlerConfiguration[clickedColumn.groupType as string];
+    return handlerConfiguration[clickedColumn.groupType || ""];
   }, [handlerConfiguration, selectedColumnIndex, tableColumns]);
 
   return useMemo(
