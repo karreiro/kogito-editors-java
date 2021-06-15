@@ -15,13 +15,21 @@
  */
 
 import "./DecisionTableExpression.css";
-import { BuiltinAggregation, DataType, DecisionTableProps, HitPolicy } from "../../api";
+import {
+  BuiltinAggregation,
+  DataType,
+  DecisionTableProps,
+  GroupOperations,
+  HitPolicy,
+  TableOperation,
+} from "../../api";
 import * as React from "react";
 import { useCallback, useMemo, useRef, useState } from "react";
 import { Table } from "../Table";
 import { ColumnInstance } from "react-table";
 import { HitPolicySelector } from "./HitPolicySelector";
 import * as _ from "lodash";
+import { useBoxedExpressionEditorI18n } from "../../i18n";
 
 enum DecisionTableColumnType {
   InputClause = "input",
@@ -37,6 +45,39 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   output = [{ name: "output-1", dataType: DataType.Undefined }],
   annotations = ["annotation-1"],
 }) => {
+  const { i18n } = useBoxedExpressionEditorI18n();
+
+  const generateColumnConfiguration = useCallback(
+    (groupName: string) => [
+      {
+        group: groupName,
+        items: [
+          { name: i18n.columnOperations.insertLeft, type: TableOperation.ColumnInsertLeft },
+          { name: i18n.columnOperations.insertRight, type: TableOperation.ColumnInsertRight },
+          { name: i18n.columnOperations.delete, type: TableOperation.ColumnDelete },
+        ],
+      },
+      {
+        group: i18n.decisionRule,
+        items: [
+          { name: i18n.rowOperations.insertAbove, type: TableOperation.RowInsertAbove },
+          { name: i18n.rowOperations.insertBelow, type: TableOperation.RowInsertBelow },
+          { name: i18n.rowOperations.delete, type: TableOperation.RowDelete },
+          { name: i18n.rowOperations.duplicate, type: TableOperation.RowDuplicate },
+        ],
+      },
+    ],
+    [i18n]
+  );
+
+  const getHandlerConfiguration = useMemo(() => {
+    const configuration: { [columnGroupType: string]: GroupOperations[] } = {};
+    configuration[DecisionTableColumnType.InputClause] = generateColumnConfiguration(i18n.inputClause);
+    configuration[DecisionTableColumnType.OutputClause] = generateColumnConfiguration(i18n.outputClause);
+    configuration[DecisionTableColumnType.Annotation] = generateColumnConfiguration(i18n.ruleAnnotation);
+    return configuration;
+  }, [generateColumnConfiguration, i18n.inputClause, i18n.outputClause, i18n.ruleAnnotation]);
+
   const [selectedHitPolicy, setSelectedHitPolicy] = useState(hitPolicy);
   const [selectedAggregation, setSelectedAggregation] = useState(aggregation);
 
@@ -86,6 +127,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   return (
     <div className={`decision-table-expression ${uid}`}>
       <Table
+        handlerConfiguration={getHandlerConfiguration}
         columns={columns.current}
         rows={[{}]}
         controllerCell={useMemo(
