@@ -47,6 +47,19 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
 }) => {
   const { i18n } = useBoxedExpressionEditorI18n();
 
+  const getColumnPrefix = useCallback((groupType: string) => {
+    switch (groupType) {
+      case DecisionTableColumnType.InputClause:
+        return "input-";
+      case DecisionTableColumnType.OutputClause:
+        return "output-";
+      case DecisionTableColumnType.Annotation:
+        return "annotation";
+      default:
+        return "column-";
+    }
+  }, []);
+
   const generateColumnConfiguration = useCallback(
     (groupName: string) => [
       {
@@ -127,6 +140,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   return (
     <div className={`decision-table-expression ${uid}`}>
       <Table
+        getColumnPrefix={getColumnPrefix}
         handlerConfiguration={getHandlerConfiguration}
         columns={columns.current}
         rows={[{}]}
