@@ -42,7 +42,7 @@ const NUMBER_OF_ROWS_SUBCOLUMN = "0";
 export const Table: React.FunctionComponent<TableProps> = ({
   tableId,
   children,
-  columnPrefix = "column-",
+  getColumnPrefix = () => "column-",
   editColumnLabel,
   onColumnsUpdate,
   onRowsUpdate,
@@ -280,7 +280,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
       {showTableHandler && handlerConfiguration ? (
         <TableHandler
           tableColumns={tableColumns}
-          columnPrefix={columnPrefix}
+          getColumnPrefix={getColumnPrefix}
           handlerConfiguration={handlerConfiguration}
           lastSelectedColumnIndex={lastSelectedColumnIndex}
           lastSelectedRowIndex={lastSelectedRowIndex}
