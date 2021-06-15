@@ -41,6 +41,8 @@ enum DecisionTableColumnType {
   Annotation = "annotation",
 }
 
+const DASH_SYMBOL = "-";
+const EMPTY_SYMBOL = "";
 export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps> = ({
   uid,
   isHeadless,
@@ -50,7 +52,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   input = [{ name: "input-1", dataType: DataType.Undefined }],
   output = [{ name: "output-1", dataType: DataType.Undefined }],
   annotations = [{ name: "annotation-1" }],
-  rules = [{ inputEntries: ["-"], outputEntries: [""], annotationEntries: [""] }],
+  rules = [{ inputEntries: [DASH_SYMBOL], outputEntries: [EMPTY_SYMBOL], annotationEntries: [EMPTY_SYMBOL] }],
 }) => {
   const { i18n } = useBoxedExpressionEditorI18n();
 
@@ -61,7 +63,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       case DecisionTableColumnType.OutputClause:
         return "output-";
       case DecisionTableColumnType.Annotation:
-        return "annotation";
+        return "annotation-";
       default:
         return "column-";
     }
@@ -92,7 +94,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
 
   const getHandlerConfiguration = useMemo(() => {
     const configuration: { [columnGroupType: string]: GroupOperations[] } = {};
-    configuration[""] = generateHandlerConfigurationByColumn(i18n.ruleAnnotation);
+    configuration[EMPTY_SYMBOL] = generateHandlerConfigurationByColumn(i18n.ruleAnnotation);
     configuration[DecisionTableColumnType.InputClause] = generateHandlerConfigurationByColumn(i18n.inputClause);
     configuration[DecisionTableColumnType.OutputClause] = generateHandlerConfigurationByColumn(i18n.outputClause);
     configuration[DecisionTableColumnType.Annotation] = generateHandlerConfigurationByColumn(i18n.ruleAnnotation);
@@ -152,7 +154,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       return _.reduce(
         columns.current,
         (tableRow: DataRecord, column, columnIndex) => {
-          tableRow[column.accessor] = rowArray[columnIndex] || "";
+          tableRow[column.accessor] = rowArray[columnIndex] || EMPTY_SYMBOL;
           return tableRow;
         },
         {}
@@ -208,6 +210,46 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     [spreadDecisionTableExpressionDefinition]
   );
 
+  const fillMissingCellValues = useCallback(
+    (updatedRows: DataRecord[]) =>
+      _.map(updatedRows, (row) =>
+        _.reduce(
+          columns.current,
+          (filledRow: DataRecord, column: ColumnInstance) => {
+            if (_.isNil(row[column.accessor])) {
+              filledRow[column.accessor] =
+                column.groupType === DecisionTableColumnType.InputClause ? DASH_SYMBOL : EMPTY_SYMBOL;
+            } else {
+              filledRow[column.accessor] = row[column.accessor];
+            }
+            return filledRow;
+          },
+          {}
+        )
+      ),
+    []
+  );
+
+  const onRowsUpdate = useCallback(
+    (updatedRows) => {
+      rows.current = fillMissingCellValues(updatedRows);
+      spreadDecisionTableExpressionDefinition();
+    },
+    [fillMissingCellValues, spreadDecisionTableExpressionDefinition]
+  );
+
+  const onRowAdding = useCallback(() => {
+    return _.reduce(
+      columns.current,
+      (tableRow: DataRecord, column: ColumnInstance) => {
+        tableRow[column.accessor] =
+          column.groupType === DecisionTableColumnType.InputClause ? DASH_SYMBOL : EMPTY_SYMBOL;
+        return tableRow;
+      },
+      {} as DataRecord
+    );
+  }, []);
+
   useEffect(() => {
     /** Function executed only the first time the component is loaded */
     spreadDecisionTableExpressionDefinition();
@@ -221,6 +263,8 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
         columns={columns.current}
         rows={rows.current}
         onColumnsUpdate={onColumnsUpdate}
+        onRowsUpdate={onRowsUpdate}
+        onRowAdding={onRowAdding}
         controllerCell={useMemo(
           () => (
             <HitPolicySelector
