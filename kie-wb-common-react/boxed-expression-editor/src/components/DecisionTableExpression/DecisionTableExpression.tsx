@@ -16,15 +16,18 @@
 
 import "./DecisionTableExpression.css";
 import {
+  Annotation,
   BuiltinAggregation,
+  Clause,
   DataType,
   DecisionTableProps,
   GroupOperations,
   HitPolicy,
+  LogicType,
   TableOperation,
 } from "../../api";
 import * as React from "react";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Table } from "../Table";
 import { ColumnInstance } from "react-table";
 import { HitPolicySelector } from "./HitPolicySelector";
@@ -39,11 +42,13 @@ enum DecisionTableColumnType {
 
 export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps> = ({
   uid,
+  isHeadless,
+  onUpdatingRecursiveExpression,
   hitPolicy = HitPolicy.Unique,
   aggregation = BuiltinAggregation["<None>"],
   input = [{ name: "input-1", dataType: DataType.Undefined }],
   output = [{ name: "output-1", dataType: DataType.Undefined }],
-  annotations = ["annotation-1"],
+  annotations = [{ name: "annotation-1" }],
 }) => {
   const { i18n } = useBoxedExpressionEditorI18n();
 
@@ -109,6 +114,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
           label: inputClause.name,
           accessor: inputClause.name,
           dataType: inputClause.dataType,
+          width: inputClause.width,
           groupType: DecisionTableColumnType.InputClause,
         } as ColumnInstance)
     );
@@ -119,6 +125,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
           label: outputClause.name,
           accessor: outputClause.name,
           dataType: outputClause.dataType,
+          width: outputClause.width,
           groupType: DecisionTableColumnType.OutputClause,
         } as ColumnInstance)
     );
@@ -126,8 +133,9 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       annotations,
       (annotation) =>
         ({
-          label: annotation,
-          accessor: annotation,
+          label: annotation.name,
+          accessor: annotation.name,
+          width: annotation.width,
           groupType: DecisionTableColumnType.Annotation,
         } as ColumnInstance)
     );
@@ -135,7 +143,57 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     return [...inputColumns, ...outputColumns, ...annotationColumns];
   };
 
+  const evaluateRows = () => {
+    return [{}];
+  };
+
   const columns = useRef<ColumnInstance[]>(evaluateColumns());
+  const rows = useRef(evaluateRows());
+
+  const spreadDecisionTableExpressionDefinition = useCallback(() => {
+    const groupedColumns = _.groupBy(columns.current, (column) => column.groupType);
+    const input: Clause[] = _.map(groupedColumns[DecisionTableColumnType.InputClause], (inputClause) => ({
+      name: inputClause.accessor,
+      dataType: inputClause.dataType,
+      width: inputClause.width,
+    }));
+    const output: Clause[] = _.map(groupedColumns[DecisionTableColumnType.OutputClause], (outputClause) => ({
+      name: outputClause.accessor,
+      dataType: outputClause.dataType,
+      width: outputClause.width,
+    }));
+    const annotations: Annotation[] = _.map(groupedColumns[DecisionTableColumnType.Annotation], (annotation) => ({
+      name: annotation.accessor,
+      width: annotation.width,
+    }));
+
+    const expressionDefinition: DecisionTableProps = {
+      logicType: LogicType.DecisionTable,
+      uid,
+      hitPolicy: selectedHitPolicy,
+      aggregation: selectedAggregation,
+      input,
+      output,
+      annotations,
+    };
+
+    isHeadless
+      ? onUpdatingRecursiveExpression?.(expressionDefinition)
+      : window.beeApi?.broadcastDecisionTableExpressionDefinition?.(expressionDefinition);
+  }, [isHeadless, onUpdatingRecursiveExpression, selectedAggregation, selectedHitPolicy, uid]);
+
+  const onColumnsUpdate = useCallback(
+    (updatedColumns) => {
+      columns.current = [...updatedColumns];
+      spreadDecisionTableExpressionDefinition();
+    },
+    [spreadDecisionTableExpressionDefinition]
+  );
+
+  useEffect(() => {
+    /** Function executed only the first time the component is loaded */
+    spreadDecisionTableExpressionDefinition();
+  }, [spreadDecisionTableExpressionDefinition]);
 
   return (
     <div className={`decision-table-expression ${uid}`}>
@@ -143,7 +201,8 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
         getColumnPrefix={getColumnPrefix}
         handlerConfiguration={getHandlerConfiguration}
         columns={columns.current}
-        rows={[{}]}
+        rows={rows.current}
+        onColumnsUpdate={onColumnsUpdate}
         controllerCell={useMemo(
           () => (
             <HitPolicySelector
