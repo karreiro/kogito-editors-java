@@ -30,8 +30,8 @@ import { TableHandlerMenu } from "./TableHandlerMenu";
 import { BoxedExpressionGlobalContext } from "../../context";
 
 export interface TableHandlerProps {
-  /** The prefix to be used for the column name */
-  columnPrefix: string;
+  /** Gets the prefix to be used for the next column name */
+  getColumnPrefix: (groupType?: string) => string;
   /** Columns instance */
   tableColumns: React.MutableRefObject<Column[]>;
   /** Last selected column index */
@@ -61,7 +61,7 @@ export interface TableHandlerProps {
 }
 
 export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
-  columnPrefix,
+  getColumnPrefix,
   tableColumns,
   lastSelectedColumnIndex,
   lastSelectedRowIndex,

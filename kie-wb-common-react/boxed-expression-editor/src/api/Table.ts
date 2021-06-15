@@ -23,8 +23,8 @@ export interface TableProps {
   tableId?: string;
   /** Optional children element to be appended below the table content */
   children?: React.ReactElement[];
-  /** The prefix to be used for the column name */
-  columnPrefix?: string;
+  /** Gets the prefix to be used for the next column name */
+  getColumnPrefix?: (groupType?: string) => string;
   /** Optional label to be used for the edit popover that appears when clicking on column header */
   editColumnLabel?: string;
   /** Top-left cell custom content */
