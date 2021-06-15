@@ -195,8 +195,8 @@ export const Table: React.FunctionComponent<TableProps> = ({
     const groupTypeForCurrentColumn = (tableColumns.current[columnIndex] as ColumnInstance).groupType;
     const columnsByGroupType = _.groupBy(tableColumns.current, (column: ColumnInstance) => column.groupType);
     return groupTypeForCurrentColumn
-      ? columnsByGroupType[groupTypeForCurrentColumn].length > 2
-      : tableColumns.current.length > 2;
+      ? columnsByGroupType[groupTypeForCurrentColumn].length > 1
+      : tableColumns.current.length > 2; // The total number of columns is counting also the # of rows column
   };
 
   const columnCanBeDeleted = (columnIndex: number) => {
