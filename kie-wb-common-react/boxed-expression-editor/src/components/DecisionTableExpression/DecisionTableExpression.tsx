@@ -101,6 +101,13 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     return configuration;
   }, [generateHandlerConfigurationByColumn, i18n.inputClause, i18n.outputClause, i18n.ruleAnnotation]);
 
+  const getEditColumnLabel = useMemo(() => {
+    const editColumnLabel: { [columnGroupType: string]: string } = {};
+    editColumnLabel[DecisionTableColumnType.InputClause] = i18n.editClause.input;
+    editColumnLabel[DecisionTableColumnType.OutputClause] = i18n.editClause.output;
+    return editColumnLabel;
+  }, [i18n.editClause.input, i18n.editClause.output]);
+
   const [selectedHitPolicy, setSelectedHitPolicy] = useState(hitPolicy);
   const [selectedAggregation, setSelectedAggregation] = useState(aggregation);
 
@@ -259,6 +266,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     <div className={`decision-table-expression ${uid}`}>
       <Table
         getColumnPrefix={getColumnPrefix}
+        editColumnLabel={getEditColumnLabel}
         handlerConfiguration={getHandlerConfiguration}
         columns={columns.current}
         rows={rows.current}

@@ -36,6 +36,10 @@ export const en: BoxedExpressionEditorI18n = {
   decisionTable: "Decision Table",
   delete: "Delete",
   document: "document",
+  editClause: {
+    input: "Edit Input Clause",
+    output: "Edit Output Clause",
+  },
   editContextEntry: "Edit Context Entry",
   editExpression: "Edit Expression",
   editHitPolicy: "Edit Hit Policy",
