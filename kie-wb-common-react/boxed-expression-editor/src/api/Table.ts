@@ -25,8 +25,8 @@ export interface TableProps {
   children?: React.ReactElement[];
   /** Gets the prefix to be used for the next column name */
   getColumnPrefix?: (groupType?: string) => string;
-  /** Optional label to be used for the edit popover that appears when clicking on column header */
-  editColumnLabel?: string;
+  /** Optional label, that may depend on column, to be used for the popover that appears when clicking on column header */
+  editColumnLabel?: string | { [groupType: string]: string };
   /** Top-left cell custom content */
   controllerCell?: string | JSX.Element;
   /** For each column there is a default component to be used to render the related cell */
