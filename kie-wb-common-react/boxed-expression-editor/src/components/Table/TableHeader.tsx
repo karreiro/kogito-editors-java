@@ -30,8 +30,8 @@ export interface TableHeaderProps {
   tableRows: React.MutableRefObject<DataRecord[]>;
   /** Function to be executed when one or more rows are modified */
   onRowsUpdate: (rows: DataRecord[]) => void;
-  /** Optional label to be used for the edit popover that appears when clicking on column header */
-  editColumnLabel?: string;
+  /** Optional label, that may depend on column, to be used for the popover that appears when clicking on column header */
+  editColumnLabel?: string | { [groupType: string]: string };
   /** The way in which the header will be rendered */
   headerVisibility?: TableHeaderVisibility;
   /** True, for skipping the creation in the DOM of the last defined header group */
@@ -55,6 +55,18 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
   tableColumns,
   onColumnsUpdate,
 }) => {
+  const getColumnLabel: (groupType: string) => string | undefined = useCallback(
+    (groupType) => {
+      if (_.isObject(editColumnLabel) && _.has(editColumnLabel, groupType)) {
+        return editColumnLabel[groupType];
+      }
+      if (typeof editColumnLabel === "string") {
+        return editColumnLabel;
+      }
+    },
+    [editColumnLabel]
+  );
+
   const updateColumnNameInRows = useCallback(
     (prevColumnName: string, newColumnName: string) =>
       onRowsUpdate(
@@ -140,7 +152,7 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
             <div className="header-cell" data-ouia-component-type="expression-column-header">
               {column.dataType ? (
                 <EditExpressionMenu
-                  title={editColumnLabel}
+                  title={getColumnLabel(column.groupType)}
                   selectedExpressionName={column.label}
                   selectedDataType={column.dataType}
                   onExpressionUpdate={onColumnNameOrDataTypeUpdate(columnIndex)}
@@ -157,8 +169,8 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
       );
     },
     [
-      editColumnLabel,
       getColumnKey,
+      getColumnLabel,
       onColumnNameOrDataTypeUpdate,
       onHorizontalResizeStop,
       renderHeaderCellInfo,
