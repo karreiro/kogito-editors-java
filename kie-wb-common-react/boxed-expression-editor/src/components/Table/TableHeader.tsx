@@ -22,7 +22,6 @@ import { Column, ColumnInstance, DataRecord, HeaderGroup, TableInstance } from "
 import { EditExpressionMenu, EditTextInline } from "../EditExpressionMenu";
 import { DataType, TableHeaderVisibility } from "../../api";
 import { DEFAULT_MIN_WIDTH, Resizer } from "../Resizer";
-import { EditTextInline } from "./EditTextInline";
 
 export interface TableHeaderProps {
   /** Table instance */
