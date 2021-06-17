@@ -20,6 +20,7 @@ import { en as en_common } from "@kogito-tooling/i18n-common-dictionary";
 export const en: BoxedExpressionEditorI18n = {
   ...en_common,
   addParameter: "Add parameter",
+  builtInAggregator: "Builtin Aggregator",
   choose: "Choose...",
   class: "class",
   clear: "Clear",
@@ -48,6 +49,7 @@ export const en: BoxedExpressionEditorI18n = {
   editRelation: "Edit Relation",
   enterFunction: "Enter function",
   function: "Function",
+  hitPolicy: "Hit Policy",
   inputClause: "INPUT CLAUSE",
   invocation: "Invocation",
   list: "List",
