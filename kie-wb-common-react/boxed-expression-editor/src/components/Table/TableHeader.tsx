@@ -19,10 +19,9 @@ import { useCallback, useMemo } from "react";
 import { Th, Thead, Tr } from "@patternfly/react-table";
 import * as _ from "lodash";
 import { Column, ColumnInstance, DataRecord, HeaderGroup, TableInstance } from "react-table";
-import { EditExpressionMenu } from "../EditExpressionMenu";
+import { EditExpressionMenu, EditTextInline } from "../EditExpressionMenu";
 import { DataType, TableHeaderVisibility } from "../../api";
 import { DEFAULT_MIN_WIDTH, Resizer } from "../Resizer";
-import { EditTextInline } from "./EditTextInline";
 
 export interface TableHeaderProps {
   /** Table instance */
