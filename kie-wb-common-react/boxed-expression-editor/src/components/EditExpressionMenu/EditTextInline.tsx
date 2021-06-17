@@ -15,7 +15,8 @@
  */
 
 import * as React from "react";
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import * as _ from "lodash";
 
 export interface EditTextInlineProps {
   /** Text value */
@@ -27,37 +28,48 @@ export interface EditTextInlineProps {
 export const EditTextInline: React.FunctionComponent<EditTextInlineProps> = ({ onTextChange, value }) => {
   const [toggle, setToggle] = useState(true);
 
-  const onValueBlur = useCallback((event: ChangeEvent<HTMLInputElement>) => onTextChange(event.target.value), [
-    onTextChange,
-  ]);
+  const onValueBlur = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const changedText = event.target.value;
+      if (_.size(changedText.trim())) {
+        onTextChange(changedText);
+      }
+      setToggle(true);
+    },
+    [onTextChange]
+  );
+
+  const onKeyDown = useMemo(
+    () => (event: React.KeyboardEvent<HTMLInputElement>) => {
+      const pressedEnter = event.key === "Enter";
+      const pressedEscape = event.key === "Escape";
+      if (pressedEnter) {
+        event.currentTarget.blur();
+      }
+      if (pressedEscape) {
+        setToggle(true);
+      }
+    },
+    []
+  );
+
+  const onDoubleClick = useMemo(
+    () => () => {
+      setToggle(false);
+    },
+    []
+  );
 
   return toggle ? (
-    <p
-      onDoubleClick={() => {
-        setToggle(false);
-      }}
-    >
-      {value}
-    </p>
+    <p onDoubleClick={onDoubleClick}>{value}</p>
   ) : (
     <input
       type="text"
+      autoFocus
       defaultValue={value}
       onBlur={onValueBlur}
-      autoFocus
       style={{ borderRadius: "0.5em" }}
-      onKeyDown={(event) => {
-        const pressedEnter = event.key === "Enter";
-        const pressedEscape = event.key === "Escape";
-        if (pressedEnter) {
-          event.currentTarget.blur();
-        }
-        if (pressedEnter || pressedEscape) {
-          setToggle(true);
-          event.preventDefault();
-          event.stopPropagation();
-        }
-      }}
+      onKeyDown={onKeyDown}
     />
   );
 };
