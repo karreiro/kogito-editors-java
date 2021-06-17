@@ -22,6 +22,7 @@ import { Column, ColumnInstance, DataRecord, HeaderGroup, TableInstance } from "
 import { EditExpressionMenu } from "../EditExpressionMenu";
 import { DataType, TableHeaderVisibility } from "../../api";
 import { DEFAULT_MIN_WIDTH, Resizer } from "../Resizer";
+import { EditTextInline } from "./EditTextInline";
 
 export interface TableHeaderProps {
   /** Table instance */
@@ -80,14 +81,18 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
     [onRowsUpdate, tableRows]
   );
 
-  const onColumnNameOrDataTypeUpdate = useCallback(
+  const onColumnNameOrDataTypeUpdate: (
+    columnIndex: number
+  ) => ({ name, dataType }: { name?: string; dataType?: DataType }) => void = useCallback(
     (columnIndex: number) => {
-      return ({ name = "", dataType = DataType.Undefined }) => {
+      return ({ name = "", dataType }) => {
         const prevColumnName = (tableColumns.current[columnIndex] as ColumnInstance).accessor as string;
         const updatedTableColumns = [...tableColumns.current] as ColumnInstance[];
         updatedTableColumns[columnIndex].label = name;
         updatedTableColumns[columnIndex].accessor = name;
-        updatedTableColumns[columnIndex].dataType = dataType;
+        if (dataType) {
+          updatedTableColumns[columnIndex].dataType = dataType;
+        }
         onColumnsUpdate(updatedTableColumns);
         if (name !== prevColumnName) {
           updateColumnNameInRows(prevColumnName, name);
@@ -112,14 +117,29 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
     [getColumnKey]
   );
 
+  const renderCellInfoLabel = useCallback(
+    (column: ColumnInstance, columnIndex: number) => {
+      if (column.inlineEditable) {
+        return (
+          <EditTextInline
+            value={column.label as string}
+            onTextChange={(value) => onColumnNameOrDataTypeUpdate(columnIndex)({ name: value })}
+          />
+        );
+      }
+      return <p className="pf-u-text-truncate">{column.label}</p>;
+    },
+    [onColumnNameOrDataTypeUpdate]
+  );
+
   const renderHeaderCellInfo = useCallback(
-    (column) => (
+    (column, columnIndex) => (
       <div className="header-cell-info" data-ouia-component-type="expression-column-header-cell-info">
-        {column.headerCellElement ? column.headerCellElement : <p className="pf-u-text-truncate">{column.label}</p>}
+        {column.headerCellElement ? column.headerCellElement : renderCellInfoLabel(column, columnIndex)}
         {column.dataType ? <p className="pf-u-text-truncate data-type">({column.dataType})</p> : null}
       </div>
     ),
-    []
+    [renderCellInfoLabel]
   );
 
   const onHorizontalResizeStop = useCallback(
@@ -155,13 +175,13 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
                   title={getColumnLabel(column.groupType)}
                   selectedExpressionName={column.label}
                   selectedDataType={column.dataType}
-                  onExpressionUpdate={onColumnNameOrDataTypeUpdate(columnIndex)}
+                  onExpressionUpdate={(expression) => onColumnNameOrDataTypeUpdate(columnIndex)(expression)}
                   key={`${getColumnKey(column)}-${columnIndex}`}
                 >
-                  {renderHeaderCellInfo(column)}
+                  {renderHeaderCellInfo(column, columnIndex)}
                 </EditExpressionMenu>
               ) : (
-                renderHeaderCellInfo(column)
+                renderHeaderCellInfo(column, columnIndex)
               )}
             </div>
           </Resizer>

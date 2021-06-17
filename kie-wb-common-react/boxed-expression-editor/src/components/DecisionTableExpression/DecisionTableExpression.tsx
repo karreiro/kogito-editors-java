@@ -148,6 +148,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
           label: annotation.name,
           accessor: annotation.name,
           width: annotation.width,
+          inlineEditable: true,
           groupType: DecisionTableColumnType.Annotation,
         } as ColumnInstance)
     );

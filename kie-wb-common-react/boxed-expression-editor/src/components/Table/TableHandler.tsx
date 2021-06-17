@@ -134,6 +134,7 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
         accessor: nextAvailableColumnName,
         label: nextAvailableColumnName,
         ...(clickedColumn.dataType ? { dataType: DataType.Undefined } : {}),
+        inlineEditable: clickedColumn?.inlineEditable,
         groupType,
       } as ColumnInstance;
     },
