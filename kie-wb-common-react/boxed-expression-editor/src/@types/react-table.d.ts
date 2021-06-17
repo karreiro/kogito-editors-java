@@ -60,6 +60,8 @@ declare module "react-table" {
     label: string | JSX.Element;
     /** Custom Element to be rendered in place of the column label */
     headerCellElement?: JSX.Element;
+    /** It makes this column header inline editable (with double-click) */
+    inlineEditable?: boolean;
     /** Column data type */
     dataType: DataType;
     /** When resizable, this function returns the resizer props  */
