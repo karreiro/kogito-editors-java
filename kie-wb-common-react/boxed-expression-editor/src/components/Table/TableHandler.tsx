@@ -89,25 +89,34 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     setSelectedRowIndex(lastSelectedRowIndex);
   }, [lastSelectedRowIndex]);
 
-  const insertBefore = <T extends unknown>(elements: T[], index: number, element: T) => {
-    return [...elements.slice(0, index), element, ...elements.slice(index)];
-  };
+  const insertBefore = <T extends unknown>(elements: T[], index: number, element: T) => [
+    ...elements.slice(0, index),
+    element,
+    ...elements.slice(index),
+  ];
 
-  const insertAfter = <T extends unknown>(elements: T[], index: number, element: T) => {
-    return [...elements.slice(0, index + 1), element, ...elements.slice(index + 1)];
-  };
+  const insertAfter = <T extends unknown>(elements: T[], index: number, element: T) => [
+    ...elements.slice(0, index + 1),
+    element,
+    ...elements.slice(index + 1),
+  ];
 
-  const deleteAt = <T extends unknown>(elements: T[], index: number) => {
-    return [...elements.slice(0, index), ...elements.slice(index + 1)];
-  };
+  const duplicateAfter = <T extends unknown>(elements: T[], index: number) => [
+    ...elements.slice(0, index + 1),
+    _.cloneDeep(elements[index]),
+    ...elements.slice(index + 1),
+  ];
 
-  const clearAt = <T extends unknown>(elements: T[], index: number) => {
-    return [
-      ...elements.slice(0, index),
-      resetRowCustomFunction(elements[index] as DataRecord),
-      ...elements.slice(index + 1),
-    ];
-  };
+  const deleteAt = <T extends unknown>(elements: T[], index: number) => [
+    ...elements.slice(0, index),
+    ...elements.slice(index + 1),
+  ];
+
+  const clearAt = <T extends unknown>(elements: T[], index: number) => [
+    ...elements.slice(0, index),
+    resetRowCustomFunction(elements[index] as DataRecord),
+    ...elements.slice(index + 1),
+  ];
 
   const generateNextAvailableColumnName: (lastIndex: number, groupType?: string) => string = useCallback(
     (lastIndex, groupType) => {
@@ -178,6 +187,8 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
         case TableOperation.RowClear:
           onRowsUpdate(clearAt(tableRows.current, selectedRowIndex));
           break;
+        case TableOperation.RowDuplicate:
+          onRowsUpdate(duplicateAfter(tableRows.current, selectedRowIndex));
       }
       setShowTableHandler(false);
     },
