@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
+import "./HitPolicySelector.css";
 import { BuiltinAggregation, HitPolicy } from "../../api";
 import * as React from "react";
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState } from "react";
 import { PopoverMenu } from "../PopoverMenu";
-import { Menu, MenuItem, MenuList } from "@patternfly/react-core";
+import { Select, SelectOption, SelectVariant } from "@patternfly/react-core";
 import * as _ from "lodash";
 import { useBoxedExpressionEditorI18n } from "../../i18n";
 import { BoxedExpressionGlobalContext } from "../../context";
@@ -42,12 +43,18 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
 }) => {
   const { i18n } = useBoxedExpressionEditorI18n();
 
+  const [hitPolicySelectOpen, setHitPolicySelectOpen] = useState(false);
+  const [builtInAggregatorSelectOpen, setBuiltInAggregatorSelectOpen] = useState(false);
+
   const globalContext = useContext(BoxedExpressionGlobalContext);
 
+  const onHitPolicySelectToggle = useCallback((isOpen) => setHitPolicySelectOpen(isOpen), []);
+  const onBuiltInAggregatorSelectToggle = useCallback((isOpen) => setBuiltInAggregatorSelectOpen(isOpen), []);
+
   const hitPolicySelectionCallback = useCallback(
-    (hide: () => void) => (event: MouseEvent, itemId: string) => {
+    (event: React.MouseEvent<Element, MouseEvent>, itemId: string) => {
       onHitPolicySelect(itemId as HitPolicy);
-      hide();
+      setHitPolicySelectOpen(false);
     },
     [onHitPolicySelect]
   );
@@ -55,17 +62,17 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
   const renderHitPolicyItems = useCallback(
     () =>
       _.map(Object.values(HitPolicy), (key) => (
-        <MenuItem key={key} itemId={key} data-ouia-component-id={key}>
+        <SelectOption key={key} value={key} data-ouia-component-id={key}>
           {key}
-        </MenuItem>
+        </SelectOption>
       )),
     []
   );
 
   const builtInAggregatorSelectionCallback = useCallback(
-    (hide: () => void) => (event: MouseEvent, itemId: string) => {
+    (event: React.MouseEvent<Element, MouseEvent>, itemId: string) => {
       onBuiltInAggregatorSelect(itemId as BuiltinAggregation);
-      hide();
+      setBuiltInAggregatorSelectOpen(false);
     },
     [onBuiltInAggregatorSelect]
   );
@@ -73,9 +80,9 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
   const renderBuiltInAggregationItems = useCallback(
     () =>
       _.map(Object.keys(BuiltinAggregation), (key) => (
-        <MenuItem key={key} itemId={key} data-ouia-component-id={key}>
+        <SelectOption key={key} value={key} data-ouia-component-id={key}>
           {key}
-        </MenuItem>
+        </SelectOption>
       )),
     []
   );
@@ -86,16 +93,40 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
       appendTo={globalContext.boxedExpressionEditorRef?.current ?? undefined}
       className="hit-policy-popover"
       hasAutoWidth
-      body={(hide: () => void) => (
-        <React.Fragment>
-          <Menu onSelect={hitPolicySelectionCallback(hide)}>
-            <MenuList>{renderHitPolicyItems()}</MenuList>
-          </Menu>
-          <Menu onSelect={builtInAggregatorSelectionCallback(hide)}>
-            <MenuList>{renderBuiltInAggregationItems()}</MenuList>
-          </Menu>
-        </React.Fragment>
-      )}
+      body={
+        <div className="hit-policy-container">
+          <div className="hit-policy-section">
+            <label>{i18n.hitPolicy}</label>
+            <Select
+              className="hit-policy-selector"
+              menuAppendTo={globalContext.boxedExpressionEditorRef?.current ?? "inline"}
+              ouiaId="hit-policy-selector"
+              variant={SelectVariant.single}
+              onToggle={onHitPolicySelectToggle}
+              onSelect={hitPolicySelectionCallback}
+              isOpen={hitPolicySelectOpen}
+              selections={selectedHitPolicy}
+            >
+              {renderHitPolicyItems()}
+            </Select>
+          </div>
+          <div className="builtin-aggregator-section">
+            <label>{i18n.builtInAggregator}</label>
+            <Select
+              className="builtin-aggregator-selector"
+              menuAppendTo={globalContext.boxedExpressionEditorRef?.current ?? "inline"}
+              ouiaId="builtin-aggregator-selector"
+              variant={SelectVariant.single}
+              onToggle={onBuiltInAggregatorSelectToggle}
+              onSelect={builtInAggregatorSelectionCallback}
+              isOpen={builtInAggregatorSelectOpen}
+              selections={selectedBuiltInAggregator}
+            >
+              {renderBuiltInAggregationItems()}
+            </Select>
+          </div>
+        </div>
+      }
     >
       <div className="selected-function-kind">{`${_.first(selectedHitPolicy)}${selectedBuiltInAggregator}`}</div>
     </PopoverMenu>
