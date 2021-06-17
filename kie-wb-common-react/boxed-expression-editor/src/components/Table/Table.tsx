@@ -235,6 +235,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
           TableOperation.RowInsertBelow,
           ...(tableRows.current.length > 1 ? [TableOperation.RowDelete] : []),
           TableOperation.RowClear,
+          TableOperation.RowDuplicate,
         ]);
         tableHandlerStateUpdate(target, columnIndex);
         setLastSelectedRowIndex(rowIndex);
