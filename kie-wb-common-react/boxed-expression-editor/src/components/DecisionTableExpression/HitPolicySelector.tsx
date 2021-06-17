@@ -15,7 +15,7 @@
  */
 
 import "./HitPolicySelector.css";
-import { BuiltinAggregation, HitPolicy } from "../../api";
+import { BuiltinAggregation, getEnumKeyByEnumValue, HitPolicy } from "../../api";
 import * as React from "react";
 import { useCallback, useContext, useState } from "react";
 import { PopoverMenu } from "../PopoverMenu";
@@ -35,6 +35,7 @@ export interface HitPolicySelectorProps {
   onBuiltInAggregatorSelect: (builtInAggregator: BuiltinAggregation) => void;
 }
 
+const BUILT_IN_AGGREGATION_AVAILABILITY = [HitPolicy.Collect];
 export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> = ({
   onBuiltInAggregatorSelect,
   onHitPolicySelect,
@@ -45,6 +46,7 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
 
   const [hitPolicySelectOpen, setHitPolicySelectOpen] = useState(false);
   const [builtInAggregatorSelectOpen, setBuiltInAggregatorSelectOpen] = useState(false);
+  const [builtInAggregatorSelectDisabled, setBuiltInAggregatorSelectDisabled] = useState(true);
 
   const globalContext = useContext(BoxedExpressionGlobalContext);
 
@@ -53,10 +55,18 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
 
   const hitPolicySelectionCallback = useCallback(
     (event: React.MouseEvent<Element, MouseEvent>, itemId: string) => {
-      onHitPolicySelect(itemId as HitPolicy);
+      const updatedHitPolicy = itemId as HitPolicy;
+      const hitPolicySupportsAggregation = _.includes(BUILT_IN_AGGREGATION_AVAILABILITY, updatedHitPolicy);
+      onHitPolicySelect(updatedHitPolicy);
+      if (hitPolicySupportsAggregation) {
+        setBuiltInAggregatorSelectDisabled(false);
+      } else {
+        setBuiltInAggregatorSelectDisabled(true);
+        onBuiltInAggregatorSelect("<None>" as BuiltinAggregation);
+      }
       setHitPolicySelectOpen(false);
     },
-    [onHitPolicySelect]
+    [onBuiltInAggregatorSelect, onHitPolicySelect]
   );
 
   const renderHitPolicyItems = useCallback(
@@ -116,11 +126,12 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
               className="builtin-aggregator-selector"
               menuAppendTo={globalContext.boxedExpressionEditorRef?.current ?? "inline"}
               ouiaId="builtin-aggregator-selector"
+              isDisabled={builtInAggregatorSelectDisabled}
               variant={SelectVariant.single}
               onToggle={onBuiltInAggregatorSelectToggle}
               onSelect={builtInAggregatorSelectionCallback}
               isOpen={builtInAggregatorSelectOpen}
-              selections={selectedBuiltInAggregator}
+              selections={getEnumKeyByEnumValue(BuiltinAggregation, selectedBuiltInAggregator)!}
             >
               {renderBuiltInAggregationItems()}
             </Select>
