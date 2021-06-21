@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-.expression-container .decision-table-expression .selected-function-kind {
+.expression-container .decision-table-expression .selected-hit-policy {
   cursor: pointer;
 }
 

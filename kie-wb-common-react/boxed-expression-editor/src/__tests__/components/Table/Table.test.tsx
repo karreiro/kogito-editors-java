@@ -542,7 +542,7 @@ async function selectMenuEntryIfNotDisabled(baseElement: Element, menuEntry: str
   });
 }
 
-async function openContextMenu(element: Element) {
+export async function openContextMenu(element: Element): Promise<void> {
   await act(async () => {
     fireEvent.contextMenu(element);
     await flushPromises();

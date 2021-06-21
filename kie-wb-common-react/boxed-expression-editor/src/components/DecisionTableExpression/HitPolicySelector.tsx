@@ -139,7 +139,7 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
         </div>
       }
     >
-      <div className="selected-function-kind">{`${_.first(selectedHitPolicy)}${selectedBuiltInAggregator}`}</div>
+      <div className="selected-hit-policy">{`${_.first(selectedHitPolicy)}${selectedBuiltInAggregator}`}</div>
     </PopoverMenu>
   );
 };
