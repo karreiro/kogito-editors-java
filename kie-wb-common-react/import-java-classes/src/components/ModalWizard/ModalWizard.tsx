@@ -77,7 +77,7 @@ export const ModalWizard: React.FunctionComponent<ModalWizardProps> = ({
       </Tooltip>
     );
   };
-  console.log(buttonTooltipMessage);
+
   return (
     <>
       {buttonTooltipMessage ? <WizardButtonWithTooltip /> : <WizardButton />}
