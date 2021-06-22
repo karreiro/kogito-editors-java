@@ -41,8 +41,8 @@ export const EditTextInline: React.FunctionComponent<EditTextInlineProps> = ({ o
 
   const onKeyDown = useMemo(
     () => (event: React.KeyboardEvent<HTMLInputElement>) => {
-      const pressedEnter = event.key === "Enter";
-      const pressedEscape = event.key === "Escape";
+      const pressedEnter = _.lowerCase(event.key) === "enter";
+      const pressedEscape = _.lowerCase(event.key) === "escape";
       if (pressedEnter) {
         event.currentTarget.blur();
       }
