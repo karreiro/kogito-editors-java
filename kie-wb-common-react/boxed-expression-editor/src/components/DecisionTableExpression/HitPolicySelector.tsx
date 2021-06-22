@@ -46,7 +46,9 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
 
   const [hitPolicySelectOpen, setHitPolicySelectOpen] = useState(false);
   const [builtInAggregatorSelectOpen, setBuiltInAggregatorSelectOpen] = useState(false);
-  const [builtInAggregatorSelectDisabled, setBuiltInAggregatorSelectDisabled] = useState(true);
+  const [builtInAggregatorSelectDisabled, setBuiltInAggregatorSelectDisabled] = useState(
+    !_.includes(BUILT_IN_AGGREGATION_AVAILABILITY, selectedHitPolicy)
+  );
 
   const globalContext = useContext(BoxedExpressionGlobalContext);
 
@@ -97,6 +99,13 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
     []
   );
 
+  const renderAggregator = useCallback((builtInAggregator: BuiltinAggregation, hitPolicy: HitPolicy) => {
+    if (_.includes(BUILT_IN_AGGREGATION_AVAILABILITY, hitPolicy)) {
+      return builtInAggregator;
+    }
+    return "";
+  }, []);
+
   return (
     <PopoverMenu
       title={i18n.editHitPolicy}
@@ -139,7 +148,10 @@ export const HitPolicySelector: React.FunctionComponent<HitPolicySelectorProps> 
         </div>
       }
     >
-      <div className="selected-hit-policy">{`${_.first(selectedHitPolicy)}${selectedBuiltInAggregator}`}</div>
+      <div className="selected-hit-policy">{`${_.first(selectedHitPolicy)}${renderAggregator(
+        selectedBuiltInAggregator,
+        selectedHitPolicy
+      )}`}</div>
     </PopoverMenu>
   );
 };
