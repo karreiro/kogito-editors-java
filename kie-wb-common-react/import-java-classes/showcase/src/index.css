@@ -16,12 +16,9 @@ code {
   padding: 20px;
 }
 
-.status-changes-buttons {
+.menu {
+  display: inline-grid;
   margin: 5px;
-}
-
-.status-changes-buttons button {
-  margin: 2px;
 }
 
 .import-java-classes {

@@ -20,6 +20,9 @@ import { ImportJavaClasses } from "./components";
 
 export * from "./components";
 
-window.renderImportJavaClasses = (selector: string) => {
-  ReactDOM.render(<ImportJavaClasses />, document.getElementById(selector));
+window.renderImportJavaClasses = (selector: string, buttonDisabledStatus: boolean, buttonTooltipMessage?: string) => {
+  ReactDOM.render(
+    <ImportJavaClasses buttonDisabledStatus={buttonDisabledStatus} buttonTooltipMessage={buttonTooltipMessage} />,
+    document.getElementById(selector)
+  );
 };

@@ -16,7 +16,7 @@
 
 import * as React from "react";
 import { useState, useCallback } from "react";
-import { Button, Wizard, WizardStep } from "@patternfly/react-core";
+import { Button, Tooltip, Wizard, WizardStep } from "@patternfly/react-core";
 
 export interface ModalWizardProps {
   /** Text to apply to the Modal button */
@@ -27,8 +27,8 @@ export interface ModalWizardProps {
   buttonIcon?: React.ReactNode;
   /** Button disabled status */
   buttonDisabledStatus: boolean;
-  /** Button hidden status */
-  buttonHiddenStatus: boolean;
+  /** Button tooltip message */
+  buttonTooltipMessage?: string;
   /** Title of the Modal Wizard */
   wizardTitle: string;
   /** Title of the Modal Wizard */
@@ -42,26 +42,45 @@ export const ModalWizard: React.FunctionComponent<ModalWizardProps> = ({
   buttonStyle,
   buttonIcon,
   buttonDisabledStatus,
-  buttonHiddenStatus,
+  buttonTooltipMessage,
   wizardTitle,
   wizardDescription,
   wizardSteps,
 }: ModalWizardProps) => {
   const [isOpen, setOpen] = useState(false);
   const handleModalToggle = useCallback(() => setOpen(!isOpen), [isOpen]);
-
-  return (
-    <>
+  const WizardButton: React.FunctionComponent = () => {
+    return (
       <Button
         variant={buttonStyle}
         icon={buttonIcon}
         onClick={handleModalToggle}
         isDisabled={buttonDisabledStatus}
-        style={{ display: buttonHiddenStatus ? "none" : "block" }}
         data-testid={"modal-wizard-button"}
       >
         {buttonText}
       </Button>
+    );
+  };
+  const WizardButtonWithTooltip: React.FunctionComponent = () => {
+    return (
+      <Tooltip content={buttonTooltipMessage}>
+        <Button
+          variant={buttonStyle}
+          icon={buttonIcon}
+          onClick={handleModalToggle}
+          isAriaDisabled={buttonDisabledStatus}
+          data-testid={"modal-wizard-button"}
+        >
+          {buttonText}
+        </Button>
+      </Tooltip>
+    );
+  };
+  console.log(buttonTooltipMessage);
+  return (
+    <>
+      {buttonTooltipMessage ? <WizardButtonWithTooltip /> : <WizardButton />}
       <Wizard
         title={wizardTitle}
         description={wizardDescription}

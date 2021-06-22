@@ -26,13 +26,13 @@ import { ImportJavaClassesWizard } from "./ImportJavaClassesWizard";
 export interface ImportJavaClassesProps {
   /** Button disabled status */
   buttonDisabledStatus: boolean;
-  /** Button hidden status */
-  buttonHiddenStatus: boolean;
+  /** Button tooltip message */
+  buttonTooltipMessage?: string;
 }
 
 export const ImportJavaClasses: React.FunctionComponent<ImportJavaClassesProps> = ({
   buttonDisabledStatus,
-  buttonHiddenStatus,
+  buttonTooltipMessage,
 }: ImportJavaClassesProps) => {
   return (
     <I18nDictionariesProvider
@@ -41,7 +41,10 @@ export const ImportJavaClasses: React.FunctionComponent<ImportJavaClassesProps> 
       initialLocale={navigator.language}
       ctx={ImportJavaClassesWizardI18nContext}
     >
-      <ImportJavaClassesWizard buttonDisabledStatus={buttonDisabledStatus} buttonHiddenStatus={buttonHiddenStatus} />
+      <ImportJavaClassesWizard
+        buttonDisabledStatus={buttonDisabledStatus}
+        buttonTooltipMessage={buttonTooltipMessage}
+      />
     </I18nDictionariesProvider>
   );
 };
