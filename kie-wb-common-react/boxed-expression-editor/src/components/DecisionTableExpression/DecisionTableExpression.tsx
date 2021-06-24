@@ -131,6 +131,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
           dataType: inputClause.dataType,
           width: inputClause.width,
           groupType: DecisionTableColumnType.InputClause,
+          cssClasses: "decision-table--input",
         } as ColumnInstance)
     );
     const outputColumns = _.map(
@@ -142,6 +143,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
           dataType: outputClause.dataType,
           width: outputClause.width,
           groupType: DecisionTableColumnType.OutputClause,
+          cssClasses: "decision-table--output",
         } as ColumnInstance)
     );
     const annotationColumns = _.map(
@@ -153,6 +155,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
           width: annotation.width,
           inlineEditable: true,
           groupType: DecisionTableColumnType.Annotation,
+          cssClasses: "decision-table--annotation",
         } as ColumnInstance)
     );
 
