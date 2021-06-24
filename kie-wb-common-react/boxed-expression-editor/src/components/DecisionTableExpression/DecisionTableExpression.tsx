@@ -25,6 +25,7 @@ import {
   GroupOperations,
   HitPolicy,
   LogicType,
+  TableHeaderVisibility,
   TableOperation,
 } from "../../api";
 import * as React from "react";
@@ -47,6 +48,8 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   uid,
   isHeadless,
   onUpdatingRecursiveExpression,
+  name,
+  dataType,
   hitPolicy = HitPolicy.Unique,
   aggregation = BuiltinAggregation["<None>"],
   input = [{ name: "input-1", dataType: DataType.Undefined }],
@@ -153,7 +156,27 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
         } as ColumnInstance)
     );
 
-    return [...inputColumns, ...outputColumns, ...annotationColumns];
+    const inputSection = {
+      groupType: DecisionTableColumnType.InputClause,
+      label: "Input",
+      accessor: "Input",
+      columns: inputColumns,
+    };
+    const outputSection = {
+      groupType: DecisionTableColumnType.OutputClause,
+      label: name,
+      accessor: name,
+      dataType,
+      columns: outputColumns,
+    };
+    const annotationSection = {
+      groupType: DecisionTableColumnType.Annotation,
+      label: "Annotations",
+      accessor: "Annotations",
+      columns: annotationColumns,
+    };
+
+    return [inputSection, outputSection, annotationSection];
   };
 
   const evaluateRows = () =>
@@ -161,7 +184,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       const rowArray = [...rule.inputEntries, ...rule.outputEntries, ...rule.annotationEntries];
       return _.reduce(
         columns.current,
-        (tableRow: DataRecord, column, columnIndex) => {
+        (tableRow: DataRecord, column, columnIndex: number) => {
           tableRow[column.accessor] = rowArray[columnIndex] || EMPTY_SYMBOL;
           return tableRow;
         },
@@ -169,7 +192,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       );
     });
 
-  const columns = useRef<ColumnInstance[]>(evaluateColumns());
+  const columns = useRef<ColumnInstance[]>(evaluateColumns() as ColumnInstance[]);
   const rows = useRef<DataRecord[]>(evaluateRows());
 
   const spreadDecisionTableExpressionDefinition = useCallback(() => {
@@ -266,6 +289,8 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   return (
     <div className={`decision-table-expression ${uid}`}>
       <Table
+        headerLevels={1}
+        headerVisibility={TableHeaderVisibility.Full}
         getColumnPrefix={getColumnPrefix}
         editColumnLabel={getEditColumnLabel}
         handlerConfiguration={getHandlerConfiguration}
