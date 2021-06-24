@@ -182,11 +182,13 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     return [inputSection, outputSection, annotationSection];
   };
 
+  const columnsAtLastLevel = () => _.flatMap(columns.current, "columns");
+
   const evaluateRows = () =>
     _.map(rules, (rule) => {
       const rowArray = [...rule.inputEntries, ...rule.outputEntries, ...rule.annotationEntries];
       return _.reduce(
-        columns.current,
+        columnsAtLastLevel(),
         (tableRow: DataRecord, column, columnIndex: number) => {
           tableRow[column.accessor] = rowArray[columnIndex] || EMPTY_SYMBOL;
           return tableRow;
@@ -199,7 +201,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   const rows = useRef<DataRecord[]>(evaluateRows());
 
   const spreadDecisionTableExpressionDefinition = useCallback(() => {
-    const groupedColumns = _.groupBy(columns.current, (column) => column.groupType);
+    const groupedColumns = _.groupBy(columnsAtLastLevel(), (column) => column.groupType);
     const input: Clause[] = _.map(groupedColumns[DecisionTableColumnType.InputClause], (inputClause) => ({
       name: inputClause.accessor,
       dataType: inputClause.dataType,
@@ -248,7 +250,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     (updatedRows: DataRecord[]) =>
       _.map(updatedRows, (row) =>
         _.reduce(
-          columns.current,
+          columnsAtLastLevel(),
           (filledRow: DataRecord, column: ColumnInstance) => {
             if (_.isNil(row[column.accessor])) {
               filledRow[column.accessor] =
@@ -274,7 +276,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
 
   const onRowAdding = useCallback(() => {
     return _.reduce(
-      columns.current,
+      columnsAtLastLevel(),
       (tableRow: DataRecord, column: ColumnInstance) => {
         tableRow[column.accessor] =
           column.groupType === DecisionTableColumnType.InputClause ? DASH_SYMBOL : EMPTY_SYMBOL;
