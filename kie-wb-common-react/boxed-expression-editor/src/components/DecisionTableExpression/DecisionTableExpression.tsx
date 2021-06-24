@@ -50,6 +50,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   onUpdatingRecursiveExpression,
   name,
   dataType,
+  onUpdatingNameAndDataType,
   hitPolicy = HitPolicy.Unique,
   aggregation = BuiltinAggregation["<None>"],
   input = [{ name: "input-1", dataType: DataType.Undefined }],
@@ -167,9 +168,9 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     };
     const outputSection = {
       groupType: DecisionTableColumnType.OutputClause,
-      label: name,
-      accessor: name,
-      dataType,
+      label: decisionName.current,
+      accessor: decisionName.current,
+      dataType: decisionDataType.current,
       columns: outputColumns,
     };
     const annotationSection = {
@@ -197,6 +198,8 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       );
     });
 
+  const decisionName = useRef(name);
+  const decisionDataType = useRef(dataType);
   const columns = useRef<ColumnInstance[]>(evaluateColumns() as ColumnInstance[]);
   const rows = useRef<DataRecord[]>(evaluateRows());
 
@@ -223,8 +226,10 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     }));
 
     const expressionDefinition: DecisionTableProps = {
-      logicType: LogicType.DecisionTable,
       uid,
+      logicType: LogicType.DecisionTable,
+      name: decisionName.current,
+      dataType: decisionDataType.current,
       hitPolicy: selectedHitPolicy,
       aggregation: selectedAggregation,
       input,
@@ -241,9 +246,13 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   const onColumnsUpdate = useCallback(
     (updatedColumns) => {
       columns.current = [...updatedColumns];
+      const decisionNodeColumn = _.find(updatedColumns, { groupType: DecisionTableColumnType.OutputClause });
+      decisionName.current = decisionNodeColumn.label;
+      decisionDataType.current = decisionNodeColumn.dataType;
+      onUpdatingNameAndDataType?.(decisionNodeColumn.label, decisionNodeColumn.dataType);
       spreadDecisionTableExpressionDefinition();
     },
-    [spreadDecisionTableExpressionDefinition]
+    [onUpdatingNameAndDataType, spreadDecisionTableExpressionDefinition]
   );
 
   const fillMissingCellValues = useCallback(
