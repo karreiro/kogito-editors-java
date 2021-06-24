@@ -56,6 +56,8 @@ declare module "react-table" {
     accessor: string;
     /** Column group type */
     groupType?: string;
+    /** Column additive css classes - appended as passed */
+    cssClasses?: string;
     /** Column label */
     label: string | JSX.Element;
     /** Custom Element to be rendered in place of the column label */
