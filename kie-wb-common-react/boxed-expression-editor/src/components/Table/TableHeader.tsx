@@ -80,19 +80,26 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
     [onRowsUpdate, tableRows]
   );
 
+  /**
+   * Currently, column rename/type update is supported only for the first and the second level of the header
+   */
   const onColumnNameOrDataTypeUpdate: (
+    column: ColumnInstance,
     columnIndex: number
   ) => ({ name, dataType }: { name?: string; dataType?: DataType }) => void = useCallback(
-    (columnIndex: number) => {
+    (column, columnIndex) => {
       return ({ name = "", dataType }) => {
-        const prevColumnName = (tableColumns.current[columnIndex] as ColumnInstance).accessor as string;
-        const updatedTableColumns = [...tableColumns.current] as ColumnInstance[];
-        updatedTableColumns[columnIndex].label = name;
-        updatedTableColumns[columnIndex].accessor = name;
-        if (dataType) {
-          updatedTableColumns[columnIndex].dataType = dataType;
+        const prevColumnName = column.label as string;
+        let columnToUpdate = tableColumns.current[columnIndex] as ColumnInstance;
+        if (column.depth > 0) {
+          const parentName = column.parent.label;
+          const parentColumns = (_.find(tableColumns.current, { accessor: parentName }) as ColumnInstance).columns;
+          columnToUpdate = _.find(parentColumns, { accessor: prevColumnName })!;
         }
-        onColumnsUpdate(updatedTableColumns);
+        columnToUpdate.label = name;
+        columnToUpdate.accessor = name;
+        columnToUpdate.dataType = dataType as DataType;
+        onColumnsUpdate([...tableColumns.current]);
         if (name !== prevColumnName) {
           updateColumnNameInRows(prevColumnName, name);
         }
@@ -122,7 +129,7 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
         return (
           <EditTextInline
             value={column.label as string}
-            onTextChange={(value) => onColumnNameOrDataTypeUpdate(columnIndex)({ name: value })}
+            onTextChange={(value) => onColumnNameOrDataTypeUpdate(column, columnIndex)({ name: value })}
           />
         );
       }
@@ -176,7 +183,7 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
                   title={getColumnLabel(column.groupType)}
                   selectedExpressionName={column.label}
                   selectedDataType={column.dataType}
-                  onExpressionUpdate={(expression) => onColumnNameOrDataTypeUpdate(columnIndex)(expression)}
+                  onExpressionUpdate={(expression) => onColumnNameOrDataTypeUpdate(column, columnIndex)(expression)}
                   key={`${getColumnKey(column)}-${columnIndex}`}
                 >
                   {renderHeaderCellInfo(column, columnIndex)}
