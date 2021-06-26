@@ -35,6 +35,7 @@ import { ColumnInstance, DataRecord } from "react-table";
 import { HitPolicySelector } from "./HitPolicySelector";
 import * as _ from "lodash";
 import { useBoxedExpressionEditorI18n } from "../../i18n";
+import { EXPRESSION_NAME } from "../EditExpressionMenu";
 
 enum DecisionTableColumnType {
   InputClause = "input",
@@ -48,8 +49,8 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   uid,
   isHeadless,
   onUpdatingRecursiveExpression,
-  name,
-  dataType,
+  name = EXPRESSION_NAME,
+  dataType = DataType.Undefined,
   onUpdatingNameAndDataType,
   hitPolicy = HitPolicy.Unique,
   aggregation = BuiltinAggregation["<None>"],
