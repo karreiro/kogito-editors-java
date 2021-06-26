@@ -18,6 +18,12 @@
   cursor: pointer;
 }
 
+.expression-container .decision-table-expression table thead th,
+.expression-container .decision-table-expression table tbody td {
+  display: table-cell !important;
+  height: inherit;
+}
+
 .expression-container .decision-table-expression table thead th.input {
   background-color: #DEF3FF;
 }
@@ -28,4 +34,8 @@
 
 .expression-container .decision-table-expression table thead th.annotation {
   background-color: #FFFFFF;
+}
+
+.expression-container .decision-table-expression table tr {
+  display: table-row;
 }
