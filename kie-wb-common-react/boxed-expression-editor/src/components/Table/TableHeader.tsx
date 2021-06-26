@@ -22,6 +22,7 @@ import { Column, ColumnInstance, DataRecord, HeaderGroup, TableInstance } from "
 import { EditExpressionMenu, EditTextInline } from "../EditExpressionMenu";
 import { DataType, TableHeaderVisibility } from "../../api";
 import { DEFAULT_MIN_WIDTH, Resizer } from "../Resizer";
+import { getColumnsAtLastLevel } from "./Table";
 
 export interface TableHeaderProps {
   /** Table instance */
@@ -108,19 +109,25 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
     [onColumnsUpdate, tableColumns, updateColumnNameInRows]
   );
 
+  const computeColumnKey = useCallback(
+    (column: ColumnInstance, columnIndex: number) =>
+      `${getColumnKey(column)}-${column.parent?.id || ""}-${columnIndex}`,
+    [getColumnKey]
+  );
+
   const renderCountColumn = useCallback(
     (column: ColumnInstance, columnIndex: number) => (
       <Th
         {...column.getHeaderProps()}
         className="fixed-column no-clickable-cell"
-        key={`${getColumnKey(column)}-${columnIndex}`}
+        key={computeColumnKey(column, columnIndex)}
       >
         <div className="header-cell" data-ouia-component-type="expression-column-header">
           {column.label}
         </div>
       </Th>
     ),
-    [getColumnKey]
+    [computeColumnKey]
   );
 
   const renderCellInfoLabel = useCallback(
@@ -149,8 +156,17 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
   );
 
   const onHorizontalResizeStop = useCallback(
-    (columnIndex, columnWidth) => {
-      tableColumns.current[columnIndex].width = columnWidth;
+    (column, columnWidth) => {
+      const columnId = column.originalId || column.id;
+      let columnToUpdate = _.find(tableColumns.current, {
+        accessor: columnId,
+      }) as ColumnInstance;
+      if (column.parent) {
+        columnToUpdate = _.find(getColumnsAtLastLevel(tableColumns.current), {
+          accessor: columnId,
+        }) as ColumnInstance;
+      }
+      columnToUpdate.width = columnWidth;
       onColumnsUpdate(tableColumns.current);
     },
     [onColumnsUpdate, tableColumns]
@@ -171,12 +187,9 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
           className={`resizable-column ${!column.dataType ? "no-clickable-cell" : ""} ${column.groupType || ""} ${
             column.cssClasses || ""
           }`}
-          key={`${getColumnKey(column)}-${columnIndex}`}
+          key={computeColumnKey(column, columnIndex)}
         >
-          <Resizer
-            width={width}
-            onHorizontalResizeStop={(columnWidth) => onHorizontalResizeStop(columnIndex, columnWidth)}
-          >
+          <Resizer width={width} onHorizontalResizeStop={(columnWidth) => onHorizontalResizeStop(column, columnWidth)}>
             <div className="header-cell" data-ouia-component-type="expression-column-header">
               {column.dataType ? (
                 <EditExpressionMenu
@@ -184,7 +197,7 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
                   selectedExpressionName={column.label}
                   selectedDataType={column.dataType}
                   onExpressionUpdate={(expression) => onColumnNameOrDataTypeUpdate(column, columnIndex)(expression)}
-                  key={`${getColumnKey(column)}-${columnIndex}`}
+                  key={computeColumnKey(column, columnIndex)}
                 >
                   {renderHeaderCellInfo(column, columnIndex)}
                 </EditExpressionMenu>
@@ -197,7 +210,7 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
       );
     },
     [
-      getColumnKey,
+      computeColumnKey,
       getColumnLabel,
       onColumnNameOrDataTypeUpdate,
       onHorizontalResizeStop,
