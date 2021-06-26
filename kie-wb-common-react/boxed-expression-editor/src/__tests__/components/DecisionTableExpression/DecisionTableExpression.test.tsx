@@ -31,7 +31,9 @@ describe("DecisionTableExpression tests", () => {
 
     expect(container.querySelector(".decision-table-expression")).toBeTruthy();
     expect(container.querySelector(".decision-table-expression table")).toBeTruthy();
-    expect(container.querySelectorAll(".decision-table-expression table thead tr th.resizable-column")).toHaveLength(3);
+    expect(
+      container.querySelectorAll(".decision-table-expression table thead tr:last-of-type th.resizable-column")
+    ).toHaveLength(3);
     expect(container.querySelectorAll(".decision-table-expression table thead tr th.input")).toBeTruthy();
     expect(container.querySelectorAll(".decision-table-expression table thead tr th.output")).toBeTruthy();
     expect(container.querySelectorAll(".decision-table-expression table thead tr th.annotation")).toBeTruthy();
@@ -97,13 +99,15 @@ describe("DecisionTableExpression tests", () => {
       ).wrapper
     );
 
-    expect(container.querySelector(".decision-table-expression table thead tr th.input")).toHaveTextContent(inputName);
-    expect(container.querySelector(".decision-table-expression table thead tr th.output")).toHaveTextContent(
-      outputName
-    );
-    expect(container.querySelector(".decision-table-expression table thead tr th.annotation")).toHaveTextContent(
-      annotationName
-    );
+    expect(
+      container.querySelector(".decision-table-expression table thead tr:last-of-type th.input")
+    ).toHaveTextContent(inputName);
+    expect(
+      container.querySelector(".decision-table-expression table thead tr:last-of-type th.output")
+    ).toHaveTextContent(outputName);
+    expect(
+      container.querySelector(".decision-table-expression table thead tr:last-of-type th.annotation")
+    ).toHaveTextContent(annotationName);
     expect(container.querySelectorAll(".decision-table-expression table tbody tr td.data-cell")).toHaveLength(3);
     expect(container.querySelectorAll(".decision-table-expression table tbody tr td.data-cell")[0]).toHaveTextContent(
       inputEntry
