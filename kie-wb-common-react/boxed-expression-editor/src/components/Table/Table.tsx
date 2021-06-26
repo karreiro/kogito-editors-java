@@ -39,6 +39,14 @@ export const NO_TABLE_CONTEXT_MENU_CLASS = "no-table-context-menu";
 const NUMBER_OF_ROWS_COLUMN = "#";
 const NUMBER_OF_ROWS_SUBCOLUMN = "0";
 
+export const getColumnsAtLastLevel: (columns: ColumnInstance[] | Column[]) => ColumnInstance[] = (columns) =>
+  _.flatMap(columns, (column: ColumnInstance) => {
+    if (_.has(column, "columns")) {
+      return column.columns;
+    }
+    return column;
+  });
+
 export const Table: React.FunctionComponent<TableProps> = ({
   tableId,
   children,
@@ -110,7 +118,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
   const [tableHandlerAllowedOperations, setTableHandlerAllowedOperations] = useState(
     _.values(TableOperation).map((operation) => parseInt(operation.toString()))
   );
-  const [lastSelectedColumnIndex, setLastSelectedColumnIndex] = useState(-1);
+  const [lastSelectedColumn, setLastSelectedColumn] = useState({} as ColumnInstance);
   const [lastSelectedRowIndex, setLastSelectedRowIndex] = useState(-1);
 
   useEffect(() => {
@@ -183,17 +191,18 @@ export const Table: React.FunctionComponent<TableProps> = ({
     return targetIsContainedInCurrentTable && contextMenuAvailableForTarget;
   };
 
-  const tableHandlerStateUpdate = (target: HTMLElement, columnIndex: number) => {
+  const tableHandlerStateUpdate = (target: HTMLElement, column: ColumnInstance) => {
     setTableHandlerTarget(target);
     globalContext.currentlyOpenedHandlerCallback?.(false);
     setShowTableHandler(true);
     globalContext.setCurrentlyOpenedHandlerCallback?.(() => setShowTableHandler);
-    setLastSelectedColumnIndex(columnIndex);
+    setLastSelectedColumn(column);
   };
 
   const atLeastTwoColumnsOfTheSameGroupType = (columnIndex: number) => {
-    const groupTypeForCurrentColumn = (tableColumns.current[columnIndex] as ColumnInstance).groupType;
-    const columnsByGroupType = _.groupBy(tableColumns.current, (column: ColumnInstance) => column.groupType);
+    const columnsAtLastLevel = getColumnsAtLastLevel(tableColumns.current);
+    const groupTypeForCurrentColumn = (columnsAtLastLevel[columnIndex] as ColumnInstance).groupType;
+    const columnsByGroupType = _.groupBy(columnsAtLastLevel, (column: ColumnInstance) => column.groupType);
     return groupTypeForCurrentColumn
       ? columnsByGroupType[groupTypeForCurrentColumn].length > 1
       : tableColumns.current.length > 2; // The total number of columns is counting also the # of rows column
@@ -212,14 +221,15 @@ export const Table: React.FunctionComponent<TableProps> = ({
           ...(columnCanBeDeleted(columnIndex) ? [TableOperation.ColumnDelete] : []),
         ];
 
-  const getThProps = (column: ColumnInstance, columnIndex: number) => ({
+  const getThProps = (column: ColumnInstance) => ({
     onContextMenu: (e: ContextMenuEvent) => {
+      const columnIndex = _.findIndex(getColumnsAtLastLevel(tableColumns.current), { accessor: column.id });
       const target = e.target as HTMLElement;
       const handlerOnHeaderIsAvailable = !column.disableHandlerOnHeader;
       if (contextMenuIsAvailable(target) && handlerOnHeaderIsAvailable) {
         e.preventDefault();
         setTableHandlerAllowedOperations(getColumnOperations(columnIndex));
-        tableHandlerStateUpdate(target, columnIndex);
+        tableHandlerStateUpdate(target, column);
       }
     },
   });
@@ -237,7 +247,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
           TableOperation.RowClear,
           TableOperation.RowDuplicate,
         ]);
-        tableHandlerStateUpdate(target, columnIndex);
+        tableHandlerStateUpdate(target, getColumnsAtLastLevel(tableColumns.current)[columnIndex]);
         setLastSelectedRowIndex(rowIndex);
       }
     },
@@ -286,7 +296,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
           tableColumns={tableColumns}
           getColumnPrefix={getColumnPrefix}
           handlerConfiguration={handlerConfiguration}
-          lastSelectedColumnIndex={lastSelectedColumnIndex}
+          lastSelectedColumn={lastSelectedColumn}
           lastSelectedRowIndex={lastSelectedRowIndex}
           tableRows={tableRows}
           onRowsUpdate={onRowsUpdateCallback}
