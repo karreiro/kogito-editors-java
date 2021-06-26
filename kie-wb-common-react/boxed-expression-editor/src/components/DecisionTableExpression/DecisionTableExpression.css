@@ -20,7 +20,7 @@
 
 .expression-container .decision-table-expression table thead th,
 .expression-container .decision-table-expression table tbody td {
-  display: table-cell !important;
+  display: table-cell !important; /* Need to overwrite inline properties added by react-table */
   height: inherit;
 }
 
