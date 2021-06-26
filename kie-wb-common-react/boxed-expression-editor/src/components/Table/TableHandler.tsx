@@ -28,14 +28,15 @@ import { Column, ColumnInstance, DataRecord } from "react-table";
 import { Popover } from "@patternfly/react-core";
 import { TableHandlerMenu } from "./TableHandlerMenu";
 import { BoxedExpressionGlobalContext } from "../../context";
+import { getColumnsAtLastLevel } from "./Table";
 
 export interface TableHandlerProps {
   /** Gets the prefix to be used for the next column name */
   getColumnPrefix: (groupType?: string) => string;
   /** Columns instance */
   tableColumns: React.MutableRefObject<Column[]>;
-  /** Last selected column index */
-  lastSelectedColumnIndex: number;
+  /** Last selected column */
+  lastSelectedColumn: ColumnInstance;
   /** Last selected row index */
   lastSelectedRowIndex: number;
   /** Rows instance */
@@ -63,7 +64,7 @@ export interface TableHandlerProps {
 export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
   getColumnPrefix,
   tableColumns,
-  lastSelectedColumnIndex,
+  lastSelectedColumn,
   lastSelectedRowIndex,
   tableRows,
   onRowsUpdate,
@@ -78,12 +79,12 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
 }) => {
   const globalContext = useContext(BoxedExpressionGlobalContext);
 
-  const [selectedColumnIndex, setSelectedColumnIndex] = useState(lastSelectedColumnIndex);
+  const [selectedColumn, setSelectedColumn] = useState(lastSelectedColumn);
   const [selectedRowIndex, setSelectedRowIndex] = useState(lastSelectedRowIndex);
 
   useEffect(() => {
-    setSelectedColumnIndex(lastSelectedColumnIndex);
-  }, [lastSelectedColumnIndex]);
+    setSelectedColumn(lastSelectedColumn);
+  }, [lastSelectedColumn]);
 
   useEffect(() => {
     setSelectedRowIndex(lastSelectedRowIndex);
@@ -132,48 +133,58 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     return columnsByGroupType[groupType]?.length;
   }, []);
 
-  const generateNextAvailableColumn = useCallback(
-    (columns: Column[]) => {
-      const clickedColumn = columns[selectedColumnIndex] as ColumnInstance;
-      const groupType = clickedColumn?.groupType;
-      const columnsLength = groupType ? getLengthOfColumnsByGroupType(columns, groupType) : columns.length;
-      const nextAvailableColumnName = generateNextAvailableColumnName(columnsLength, groupType);
+  const generateNextAvailableColumn = useCallback(() => {
+    const groupType = selectedColumn.groupType;
+    const cssClasses = selectedColumn.cssClasses;
+    const columns = getColumnsAtLastLevel(tableColumns.current);
+    const columnsLength = groupType ? getLengthOfColumnsByGroupType(columns, groupType) + 1 : columns.length;
+    const nextAvailableColumnName = generateNextAvailableColumnName(columnsLength, groupType);
 
-      return {
-        accessor: nextAvailableColumnName,
-        label: nextAvailableColumnName,
-        ...(clickedColumn.dataType ? { dataType: DataType.Undefined } : {}),
-        inlineEditable: clickedColumn?.inlineEditable,
-        groupType,
-      } as ColumnInstance;
-    },
-    [generateNextAvailableColumnName, getLengthOfColumnsByGroupType, selectedColumnIndex]
-  );
+    return {
+      accessor: nextAvailableColumnName,
+      label: nextAvailableColumnName,
+      ...(selectedColumn.dataType ? { dataType: DataType.Undefined } : {}),
+      inlineEditable: selectedColumn.inlineEditable,
+      groupType,
+      cssClasses,
+    } as ColumnInstance;
+  }, [generateNextAvailableColumnName, getLengthOfColumnsByGroupType, selectedColumn, tableColumns]);
 
   /** These column operations have impact also on the collection of cells */
-  const updateColumnsThenRows = useCallback(
-    (columns) => {
-      onColumnsUpdate(columns);
-      onRowsUpdate(tableRows.current);
-    },
-    [onColumnsUpdate, onRowsUpdate, tableRows]
-  );
+  const updateColumnsThenRows = useCallback(() => {
+    onColumnsUpdate([...tableColumns.current]);
+    onRowsUpdate([...tableRows.current]);
+  }, [onColumnsUpdate, onRowsUpdate, tableColumns, tableRows]);
+
+  const updateTargetColumns = (operation: <T extends unknown>(elements: T[], index: number, element: T) => T[]) => {
+    if (selectedColumn.parent) {
+      const parent = _.find(tableColumns.current, { accessor: selectedColumn.parent.id }) as ColumnInstance;
+      parent.columns = operation(
+        parent.columns,
+        _.findIndex(parent.columns, { accessor: selectedColumn.id }),
+        generateNextAvailableColumn()
+      );
+    } else {
+      tableColumns.current = operation(
+        tableColumns.current,
+        _.findIndex(getColumnsAtLastLevel(tableColumns.current), { accessor: selectedColumn.id }),
+        generateNextAvailableColumn()
+      );
+    }
+    updateColumnsThenRows();
+  };
 
   const handlingOperation = useCallback(
     (tableOperation: TableOperation) => {
       switch (tableOperation) {
         case TableOperation.ColumnInsertLeft:
-          updateColumnsThenRows(
-            insertBefore(tableColumns.current, selectedColumnIndex, generateNextAvailableColumn(tableColumns.current))
-          );
+          updateTargetColumns(insertBefore);
           break;
         case TableOperation.ColumnInsertRight:
-          updateColumnsThenRows(
-            insertAfter(tableColumns.current, selectedColumnIndex, generateNextAvailableColumn(tableColumns.current))
-          );
+          updateTargetColumns(insertAfter);
           break;
         case TableOperation.ColumnDelete:
-          updateColumnsThenRows(deleteAt(tableColumns.current, selectedColumnIndex));
+          updateTargetColumns(deleteAt);
           break;
         case TableOperation.RowInsertAbove:
           onRowsUpdate(insertBefore(tableRows.current, selectedRowIndex, onRowAdding()));
@@ -198,7 +209,6 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
       updateColumnsThenRows,
       onRowAdding,
       onRowsUpdate,
-      selectedColumnIndex,
       selectedRowIndex,
       setShowTableHandler,
       tableColumns,
@@ -214,9 +224,8 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     if (groupOperationsDoNotDependOnColumn(handlerConfiguration)) {
       return handlerConfiguration;
     }
-    const clickedColumn = tableColumns.current[selectedColumnIndex] as ColumnInstance;
-    return handlerConfiguration[clickedColumn.groupType || ""];
-  }, [handlerConfiguration, selectedColumnIndex, tableColumns]);
+    return handlerConfiguration[selectedColumn.groupType || ""];
+  }, [handlerConfiguration, selectedColumn.groupType]);
 
   return useMemo(
     () => (
