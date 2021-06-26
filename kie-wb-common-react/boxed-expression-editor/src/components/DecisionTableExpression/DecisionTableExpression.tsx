@@ -30,7 +30,7 @@ import {
 } from "../../api";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Table } from "../Table";
+import { getColumnsAtLastLevel, Table } from "../Table";
 import { ColumnInstance, DataRecord } from "react-table";
 import { HitPolicySelector } from "./HitPolicySelector";
 import * as _ from "lodash";
@@ -184,13 +184,11 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     return [inputSection, outputSection, annotationSection];
   };
 
-  const columnsAtLastLevel = () => _.flatMap(columns.current, "columns");
-
   const evaluateRows = () =>
     _.map(rules, (rule) => {
       const rowArray = [...rule.inputEntries, ...rule.outputEntries, ...rule.annotationEntries];
       return _.reduce(
-        columnsAtLastLevel(),
+        getColumnsAtLastLevel(columns.current),
         (tableRow: DataRecord, column, columnIndex: number) => {
           tableRow[column.accessor] = rowArray[columnIndex] || EMPTY_SYMBOL;
           return tableRow;
@@ -205,7 +203,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
   const rows = useRef<DataRecord[]>(evaluateRows());
 
   const spreadDecisionTableExpressionDefinition = useCallback(() => {
-    const groupedColumns = _.groupBy(columnsAtLastLevel(), (column) => column.groupType);
+    const groupedColumns = _.groupBy(getColumnsAtLastLevel(columns.current), (column) => column.groupType);
     const input: Clause[] = _.map(groupedColumns[DecisionTableColumnType.InputClause], (inputClause) => ({
       name: inputClause.accessor,
       dataType: inputClause.dataType,
@@ -260,7 +258,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     (updatedRows: DataRecord[]) =>
       _.map(updatedRows, (row) =>
         _.reduce(
-          columnsAtLastLevel(),
+          getColumnsAtLastLevel(columns.current),
           (filledRow: DataRecord, column: ColumnInstance) => {
             if (_.isNil(row[column.accessor])) {
               filledRow[column.accessor] =
@@ -286,7 +284,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
 
   const onRowAdding = useCallback(() => {
     return _.reduce(
-      columnsAtLastLevel(),
+      getColumnsAtLastLevel(columns.current),
       (tableRow: DataRecord, column: ColumnInstance) => {
         tableRow[column.accessor] =
           column.groupType === DecisionTableColumnType.InputClause ? DASH_SYMBOL : EMPTY_SYMBOL;
