@@ -40,6 +40,7 @@ class SupervisorExecution {
     const cells = this.domSession.getCells();
     cells.sort((c1, c2) => c2.depth - c1.depth).forEach(this.refreshWidthAsParent);
     cells.sort((c1, c2) => c1.depth - c2.depth).forEach(this.refreshWidthAsLastColumn);
+    cells.sort((c1, c2) => c1.depth - c2.depth).forEach(this.refreshWidthAsLastGroupColumn);
   }
 
   private refreshWidthAsParent(cell: Cell) {
@@ -48,5 +49,9 @@ class SupervisorExecution {
 
   private refreshWidthAsLastColumn(cell: Cell) {
     cell.refreshWidthAsLastColumn();
+  }
+
+  private refreshWidthAsLastGroupColumn(cell: Cell) {
+    cell.refreshWidthAsLastGroupColumn();
   }
 }

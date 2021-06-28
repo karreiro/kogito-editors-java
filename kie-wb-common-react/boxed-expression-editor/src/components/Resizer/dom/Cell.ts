@@ -26,7 +26,7 @@ export class Cell {
   private rect?: DOMRect;
   private parentRow?: HTMLTableRowElement | null;
 
-  constructor(public element: HTMLElement, public children: Cell[], public depth: number) {}
+  constructor(public element: HTMLElement, public children: Cell[], public depth: number) { }
 
   getId(): string {
     if (!this.id) {
@@ -66,11 +66,32 @@ export class Cell {
       return;
     }
 
-    const parentRect = this.getParentRow()?.getBoundingClientRect();
+    const parentRect = this.getParentRow()!.getBoundingClientRect();
 
     if (parentRect) {
       this.setWidth(Math.round(parentRect.right) - Math.round(this.getRect().x) - BORDER);
     }
+  }
+
+  refreshWidthAsLastGroupColumn(): void {
+    if (!this.isColSpanHeader()) {
+      return;
+    }
+
+    const parentRect = this.getParent()?.getBoundingClientRect();
+
+    if (parentRect) {
+      this.setWidth(Math.round(parentRect.right) - Math.round(this.getRect().x) - BORDER);
+    }
+  }
+
+  isColSpanHeader() {
+    console.log(this.getParent());
+    return this.getParent()?.classList.contains("colspan-header") || false;
+  }
+
+  private getParent() {
+    return this.element.parentElement;
   }
 
   private getParentRow() {
