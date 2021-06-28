@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import * as React from "react";
-import { useCallback, useMemo } from "react";
 import { Th, Thead, Tr } from "@patternfly/react-table";
 import * as _ from "lodash";
+import * as React from "react";
+import { useCallback, useMemo } from "react";
 import { Column, ColumnInstance, DataRecord, HeaderGroup, TableInstance } from "react-table";
-import { EditExpressionMenu, EditTextInline } from "../EditExpressionMenu";
 import { DataType, TableHeaderVisibility } from "../../api";
+import { EditExpressionMenu, EditTextInline } from "../EditExpressionMenu";
 import { DEFAULT_MIN_WIDTH, Resizer } from "../Resizer";
 import { getColumnsAtLastLevel } from "./Table";
 
@@ -180,15 +180,23 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
       };
       const thProps = tableInstance.getThProps(column, columnIndex);
       const width = column.width || DEFAULT_MIN_WIDTH;
+      const isColspan = column.columns?.length > 0 || false;
+
+      const getCssClass = () => {
+        const cssClasses = [];
+        if (!column.dataType) {
+          cssClasses.push("no-clickable-cell");
+        }
+        if (isColspan) {
+          cssClasses.push("colspan-header");
+        }
+        cssClasses.push(column.groupType || "");
+        cssClasses.push(column.cssClasses || "");
+        return cssClasses.join(" ");
+      };
+
       return (
-        <Th
-          {...headerProps}
-          {...thProps}
-          className={`resizable-column ${!column.dataType ? "no-clickable-cell" : ""} ${column.groupType || ""} ${
-            column.cssClasses || ""
-          }`}
-          key={computeColumnKey(column, columnIndex)}
-        >
+        <Th {...headerProps} {...thProps} className={getCssClass()} key={computeColumnKey(column, columnIndex)}>
           <Resizer width={width} onHorizontalResizeStop={(columnWidth) => onHorizontalResizeStop(column, columnWidth)}>
             <div className="header-cell" data-ouia-component-type="expression-column-header">
               {column.dataType ? (
