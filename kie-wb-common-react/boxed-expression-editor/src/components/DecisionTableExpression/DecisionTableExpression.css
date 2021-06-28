@@ -24,18 +24,30 @@
   height: inherit;
 }
 
-.expression-container .decision-table-expression table thead th.input {
-  background-color: #DEF3FF;
+.expression-container .decision-table-expression table thead th.input.decision-table--input .react-resizable,
+.expression-container .decision-table-expression table thead th.annotation.decision-table--annotation .react-resizable {
+  top: -75%;
+}
+
+.expression-container .decision-table-expression table thead th.input,
+.expression-container .decision-table-expression table thead th.input.decision-table--input .react-resizable {
+  background-color: #def3ff;
 }
 
 .expression-container .decision-table-expression table thead th.output {
-  background-color: #BEE1F4;
+  background-color: #bee1f4;
 }
 
-.expression-container .decision-table-expression table thead th.annotation {
-  background-color: #FFFFFF;
+.expression-container .decision-table-expression table thead th.annotation,
+.expression-container .decision-table-expression table thead th.annotation.decision-table--annotation .react-resizable {
+  background-color: #ffffff;
 }
 
 .expression-container .decision-table-expression table tr {
   display: table-row;
+}
+
+.expression-container .decision-table-expression table tr th.colspan-header.input .header-cell,
+.expression-container .decision-table-expression table tr th.colspan-header.annotation .header-cell {
+  display: none;
 }
