@@ -22,7 +22,7 @@ import { Column, ColumnInstance, DataRecord, HeaderGroup, TableInstance } from "
 import { EditExpressionMenu, EditTextInline } from "../EditExpressionMenu";
 import { DataType, TableHeaderVisibility } from "../../api";
 import { DEFAULT_MIN_WIDTH, Resizer } from "../Resizer";
-import { getColumnsAtLastLevel } from "./Table";
+import { getColumnsAtLastLevel, getColumnSearchPredicate } from "./Table";
 
 export interface TableHeaderProps {
   /** Table instance */
@@ -157,11 +157,12 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
 
   const onHorizontalResizeStop = useCallback(
     (column, columnWidth) => {
-      const columnId = column.originalId || column.id;
-      const columnSearchPredicate = (column: ColumnInstance) => column.id === columnId || column.accessor === columnId;
-      let columnToUpdate = _.find(tableColumns.current, columnSearchPredicate) as ColumnInstance;
+      let columnToUpdate = _.find(tableColumns.current, getColumnSearchPredicate(column)) as ColumnInstance;
       if (column.parent) {
-        columnToUpdate = _.find(getColumnsAtLastLevel(tableColumns.current), columnSearchPredicate) as ColumnInstance;
+        columnToUpdate = _.find(
+          getColumnsAtLastLevel(tableColumns.current),
+          getColumnSearchPredicate(column)
+        ) as ColumnInstance;
       }
       columnToUpdate.width = columnWidth;
       onColumnsUpdate(tableColumns.current);
