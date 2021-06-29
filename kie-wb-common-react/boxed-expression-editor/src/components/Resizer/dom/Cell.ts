@@ -26,7 +26,7 @@ export class Cell {
   private rect?: DOMRect;
   private parentRow?: HTMLTableRowElement | null;
 
-  constructor(public element: HTMLElement, public children: Cell[], public depth: number) { }
+  constructor(public element: HTMLElement, public children: Cell[], public depth: number) {}
 
   getId(): string {
     if (!this.id) {
@@ -85,8 +85,7 @@ export class Cell {
     }
   }
 
-  isColSpanHeader() {
-    console.log(this.getParent());
+  isColSpanHeader(): boolean {
     return this.getParent()?.classList.contains("colspan-header") || false;
   }
 
