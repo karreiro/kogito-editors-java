@@ -15,26 +15,42 @@
  */
 
 import * as React from "react";
-import {
-  Title,
-  SearchInput,
-  DataList,
-  DataListItem,
-  DataListCheck,
-  DataListCell,
-  DataListItemRow,
-} from "@patternfly/react-core";
+import { Title, SearchInput } from "@patternfly/react-core";
 import CubesIcon from "@patternfly/react-icons/dist/js/icons/cubes-icon";
 import { useImportJavaClassesWizardI18n } from "../../i18n";
 import { useCallback, useState } from "react";
 import { EmptyStateWidget } from "../EmptyStateWidget";
+import { ImportJavaClassesWizardFirstStepDataList } from "./ImportJavaClassesWizardFirstStepDataList";
 
 export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
   const EMPTY_SEARCH_VALUE = "";
   const { i18n } = useImportJavaClassesWizardI18n();
-  const javaClassesList: string[] = ["org.kie.test.kogito.Author", "org.kie.test.kogito.Book"];
   const [searchValue, setSearchValue] = useState(EMPTY_SEARCH_VALUE);
-  const onSearchValueChange = useCallback((value: string) => setSearchValue(value), []);
+  const [retrievedJavaClassesLSP, setRetrievedJavaClassesLSP] = useState<string[]>([]);
+  const onSearchValueChange = useCallback((value: string) => lspGetClassServiceMocked(value), []);
+  /* This function temporary mocks a call to the LSP service method getClasses */
+  const lspGetClassServiceMocked = (value: string) => {
+    /* Mocked data retrieved from LSP Service */
+    const booClassesList = ["org.kie.test.kogito.Book", "org.kie.test.kogito.Boom"];
+    const bookClassesList = ["org.kie.test.kogito.Book"];
+    const boomClassesList = ["org.kie.test.kogito.Boom"];
+
+    setSearchValue(value);
+    setRetrievedJavaClassesLSP([]);
+    /* Temporary mocks managing */
+    console.log(value);
+    if (value === "Boo") {
+      setRetrievedJavaClassesLSP(booClassesList);
+      console.log("Boo branch");
+    } else if (value === "Book") {
+      console.log("Book branch");
+      setRetrievedJavaClassesLSP(bookClassesList);
+    } else if (value === "Boom") {
+      console.log("Boom branch");
+      setRetrievedJavaClassesLSP(boomClassesList);
+    }
+  };
+
   const EmptyStep: React.FunctionComponent = () => {
     return (
       <EmptyStateWidget
@@ -44,28 +60,6 @@ export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
         emptyStateTitleText={i18n.modalWizard.firstStep.emptyState.title}
         emptyStateBodyText={i18n.modalWizard.firstStep.emptyState.body}
       />
-    );
-  };
-  const ClassList: React.FunctionComponent = () => {
-    return (
-      <DataList aria-label={"class-data-list"} isCompact>
-        <DataListItem aria-labelledby="check-action-item1">
-          <DataListItemRow>
-            <DataListCheck aria-labelledby="check-action-item1" name="check-action-check1" />
-            <DataListCell key="primary content">
-              <span id="check-action-item1">org.kogito.test.Author</span>
-            </DataListCell>
-          </DataListItemRow>
-        </DataListItem>
-        <DataListItem aria-labelledby="check-action-item2">
-          <DataListItemRow>
-            <DataListCheck aria-labelledby="check-action-item2" name="check-action-check2" />
-            <DataListCell key="primary content">
-              <span id="check-action-item2">org.kogito.test.Book</span>
-            </DataListCell>
-          </DataListItemRow>
-        </DataListItem>
-      </DataList>
     );
   };
 
@@ -81,7 +75,11 @@ export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
         onClear={() => onSearchValueChange(EMPTY_SEARCH_VALUE)}
         autoFocus
       />
-      {javaClassesList.length > 1 ? <ClassList /> : <EmptyStep />}
+      {retrievedJavaClassesLSP.length > 0 ? (
+        <ImportJavaClassesWizardFirstStepDataList data={retrievedJavaClassesLSP} />
+      ) : (
+        <EmptyStep />
+      )}
     </>
   );
 };

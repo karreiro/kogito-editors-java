@@ -29,13 +29,24 @@ const Showcase: React.FunctionComponent = () => {
 
   return (
     <div className="showcase">
+      <p>
+        This showcase demonstrates how the <strong>Import Java Classes</strong> component works. Adding the component to
+        the DOM, will result to render a Button with <em>Import Java Classes</em> label. As default status, the button
+        is disabled with a tooltip reporting the reason. Using the above menu, you can modify the button status and the
+        related tooltip message.
+      </p>
+      <p>
+        To simulate the searching of a Java Classes on the Search box inside the wizard, please use values:
+        <em>Boo</em>, <em>Boom</em> or <em>Book</em> as key, which are mocked in this showcase to demonstrate the
+        component usage
+      </p>
       <div className="menu">
-        <h1>Import Java classes button state</h1>
+        <strong>Import Java classes button state</strong>
         <select onChange={onSelectChange}>
           <option value="true">Disabled</option>
           <option value="false">Enabled</option>
         </select>
-        <h1>Tooltip Message (Optional)</h1>
+        <strong>Tooltip Message (Optional)</strong>
         <input value={buttonTooltipMessage} onChange={onInputChange} />
       </div>
       <div className="import-java-classes">
