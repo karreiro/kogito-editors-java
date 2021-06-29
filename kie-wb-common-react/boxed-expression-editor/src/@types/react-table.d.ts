@@ -52,6 +52,8 @@ declare module "react-table" {
   }
 
   export interface ColumnInstance {
+    /** Used by react-table to hold the original id chosen for the column, independently from applied operations */
+    originalId?: string;
     /** Column identifier */
     accessor: string;
     /** Column group type */

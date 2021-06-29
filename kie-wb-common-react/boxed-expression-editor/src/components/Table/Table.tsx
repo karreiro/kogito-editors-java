@@ -47,6 +47,15 @@ export const getColumnsAtLastLevel: (columns: ColumnInstance[] | Column[]) => Co
     return column;
   });
 
+export const getColumnSearchPredicate: (column: ColumnInstance) => (columnToCompare: ColumnInstance) => boolean = (
+  column
+) => {
+  const columnId = column.originalId || column.id || column.accessor;
+  return (columnToCompare: ColumnInstance) => {
+    return columnToCompare.id === columnId || columnToCompare.accessor === columnId;
+  };
+};
+
 export const Table: React.FunctionComponent<TableProps> = ({
   tableId,
   children,
@@ -223,7 +232,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
 
   const getThProps = (column: ColumnInstance) => ({
     onContextMenu: (e: ContextMenuEvent) => {
-      const columnIndex = _.findIndex(getColumnsAtLastLevel(tableColumns.current), { accessor: column.id });
+      const columnIndex = _.findIndex(getColumnsAtLastLevel(tableColumns.current), getColumnSearchPredicate(column));
       const target = e.target as HTMLElement;
       const handlerOnHeaderIsAvailable = !column.disableHandlerOnHeader;
       if (contextMenuIsAvailable(target) && handlerOnHeaderIsAvailable) {

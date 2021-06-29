@@ -28,7 +28,7 @@ import { Column, ColumnInstance, DataRecord } from "react-table";
 import { Popover } from "@patternfly/react-core";
 import { TableHandlerMenu } from "./TableHandlerMenu";
 import { BoxedExpressionGlobalContext } from "../../context";
-import { getColumnsAtLastLevel } from "./Table";
+import { getColumnsAtLastLevel, getColumnSearchPredicate } from "./Table";
 
 export interface TableHandlerProps {
   /** Gets the prefix to be used for the next column name */
@@ -158,16 +158,16 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
 
   const updateTargetColumns = (operation: <T extends unknown>(elements: T[], index: number, element: T) => T[]) => {
     if (selectedColumn.parent) {
-      const parent = _.find(tableColumns.current, { accessor: selectedColumn.parent.id }) as ColumnInstance;
+      const parent = _.find(tableColumns.current, getColumnSearchPredicate(selectedColumn.parent)) as ColumnInstance;
       parent.columns = operation(
         parent.columns,
-        _.findIndex(parent.columns, { accessor: selectedColumn.id }),
+        _.findIndex(parent.columns, getColumnSearchPredicate(selectedColumn)),
         generateNextAvailableColumn()
       );
     } else {
       tableColumns.current = operation(
         tableColumns.current,
-        _.findIndex(getColumnsAtLastLevel(tableColumns.current), { accessor: selectedColumn.id }),
+        _.findIndex(getColumnsAtLastLevel(tableColumns.current), getColumnSearchPredicate(selectedColumn)),
         generateNextAvailableColumn()
       );
     }
