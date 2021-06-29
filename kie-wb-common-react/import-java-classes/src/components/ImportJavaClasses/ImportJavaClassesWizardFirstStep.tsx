@@ -16,9 +16,6 @@
 
 import * as React from "react";
 import {
-  EmptyState,
-  EmptyStateIcon,
-  EmptyStateBody,
   Title,
   SearchInput,
   DataList,
@@ -30,6 +27,7 @@ import {
 import CubesIcon from "@patternfly/react-icons/dist/js/icons/cubes-icon";
 import { useImportJavaClassesWizardI18n } from "../../i18n";
 import { useCallback, useState } from "react";
+import { EmptyStateWidget } from "../EmptyStateWidget";
 
 export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
   const EMPTY_SEARCH_VALUE = "";
@@ -39,13 +37,13 @@ export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
   const onSearchValueChange = useCallback((value: string) => setSearchValue(value), []);
   const EmptyStep: React.FunctionComponent = () => {
     return (
-      <EmptyState>
-        <EmptyStateIcon icon={CubesIcon} />
-        <Title headingLevel="h6" size="md">
-          {i18n.modalWizard.firstStep.emptyState.title}
-        </Title>
-        <EmptyStateBody>{i18n.modalWizard.firstStep.emptyState.body}</EmptyStateBody>
-      </EmptyState>
+      <EmptyStateWidget
+        emptyStateIcon={CubesIcon}
+        emptyStateTitleHeading={"h6"}
+        emptyStateTitleSize={"md"}
+        emptyStateTitleText={i18n.modalWizard.firstStep.emptyState.title}
+        emptyStateBodyText={i18n.modalWizard.firstStep.emptyState.body}
+      />
     );
   };
   const ClassList: React.FunctionComponent = () => {
