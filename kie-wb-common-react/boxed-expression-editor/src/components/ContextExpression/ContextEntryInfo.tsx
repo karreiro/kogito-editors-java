@@ -16,7 +16,7 @@
 
 import "./ContextEntryInfo.css";
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { EditExpressionMenu } from "../EditExpressionMenu";
 import { DataType } from "../../api";
 
@@ -40,14 +40,6 @@ export const ContextEntryInfo: React.FunctionComponent<ContextEntryInfoProps> = 
   const [entryName, setEntryName] = useState(name);
 
   const [entryDataType, setEntryDataType] = useState(dataType);
-
-  useEffect(() => {
-    setEntryName(name);
-  }, [name]);
-
-  useEffect(() => {
-    setEntryDataType(dataType);
-  }, [dataType]);
 
   const onEntryNameOrDataTypeUpdate = useCallback(
     ({ name, dataType }) => {

@@ -33,21 +33,27 @@ export const ContextEntryExpressionCell: React.FunctionComponent<ContextEntryExp
 }) => {
   const contextEntry = data[index];
 
+  const entryInfo = useRef(contextEntry.entryInfo);
+
   const entryExpression = useRef({
     uid: contextEntry.entryExpression.uid,
     ...contextEntry.entryExpression,
   } as ExpressionProps);
 
   useEffect(() => {
+    entryInfo.current = contextEntry.entryInfo;
+  }, [contextEntry.entryInfo]);
+
+  useEffect(() => {
     entryExpression.current = contextEntry.entryExpression;
-    onRowUpdate(index, { ...contextEntry, entryExpression: entryExpression.current });
+    onRowUpdate(index, { ...contextEntry, entryInfo: entryInfo.current, entryExpression: entryExpression.current });
     // Every time, for an expression, its logic type changes, it means that corresponding entry has been just updated
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contextEntry.entryExpression.logicType]);
 
   const onUpdatingRecursiveExpression = useCallback((expression: ExpressionProps) => {
     entryExpression.current = expression;
-    onRowUpdate(index, { ...contextEntry, entryExpression: expression });
+    onRowUpdate(index, { ...contextEntry, entryInfo: entryInfo.current, entryExpression: expression });
     // Callback should never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
