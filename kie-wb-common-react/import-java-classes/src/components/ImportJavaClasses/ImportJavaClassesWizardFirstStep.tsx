@@ -22,7 +22,17 @@ import { useCallback, useState } from "react";
 import { EmptyStateWidget } from "../EmptyStateWidget";
 import { ImportJavaClassesWizardClassListTable } from "./ImportJavaClassesWizardClassListTable";
 
-export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
+export interface ImportJavaClassesWizardFirstStep {
+  /** Text to apply to the Modal button */
+  selectedJavaClasses: string[];
+  /** Text to apply to the Modal button */
+  setSelectedJavaClasses: (fullClassName: string, add: boolean) => void;
+}
+
+export const ImportJavaClassesWizardFirstStep: React.FunctionComponent<ImportJavaClassesWizardFirstStep> = ({
+  selectedJavaClasses,
+  setSelectedJavaClasses,
+}) => {
   const EMPTY_SEARCH_VALUE = "";
   const { i18n } = useImportJavaClassesWizardI18n();
   const [searchValue, setSearchValue] = useState(EMPTY_SEARCH_VALUE);
@@ -71,8 +81,12 @@ export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
         onClear={() => onSearchValueChange(EMPTY_SEARCH_VALUE)}
         autoFocus
       />
-      {retrievedJavaClassesLSP.length > 0 ? (
-        <ImportJavaClassesWizardClassListTable selectedData={[]} data={retrievedJavaClassesLSP} />
+      {retrievedJavaClassesLSP.length > 0 || selectedJavaClasses.length > 0 ? (
+        <ImportJavaClassesWizardClassListTable
+          selectedData={selectedJavaClasses}
+          data={retrievedJavaClassesLSP}
+          onJavaClassItemSelected={setSelectedJavaClasses}
+        />
       ) : (
         <EmptyStep />
       )}

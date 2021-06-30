@@ -23,18 +23,35 @@ export interface ImportJavaClassesWizardClassListTableProps {
   selectedData: string[];
   /** Text to apply to the Modal button */
   data: string[];
+  /** On */
+  onJavaClassItemSelected: (fullClassName: string, add: boolean) => void;
 }
 
 export const ImportJavaClassesWizardClassListTable: React.FunctionComponent<ImportJavaClassesWizardClassListTableProps> =
-  ({ selectedData, data }: ImportJavaClassesWizardClassListTableProps) => {
+  ({ selectedData, data, onJavaClassItemSelected }: ImportJavaClassesWizardClassListTableProps) => {
+    const classesSet = new Set(selectedData);
     return (
       <DataList aria-label={"class-data-list"} isCompact>
         {selectedData.map((value) => (
-          <ImportJavaClassesWizardClassListTableItems key={value} fullClassName={value} selected={true} />
+          <ImportJavaClassesWizardClassListTableItems
+            key={value}
+            fullClassName={value}
+            selected={true}
+            onJavaClassItemSelected={onJavaClassItemSelected}
+          />
         ))}
-        {data.map((value) => (
-          <ImportJavaClassesWizardClassListTableItems key={value} fullClassName={value} selected={false} />
-        ))}
+        {data.map((value) => {
+          if (!classesSet.has(value)) {
+            return (
+              <ImportJavaClassesWizardClassListTableItems
+                key={value}
+                fullClassName={value}
+                selected={false}
+                onJavaClassItemSelected={onJavaClassItemSelected}
+              />
+            );
+          }
+        })}
       </DataList>
     );
   };

@@ -22,14 +22,20 @@ export interface ImportJavaClassesWizardClassListTableItemsProps {
   fullClassName: string;
   /** Selected */
   selected: boolean;
+  /** ads */
+  onJavaClassItemSelected: (fullClassName: string, add: boolean) => void;
 }
 
 export const ImportJavaClassesWizardClassListTableItems: React.FunctionComponent<ImportJavaClassesWizardClassListTableItemsProps> =
-  ({ fullClassName, selected }: ImportJavaClassesWizardClassListTableItemsProps) => {
+  ({ fullClassName, selected, onJavaClassItemSelected }: ImportJavaClassesWizardClassListTableItemsProps) => {
     return (
       <DataListItem name={fullClassName}>
         <DataListItemRow>
-          <DataListCheck aria-labelledby={fullClassName} defaultChecked={selected} />
+          <DataListCheck
+            aria-labelledby={fullClassName}
+            defaultChecked={selected}
+            onChange={(checked) => onJavaClassItemSelected(fullClassName, checked)}
+          />
           <DataListCell>
             <span id={fullClassName}>{fullClassName}</span>
           </DataListCell>
