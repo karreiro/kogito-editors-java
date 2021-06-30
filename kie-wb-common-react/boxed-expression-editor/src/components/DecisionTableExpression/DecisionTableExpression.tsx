@@ -188,6 +188,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       accessor: "Annotations",
       cssClasses: "decision-table--annotation",
       columns: annotationColumns,
+      inlineEditable: true,
     };
 
     return [inputSection, outputSection, annotationSection];
