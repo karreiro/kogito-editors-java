@@ -37,10 +37,11 @@ class SupervisorExecution {
   }
 
   execute() {
-    const cells = this.domSession.getCells();
-    cells.sort((c1, c2) => c2.depth - c1.depth).forEach(this.refreshWidthAsParent);
+    const cells = this.domSession.getCells().sort((c1, c2) => c2.depth - c1.depth);
+
+    cells.forEach(this.refreshWidthAsParent);
+    cells.forEach(this.refreshWidthAsLastGroupColumn);
     cells.sort((c1, c2) => c1.depth - c2.depth).forEach(this.refreshWidthAsLastColumn);
-    cells.sort((c1, c2) => c1.depth - c2.depth).forEach(this.refreshWidthAsLastGroupColumn);
   }
 
   private refreshWidthAsParent(cell: Cell) {

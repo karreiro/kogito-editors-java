@@ -32,6 +32,17 @@
 .expression-container .decision-table-expression table thead th.input,
 .expression-container .decision-table-expression table thead th.input.decision-table--input .react-resizable {
   background-color: #def3ff;
+  border-right-color: #def3ff;
+}
+
+.expression-container .decision-table-expression table thead th.input.decision-table--input::after,
+.expression-container .decision-table-expression table thead th.annotation.decision-table--annotation::after {
+  content: "";
+  position: absolute;
+  border-right: 1px solid #d2d2d2;
+  height: 200%;
+  top: -100%;
+  right: -1px;
 }
 
 .expression-container .decision-table-expression table thead th.output {
