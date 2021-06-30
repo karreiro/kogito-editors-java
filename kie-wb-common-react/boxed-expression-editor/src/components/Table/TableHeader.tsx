@@ -157,13 +157,8 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
 
   const onHorizontalResizeStop = useCallback(
     (column, columnWidth) => {
-      let columnToUpdate = _.find(tableColumns.current, getColumnSearchPredicate(column)) as ColumnInstance;
-      if (column.placeholderOf) {
-        columnToUpdate = _.find(
-          tableColumns.current,
-          getColumnSearchPredicate(column.placeholderOf.id)
-        ) as ColumnInstance;
-      }
+      const columnToBeFound = column.placeholderOf || column;
+      let columnToUpdate = _.find(tableColumns.current, getColumnSearchPredicate(columnToBeFound)) as ColumnInstance;
       if (column.parent) {
         columnToUpdate = _.find(
           getColumnsAtLastLevel(tableColumns.current),
