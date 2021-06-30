@@ -79,11 +79,11 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
 }) => {
   const globalContext = useContext(BoxedExpressionGlobalContext);
 
-  const [selectedColumn, setSelectedColumn] = useState(lastSelectedColumn);
+  const [selectedColumn, setSelectedColumn] = useState(lastSelectedColumn.placeholderOf || lastSelectedColumn);
   const [selectedRowIndex, setSelectedRowIndex] = useState(lastSelectedRowIndex);
 
   useEffect(() => {
-    setSelectedColumn(lastSelectedColumn);
+    setSelectedColumn(lastSelectedColumn.placeholderOf || lastSelectedColumn);
   }, [lastSelectedColumn]);
 
   useEffect(() => {
