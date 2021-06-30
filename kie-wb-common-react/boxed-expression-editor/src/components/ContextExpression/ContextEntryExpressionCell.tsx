@@ -17,7 +17,7 @@
 import "./ContextEntryExpressionCell.css";
 import * as React from "react";
 import { useCallback, useEffect, useRef } from "react";
-import { CellProps, ContextEntries, ExpressionProps } from "../../api";
+import { CellProps, ContextEntries, DataType, ExpressionProps } from "../../api";
 import { DataRecord } from "react-table";
 import { ContextEntryExpression } from "./ContextEntryExpression";
 
@@ -52,8 +52,13 @@ export const ContextEntryExpressionCell: React.FunctionComponent<ContextEntryExp
   }, [contextEntry.entryExpression.logicType]);
 
   const onUpdatingRecursiveExpression = useCallback((expression: ExpressionProps) => {
-    entryExpression.current = expression;
-    onRowUpdate(index, { ...contextEntry, entryInfo: entryInfo.current, entryExpression: expression });
+    entryExpression.current = { ...expression };
+    const updatedEntryInfo = { ...entryInfo.current };
+    if (contextEntry.nameAndDataTypeSynchronized) {
+      updatedEntryInfo.name = expression.name as string;
+      updatedEntryInfo.dataType = expression.dataType as DataType;
+    }
+    onRowUpdate(index, { ...contextEntry, entryInfo: updatedEntryInfo, entryExpression: expression });
     // Callback should never change
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
