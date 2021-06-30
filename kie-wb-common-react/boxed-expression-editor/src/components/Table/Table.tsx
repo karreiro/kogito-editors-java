@@ -210,7 +210,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
 
   const atLeastTwoColumnsOfTheSameGroupType = (columnIndex: number) => {
     const columnsAtLastLevel = getColumnsAtLastLevel(tableColumns.current);
-    const groupTypeForCurrentColumn = (columnsAtLastLevel[columnIndex] as ColumnInstance).groupType;
+    const groupTypeForCurrentColumn = (columnsAtLastLevel[columnIndex] as ColumnInstance)?.groupType;
     const columnsByGroupType = _.groupBy(columnsAtLastLevel, (column: ColumnInstance) => column.groupType);
     return groupTypeForCurrentColumn
       ? columnsByGroupType[groupTypeForCurrentColumn].length > 1

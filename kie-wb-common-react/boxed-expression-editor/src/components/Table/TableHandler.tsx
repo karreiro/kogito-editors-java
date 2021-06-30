@@ -224,8 +224,8 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     if (groupOperationsDoNotDependOnColumn(handlerConfiguration)) {
       return handlerConfiguration;
     }
-    return handlerConfiguration[selectedColumn.groupType || ""];
-  }, [handlerConfiguration, selectedColumn.groupType]);
+    return handlerConfiguration[selectedColumn?.groupType || ""];
+  }, [handlerConfiguration, selectedColumn?.groupType]);
 
   return useMemo(
     () => (
