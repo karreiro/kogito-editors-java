@@ -156,6 +156,19 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     onRowsUpdate([...tableRows.current]);
   }, [onColumnsUpdate, onRowsUpdate, tableColumns, tableRows]);
 
+  const appendOnColumnChildren = useCallback(
+    (operation: <T extends unknown>(elements: T[], index: number, element: T) => T[]) => {
+      const children = (_.find(tableColumns.current, getColumnSearchPredicate(selectedColumn)) as ColumnInstance)
+        .columns;
+      if (operation === insertBefore) {
+        children.unshift(generateNextAvailableColumn());
+      } else if (operation === insertAfter) {
+        children.push(generateNextAvailableColumn());
+      }
+    },
+    [generateNextAvailableColumn, selectedColumn, tableColumns]
+  );
+
   const updateTargetColumns = (operation: <T extends unknown>(elements: T[], index: number, element: T) => T[]) => {
     if (selectedColumn.parent) {
       const parent = _.find(tableColumns.current, getColumnSearchPredicate(selectedColumn.parent)) as ColumnInstance;
@@ -165,11 +178,15 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
         generateNextAvailableColumn()
       );
     } else {
-      tableColumns.current = operation(
-        tableColumns.current,
-        _.findIndex(getColumnsAtLastLevel(tableColumns.current), getColumnSearchPredicate(selectedColumn)),
-        generateNextAvailableColumn()
-      );
+      if (selectedColumn.appendColumnsOnChildren && _.isArray(selectedColumn.columns)) {
+        appendOnColumnChildren(operation);
+      } else {
+        tableColumns.current = operation(
+          tableColumns.current,
+          _.findIndex(tableColumns.current, getColumnSearchPredicate(selectedColumn)),
+          generateNextAvailableColumn()
+        );
+      }
     }
     updateColumnsThenRows();
   };
