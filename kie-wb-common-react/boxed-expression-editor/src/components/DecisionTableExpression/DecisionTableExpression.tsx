@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import "./DecisionTableExpression.css";
+import * as _ from "lodash";
+import * as React from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { ColumnInstance, DataRecord } from "react-table";
 import {
   Annotation,
   BuiltinAggregation,
@@ -28,14 +31,13 @@ import {
   TableHeaderVisibility,
   TableOperation,
 } from "../../api";
-import * as React from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { getColumnsAtLastLevel, Table } from "../Table";
-import { ColumnInstance, DataRecord } from "react-table";
-import { HitPolicySelector } from "./HitPolicySelector";
-import * as _ from "lodash";
+import { BoxedExpressionGlobalContext } from "../../context";
 import { useBoxedExpressionEditorI18n } from "../../i18n";
 import { EXPRESSION_NAME } from "../EditExpressionMenu";
+import { hashfy } from "../Resizer";
+import { getColumnsAtLastLevel, Table } from "../Table";
+import "./DecisionTableExpression.css";
+import { HitPolicySelector } from "./HitPolicySelector";
 
 enum DecisionTableColumnType {
   InputClause = "input",
@@ -96,6 +98,8 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     ],
     [i18n]
   );
+
+  const { setSupervisorHash } = useContext(BoxedExpressionGlobalContext);
 
   const getHandlerConfiguration = useMemo(() => {
     const configuration: { [columnGroupType: string]: GroupOperations[] } = {};
@@ -238,9 +242,12 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       rules,
     };
 
-    isHeadless
-      ? onUpdatingRecursiveExpression?.(expressionDefinition)
-      : window.beeApi?.broadcastDecisionTableExpressionDefinition?.(expressionDefinition);
+    if (isHeadless) {
+      onUpdatingRecursiveExpression?.(expressionDefinition);
+    } else {
+      setSupervisorHash(hashfy(expressionDefinition));
+      window.beeApi?.broadcastDecisionTableExpressionDefinition?.(expressionDefinition);
+    }
   }, [isHeadless, onUpdatingRecursiveExpression, selectedAggregation, selectedHitPolicy, uid]);
 
   const onColumnsUpdate = useCallback(
