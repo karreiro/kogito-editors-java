@@ -173,6 +173,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       accessor: decisionName.current,
       dataType: decisionDataType.current,
       columns: outputColumns,
+      appendColumnsOnChildren: true,
     };
     const annotationSection = {
       groupType: DecisionTableColumnType.Annotation,
