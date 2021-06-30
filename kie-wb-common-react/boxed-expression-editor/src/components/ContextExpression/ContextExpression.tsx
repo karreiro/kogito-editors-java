@@ -101,26 +101,34 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
           name: DEFAULT_CONTEXT_ENTRY_NAME,
           dataType: DEFAULT_CONTEXT_ENTRY_DATA_TYPE,
         },
-        entryExpression: {},
+        entryExpression: {
+          name: DEFAULT_CONTEXT_ENTRY_NAME,
+          dataType: DEFAULT_CONTEXT_ENTRY_DATA_TYPE,
+        },
         editInfoPopoverLabel: i18n.editContextEntry,
+        nameAndDataTypeSynchronized: true,
       } as DataRecord,
     ]
   );
 
-  const onRowAdding = useCallback(
-    () => ({
+  const onRowAdding = useCallback(() => {
+    const generatedName = generateNextAvailableEntryName(
+      _.map(rows, (row: ContextEntryRecord) => row.entryInfo) as EntryInfo[],
+      "ContextEntry"
+    );
+    return {
       entryInfo: {
-        name: generateNextAvailableEntryName(
-          _.map(rows, (row: ContextEntryRecord) => row.entryInfo) as EntryInfo[],
-          "ContextEntry"
-        ),
+        name: generatedName,
         dataType: DataType.Undefined,
       },
-      entryExpression: {},
+      entryExpression: {
+        name: generatedName,
+        dataType: DataType.Undefined,
+      },
       editInfoPopoverLabel: i18n.editContextEntry,
-    }),
-    [i18n.editContextEntry, rows]
-  );
+      nameAndDataTypeSynchronized: true,
+    };
+  }, [i18n.editContextEntry, rows]);
 
   const getHeaderVisibility = useCallback(() => {
     return isHeadless ? TableHeaderVisibility.None : TableHeaderVisibility.SecondToLastLevel;
