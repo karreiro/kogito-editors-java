@@ -16,7 +16,7 @@
 
 import { DataType, DecisionTableProps, HitPolicy, LogicType } from "../../../api";
 import { fireEvent, render } from "@testing-library/react";
-import { flushPromises, usingTestingBoxedExpressionI18nContext } from "../test-utils";
+import { flushPromises, usingTestingBoxedExpressionI18nContext, wrapComponentInContext } from "../test-utils";
 import * as React from "react";
 import { DecisionTableExpression } from "../../../components/DecisionTableExpression";
 import { openContextMenu } from "../Table/Table.test";
@@ -26,23 +26,33 @@ import { act } from "react-dom/test-utils";
 describe("DecisionTableExpression tests", () => {
   test("should show a table with three columns: input, output and annotation, and one row", () => {
     const { container } = render(
-      usingTestingBoxedExpressionI18nContext(<DecisionTableExpression logicType={LogicType.DecisionTable} />).wrapper
+      usingTestingBoxedExpressionI18nContext(
+        wrapComponentInContext(<DecisionTableExpression logicType={LogicType.DecisionTable} />)
+      ).wrapper
     );
 
     expect(container.querySelector(".decision-table-expression")).toBeTruthy();
     expect(container.querySelector(".decision-table-expression table")).toBeTruthy();
     expect(
-      container.querySelectorAll(".decision-table-expression table thead tr:last-of-type th.resizable-column")
+      container.querySelectorAll(".decision-table-expression table thead tr:last-of-type th:not(.fixed-column)")
     ).toHaveLength(3);
-    expect(container.querySelectorAll(".decision-table-expression table thead tr th.input")).toBeTruthy();
-    expect(container.querySelectorAll(".decision-table-expression table thead tr th.output")).toBeTruthy();
-    expect(container.querySelectorAll(".decision-table-expression table thead tr th.annotation")).toBeTruthy();
+    expect(container.querySelectorAll(".decision-table-expression table thead tr:last-of-type th.input")).toHaveLength(
+      1
+    );
+    expect(container.querySelectorAll(".decision-table-expression table thead tr:last-of-type th.output")).toHaveLength(
+      1
+    );
+    expect(
+      container.querySelectorAll(".decision-table-expression table thead tr:last-of-type th.annotation")
+    ).toHaveLength(1);
     expect(container.querySelectorAll(".decision-table-expression table tbody tr")).toHaveLength(1);
   });
 
   test("should show as default hit policy, unique", () => {
     const { container } = render(
-      usingTestingBoxedExpressionI18nContext(<DecisionTableExpression logicType={LogicType.DecisionTable} />).wrapper
+      usingTestingBoxedExpressionI18nContext(
+        wrapComponentInContext(<DecisionTableExpression logicType={LogicType.DecisionTable} />)
+      ).wrapper
     );
 
     expect(container.querySelector(".decision-table-expression .selected-hit-policy")).toContainHTML("U");
@@ -51,7 +61,9 @@ describe("DecisionTableExpression tests", () => {
   test("should show the passed hit policy", () => {
     const { container } = render(
       usingTestingBoxedExpressionI18nContext(
-        <DecisionTableExpression logicType={LogicType.DecisionTable} hitPolicy={HitPolicy.First} />
+        wrapComponentInContext(
+          <DecisionTableExpression logicType={LogicType.DecisionTable} hitPolicy={HitPolicy.First} />
+        )
       ).wrapper
     );
 
@@ -60,7 +72,9 @@ describe("DecisionTableExpression tests", () => {
 
   test("should show as default a row, with empty values, except for input column, whose value is dash symbol", () => {
     const { container } = render(
-      usingTestingBoxedExpressionI18nContext(<DecisionTableExpression logicType={LogicType.DecisionTable} />).wrapper
+      usingTestingBoxedExpressionI18nContext(
+        wrapComponentInContext(<DecisionTableExpression logicType={LogicType.DecisionTable} />)
+      ).wrapper
     );
 
     expect(container.querySelectorAll(".decision-table-expression table tbody tr td.data-cell")).toHaveLength(3);
@@ -89,13 +103,15 @@ describe("DecisionTableExpression tests", () => {
 
     const { container } = render(
       usingTestingBoxedExpressionI18nContext(
-        <DecisionTableExpression
-          logicType={LogicType.DecisionTable}
-          input={input}
-          output={output}
-          annotations={annotations}
-          rules={rules}
-        />
+        wrapComponentInContext(
+          <DecisionTableExpression
+            logicType={LogicType.DecisionTable}
+            input={input}
+            output={output}
+            annotations={annotations}
+            rules={rules}
+          />
+        )
       ).wrapper
     );
 
@@ -124,7 +140,9 @@ describe("DecisionTableExpression tests", () => {
     const mockedBroadcastDefinition = jest.fn();
     mockBroadcastDefinition(mockedBroadcastDefinition);
     const { container, baseElement } = render(
-      usingTestingBoxedExpressionI18nContext(<DecisionTableExpression logicType={LogicType.DecisionTable} />).wrapper
+      wrapComponentInContext(
+        usingTestingBoxedExpressionI18nContext(<DecisionTableExpression logicType={LogicType.DecisionTable} />).wrapper
+      )
     );
 
     await openContextMenu(container.querySelector(".decision-table-expression table tbody tr td.counter-cell")!);
