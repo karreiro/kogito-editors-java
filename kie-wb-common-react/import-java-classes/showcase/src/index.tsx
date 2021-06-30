@@ -38,7 +38,7 @@ const Showcase: React.FunctionComponent = () => {
       <p>
         To simulate the searching of a Java Classes on the Search box inside the wizard, please use values:
         <em>Boo</em>, <em>Boom</em> or <em>Book</em> as key, which are mocked in this showcase to demonstrate the
-        component usage
+        component usage.
       </p>
       <div className="menu">
         <strong>Import Java classes button state</strong>

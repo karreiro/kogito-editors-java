@@ -20,7 +20,7 @@ import CubesIcon from "@patternfly/react-icons/dist/js/icons/cubes-icon";
 import { useImportJavaClassesWizardI18n } from "../../i18n";
 import { useCallback, useState } from "react";
 import { EmptyStateWidget } from "../EmptyStateWidget";
-import { ImportJavaClassesWizardFirstStepDataList } from "./ImportJavaClassesWizardFirstStepDataList";
+import { ImportJavaClassesWizardClassListTable } from "./ImportJavaClassesWizardClassListTable";
 
 export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
   const EMPTY_SEARCH_VALUE = "";
@@ -38,15 +38,11 @@ export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
     setSearchValue(value);
     setRetrievedJavaClassesLSP([]);
     /* Temporary mocks managing */
-    console.log(value);
     if (value === "Boo") {
       setRetrievedJavaClassesLSP(booClassesList);
-      console.log("Boo branch");
     } else if (value === "Book") {
-      console.log("Book branch");
       setRetrievedJavaClassesLSP(bookClassesList);
     } else if (value === "Boom") {
-      console.log("Boom branch");
       setRetrievedJavaClassesLSP(boomClassesList);
     }
   };
@@ -76,7 +72,7 @@ export const ImportJavaClassesWizardFirstStep: React.FunctionComponent = () => {
         autoFocus
       />
       {retrievedJavaClassesLSP.length > 0 ? (
-        <ImportJavaClassesWizardFirstStepDataList data={retrievedJavaClassesLSP} />
+        <ImportJavaClassesWizardClassListTable selectedData={[]} data={retrievedJavaClassesLSP} />
       ) : (
         <EmptyStep />
       )}
