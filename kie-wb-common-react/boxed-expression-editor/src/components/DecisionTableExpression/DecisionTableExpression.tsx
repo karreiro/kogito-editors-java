@@ -33,7 +33,6 @@ import {
 } from "../../api";
 import { BoxedExpressionGlobalContext } from "../../context";
 import { useBoxedExpressionEditorI18n } from "../../i18n";
-import { EXPRESSION_NAME } from "../EditExpressionMenu";
 import { hashfy } from "../Resizer";
 import { getColumnsAtLastLevel, Table } from "../Table";
 import "./DecisionTableExpression.css";
@@ -47,17 +46,19 @@ enum DecisionTableColumnType {
 
 const DASH_SYMBOL = "-";
 const EMPTY_SYMBOL = "";
+const DECISION_NODE_DEFAULT_NAME = "output-1";
+
 export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps> = ({
   uid,
   isHeadless,
   onUpdatingRecursiveExpression,
-  name = EXPRESSION_NAME,
+  name = DECISION_NODE_DEFAULT_NAME,
   dataType = DataType.Undefined,
   onUpdatingNameAndDataType,
   hitPolicy = HitPolicy.Unique,
   aggregation = BuiltinAggregation["<None>"],
   input = [{ name: "input-1", dataType: DataType.Undefined }],
-  output = [{ name: "output-1", dataType: DataType.Undefined }],
+  output = [{ name: DECISION_NODE_DEFAULT_NAME, dataType: DataType.Undefined }],
   annotations = [{ name: "annotation-1" }],
   rules = [{ inputEntries: [DASH_SYMBOL], outputEntries: [EMPTY_SYMBOL], annotationEntries: [EMPTY_SYMBOL] }],
 }) => {
@@ -169,6 +170,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       groupType: DecisionTableColumnType.InputClause,
       label: "Input",
       accessor: "Input",
+      cssClasses: "decision-table--input",
       columns: inputColumns,
     };
     const outputSection = {
@@ -176,6 +178,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       label: decisionName.current,
       accessor: decisionName.current,
       dataType: decisionDataType.current,
+      cssClasses: "decision-table--output",
       columns: outputColumns,
       appendColumnsOnChildren: true,
     };
@@ -183,6 +186,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       groupType: DecisionTableColumnType.Annotation,
       label: "Annotations",
       accessor: "Annotations",
+      cssClasses: "decision-table--annotation",
       columns: annotationColumns,
     };
 
@@ -248,7 +252,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
       setSupervisorHash(hashfy(expressionDefinition));
       window.beeApi?.broadcastDecisionTableExpressionDefinition?.(expressionDefinition);
     }
-  }, [isHeadless, onUpdatingRecursiveExpression, selectedAggregation, selectedHitPolicy, uid]);
+  }, [isHeadless, onUpdatingRecursiveExpression, selectedAggregation, selectedHitPolicy, setSupervisorHash, uid]);
 
   const onColumnsUpdate = useCallback(
     (updatedColumns) => {
