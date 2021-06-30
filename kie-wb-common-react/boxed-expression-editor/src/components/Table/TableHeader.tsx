@@ -158,6 +158,12 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
   const onHorizontalResizeStop = useCallback(
     (column, columnWidth) => {
       let columnToUpdate = _.find(tableColumns.current, getColumnSearchPredicate(column)) as ColumnInstance;
+      if (column.placeholderOf) {
+        columnToUpdate = _.find(
+          tableColumns.current,
+          getColumnSearchPredicate(column.placeholderOf.id)
+        ) as ColumnInstance;
+      }
       if (column.parent) {
         columnToUpdate = _.find(
           getColumnsAtLastLevel(tableColumns.current),
@@ -187,6 +193,10 @@ export const TableHeader: React.FunctionComponent<TableHeaderProps> = ({
         }
         if (isColspan) {
           cssClasses.push("colspan-header");
+        }
+        if (column.placeholderOf) {
+          cssClasses.push(column.placeholderOf.cssClasses);
+          cssClasses.push(column.placeholderOf.groupType);
         }
         cssClasses.push(column.groupType || "");
         cssClasses.push(column.cssClasses || "");
