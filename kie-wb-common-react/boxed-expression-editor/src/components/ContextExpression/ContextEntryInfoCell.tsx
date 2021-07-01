@@ -19,6 +19,7 @@ import * as React from "react";
 import { useCallback, useEffect, useRef } from "react";
 import { DataRecord } from "react-table";
 import { ContextEntryInfo } from "./ContextEntryInfo";
+import * as _ from "lodash";
 
 export interface ContextEntryInfoCellProps extends CellProps {
   data: ContextEntries;
@@ -45,7 +46,7 @@ export const ContextEntryInfoCell: React.FunctionComponent<ContextEntryInfoCellP
   const onContextEntryUpdate = useCallback(
     (name, dataType) => {
       const updatedExpression = { ...entryExpression.current };
-      if (contextEntry.nameAndDataTypeSynchronized) {
+      if (contextEntry.nameAndDataTypeSynchronized && _.size(name) && _.size(dataType)) {
         updatedExpression.name = name;
         updatedExpression.dataType = dataType;
       }
