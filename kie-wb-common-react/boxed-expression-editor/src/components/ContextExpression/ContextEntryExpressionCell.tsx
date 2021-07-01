@@ -20,6 +20,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { CellProps, ContextEntries, DataType, ExpressionProps } from "../../api";
 import { DataRecord } from "react-table";
 import { ContextEntryExpression } from "./ContextEntryExpression";
+import * as _ from "lodash";
 
 export interface ContextEntryExpressionCellProps extends CellProps {
   data: ContextEntries;
@@ -54,7 +55,7 @@ export const ContextEntryExpressionCell: React.FunctionComponent<ContextEntryExp
   const onUpdatingRecursiveExpression = useCallback((expression: ExpressionProps) => {
     entryExpression.current = { ...expression };
     const updatedEntryInfo = { ...entryInfo.current };
-    if (contextEntry.nameAndDataTypeSynchronized) {
+    if (contextEntry.nameAndDataTypeSynchronized && _.size(expression.name) && _.size(expression.dataType)) {
       updatedEntryInfo.name = expression.name as string;
       updatedEntryInfo.dataType = expression.dataType as DataType;
     }
