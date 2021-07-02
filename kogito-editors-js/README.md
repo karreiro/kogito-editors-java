@@ -33,7 +33,7 @@ yarn build:prod
 
 ### Prettier
 
-Do not forget to format your code, either form your favourite IDE or by running
+Do not forget to format your code, either from your favourite IDE or by running
 
 ```bash
 yarn format
