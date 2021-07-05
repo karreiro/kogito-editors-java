@@ -15,6 +15,11 @@ jobs:
         with:
           java-version: 11
 
+      - name: Set up Node 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+
       - name: Build with Maven
         run: mvn clean install -B -ntp --file pom.xml -DskipTests
 
@@ -33,7 +38,6 @@ jobs:
           cd ${{ github.workspace }}/.github/supporting-files/publish-artifacts-npm/bpmn-editor-unpacked
           cp -r ${{ github.workspace }}/kie-wb-common-stunner/kie-wb-common-stunner-sets/kie-wb-common-stunner-bpmn/kie-wb-common-stunner-bpmn-kogito-runtime/target/kie-wb-common-stunner-bpmn-kogito-runtime ./target/bpmn
           npm version ${{ steps.editors_version_npm.outputs.version }}
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.KIEGROUP_NPM_TOKEN }}" > ~/.npmrc
           npm publish --access public --tag snapshot
 
       - name: Publish DMN Editor SNAPSHOT
@@ -41,7 +45,6 @@ jobs:
           cd ${{ github.workspace }}/.github/supporting-files/publish-artifacts-npm/dmn-editor-unpacked
           cp -r ${{ github.workspace }}/kie-wb-common-dmn/kie-wb-common-dmn-webapp-kogito-runtime/target/kie-wb-common-dmn-webapp-kogito-runtime ./target/dmn
           npm version ${{ steps.editors_version_npm.outputs.version }}
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.KIEGROUP_NPM_TOKEN }}" > ~/.npmrc
           npm publish --access public --tag snapshot
 
       - name: Publish SceSim Editor SNAPSHOT
@@ -49,5 +52,4 @@ jobs:
           cd ${{ github.workspace }}/.github/supporting-files/publish-artifacts-npm/scesim-editor-unpacked
           cp -r ${{ github.workspace }}/drools-wb-screens/drools-wb-scenario-simulation-editor/drools-wb-scenario-simulation-editor-kogito-runtime/target/drools-wb-scenario-simulation-editor-kogito-runtime ./target/scesim
           npm version ${{ steps.editors_version_npm.outputs.version }}
-          echo "//registry.npmjs.org/:_authToken=${{ secrets.KIEGROUP_NPM_TOKEN }}" > ~/.npmrc
           npm publish --access public --tag snapshot
