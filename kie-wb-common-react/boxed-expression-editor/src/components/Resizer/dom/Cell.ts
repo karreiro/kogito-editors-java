@@ -78,15 +78,36 @@ export class Cell {
       return;
     }
 
-    const parentRect = this.getParent()?.getBoundingClientRect();
+    const refSibling = this.getParent()?.parentElement.nextSibling;
 
-    if (parentRect) {
-      this.setWidth(Math.round(parentRect.right) - Math.round(this.getRect().x) - BORDER);
+    if (!refSibling) {
+      return;
     }
+
+    const children = [].slice.call(refSibling.querySelectorAll(`.${this.getHeaderType()}`));
+    const childrenRects = children.map((c) => c.getBoundingClientRect());
+    const x = Math.min(...childrenRects.map((c) => c.x));
+    const right = Math.max(...childrenRects.map((c) => c.right));
+
+    this.setWidth(right - x - BORDER * 2);
   }
 
   isColSpanHeader(): boolean {
     return this.getParent()?.classList.contains("colspan-header") || false;
+  }
+
+  private getHeaderType() {
+    const cssClasses = this.getParent()?.classList || [];
+
+    if (cssClasses.contains("input")) {
+      return "input";
+    }
+
+    if (cssClasses.contains("output")) {
+      return "output";
+    }
+
+    return "annotation";
   }
 
   private getParent() {
