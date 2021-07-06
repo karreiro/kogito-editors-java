@@ -78,16 +78,16 @@ export class Cell {
       return;
     }
 
-    const refSibling = this.getParent()?.parentElement.nextSibling;
+    const refSibling = this.getParent()?.parentElement?.nextSibling;
 
     if (!refSibling) {
       return;
     }
 
-    const children = [].slice.call(refSibling.querySelectorAll(`.${this.getHeaderType()}`));
-    const childrenRects = children.map((c) => c.getBoundingClientRect());
-    const x = Math.min(...childrenRects.map((c) => c.x));
-    const right = Math.max(...childrenRects.map((c) => c.right));
+    const children = [].slice.call((refSibling as HTMLElement).querySelectorAll(`.${this.getHeaderType()}`));
+    const childrenRects = children.map((c: HTMLElement) => c.getBoundingClientRect());
+    const x = Math.min(...childrenRects.map((c: DOMRect) => c.x));
+    const right = Math.max(...childrenRects.map((c: DOMRect) => c.right));
 
     this.setWidth(right - x - BORDER * 2);
   }
@@ -97,7 +97,7 @@ export class Cell {
   }
 
   private getHeaderType() {
-    const cssClasses = this.getParent()?.classList || [];
+    const cssClasses = (this.getParent()?.classList || []) as DOMTokenList;
 
     if (cssClasses.contains("input")) {
       return "input";
