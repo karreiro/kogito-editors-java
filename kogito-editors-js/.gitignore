@@ -28,3 +28,4 @@ target
 coverage
 out
 target
+stats.json
