@@ -256,7 +256,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
           TableOperation.RowClear,
           TableOperation.RowDuplicate,
         ]);
-        tableHandlerStateUpdate(target, getColumnsAtLastLevel(tableColumns.current)[columnIndex]);
+        tableHandlerStateUpdate(target, getColumnsAtLastLevel(tableInstance.columns)[columnIndex]);
         setLastSelectedRowIndex(rowIndex);
       }
     },
