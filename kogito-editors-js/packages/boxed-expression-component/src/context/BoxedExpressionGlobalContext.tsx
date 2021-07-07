@@ -15,12 +15,19 @@
  */
 
 import * as React from "react";
-import "./ItWorks.css";
+import { PMMLParams } from "../api";
 
-export const ItWorks = () => {
-  return (
-    <div className="it-works">
-      <h1>It works!</h1>
-    </div>
-  );
-};
+export interface BoxedExpressionGlobalContextProps {
+  pmmlParams?: PMMLParams;
+  supervisorHash: string;
+  setSupervisorHash: (hash: string) => void;
+  boxedExpressionEditorRef: React.RefObject<HTMLDivElement>;
+  currentlyOpenedHandlerCallback: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentlyOpenedHandlerCallback: React.Dispatch<
+    React.SetStateAction<React.Dispatch<React.SetStateAction<boolean>>>
+  >;
+}
+
+export const BoxedExpressionGlobalContext = React.createContext<BoxedExpressionGlobalContextProps>(
+  {} as BoxedExpressionGlobalContextProps
+);
