@@ -82,7 +82,9 @@ export const Table: React.FunctionComponent<TableProps> = ({
           ],
         });
 
-        generateNumberOfRowsSubColumnRecursively(column.columns[0], headerLevels - 1);
+        if (column?.columns?.length) {
+          generateNumberOfRowsSubColumnRecursively(column.columns[0], headerLevels - 1);
+        }
       }
     },
     [currentControllerCell, headerVisibility]
@@ -229,7 +231,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
 
   const tableInstance = useTable(
     {
-      columns: tableColumns.current,
+      columns: tableColumns.current as any,
       data: tableRows.current,
       defaultColumn,
       onCellUpdate,

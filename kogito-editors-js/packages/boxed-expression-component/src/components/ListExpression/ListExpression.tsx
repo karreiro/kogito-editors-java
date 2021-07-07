@@ -134,7 +134,7 @@ export const ListExpression: React.FunctionComponent<ListProps> = ({
         <Table
           tableId={uid}
           headerVisibility={TableHeaderVisibility.None}
-          defaultCell={{ list: ContextEntryExpressionCell }}
+          defaultCell={{ list: ContextEntryExpressionCell } as any}
           columns={columns}
           rows={listItems as DataRecord[]}
           onRowsUpdate={onRowsUpdate}

@@ -324,7 +324,7 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
   );
 
   const onColumnsUpdate = useCallback(
-    ([expressionColumn]: [ColumnInstance]) => {
+    (expressionColumn) => {
       props.onUpdatingNameAndDataType?.(expressionColumn.label as string, expressionColumn.dataType);
       setWidth(expressionColumn.width as number);
 
@@ -377,7 +377,7 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
           ),
           [onFunctionKindSelect, selectedFunctionKind]
         )}
-        defaultCell={{ parameters: ContextEntryExpressionCell }}
+        defaultCell={{ parameters: ContextEntryExpressionCell } as any}
         resetRowCustomFunction={resetRowCustomFunction}
       />
     </div>

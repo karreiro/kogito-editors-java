@@ -41,7 +41,8 @@ export interface BoxedExpressionEditorProps {
 const BoxedExpressionEditor: (props: BoxedExpressionEditorProps) => JSX.Element = (
   props: BoxedExpressionEditorProps
 ) => {
-  const [currentlyOpenedHandlerCallback, setCurrentlyOpenedHandlerCallback] = useState(() => _.identity);
+  const [_, initialCurrentlyOpenedHandlerCallback] = useState(false);
+  const [currentlyOpenedHandlerCallback, setCurrentlyOpenedHandlerCallback] = useState(() => initialCurrentlyOpenedHandlerCallback);
   const boxedExpressionEditorRef = useRef<HTMLDivElement>(null);
   const [supervisorHash, setSupervisorHash] = useState(hashfy(props.expressionDefinition));
 

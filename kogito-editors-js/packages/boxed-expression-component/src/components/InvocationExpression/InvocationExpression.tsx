@@ -157,7 +157,7 @@ export const InvocationExpression: React.FunctionComponent<InvocationProps> = ({
   ]);
 
   const onColumnsUpdate = useCallback(
-    ([expressionColumn]: [ColumnInstance]) => {
+    (expressionColumn) => {
       onUpdatingNameAndDataType?.(expressionColumn.label as string, expressionColumn.dataType);
 
       const [updatedExpressionColumn] = columns.current;
@@ -172,7 +172,7 @@ export const InvocationExpression: React.FunctionComponent<InvocationProps> = ({
     () => ({
       entryInfo: {
         name: generateNextAvailableEntryName(
-          _.map(rows, (row: ContextEntryRecord) => row.entryInfo) as EntryInfo[],
+          _.map(rows as ContextEntries, (row: ContextEntryRecord) => row.entryInfo) as EntryInfo[],
           "p"
         ),
         dataType: DEFAULT_PARAMETER_DATA_TYPE,
@@ -199,7 +199,7 @@ export const InvocationExpression: React.FunctionComponent<InvocationProps> = ({
           headerLevels={2}
           headerVisibility={getHeaderVisibility()}
           skipLastHeaderGroup
-          defaultCell={{ entryInfo: ContextEntryInfoCell, entryExpression: ContextEntryExpressionCell }}
+          defaultCell={{ entryInfo: ContextEntryInfoCell, entryExpression: ContextEntryExpressionCell } as any}
           columns={columns.current}
           rows={rows as DataRecord[]}
           onColumnsUpdate={onColumnsUpdate}

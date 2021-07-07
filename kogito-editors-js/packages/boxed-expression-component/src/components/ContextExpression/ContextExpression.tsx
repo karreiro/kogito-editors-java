@@ -111,7 +111,7 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
     () => ({
       entryInfo: {
         name: generateNextAvailableEntryName(
-          _.map(rows, (row: ContextEntryRecord) => row.entryInfo) as EntryInfo[],
+          _.map(rows as ContextEntries, (row: ContextEntryRecord) => row.entryInfo) as EntryInfo[],
           "ContextEntry"
         ),
         dataType: DataType.Undefined,
@@ -163,7 +163,7 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
         tableId={uid}
         headerLevels={1}
         headerVisibility={getHeaderVisibility()}
-        defaultCell={{ entryInfo: ContextEntryInfoCell, entryExpression: ContextEntryExpressionCell }}
+        defaultCell={{ entryInfo: ContextEntryInfoCell, entryExpression: ContextEntryExpressionCell } as any}
         columns={columns}
         rows={rows as DataRecord[]}
         onRowAdding={onRowAdding}
