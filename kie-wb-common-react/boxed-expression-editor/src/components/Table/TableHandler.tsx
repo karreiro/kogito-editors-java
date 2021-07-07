@@ -122,7 +122,7 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
   const generateNextAvailableColumnName: (lastIndex: number, groupType?: string) => string = useCallback(
     (lastIndex, groupType) => {
       const candidateName = `${getColumnPrefix(groupType)}${lastIndex}`;
-      const columnWithCandidateName = _.find(tableColumns.current, { accessor: candidateName });
+      const columnWithCandidateName = _.find(getColumnsAtLastLevel(tableColumns.current), { accessor: candidateName });
       return columnWithCandidateName ? generateNextAvailableColumnName(lastIndex + 1, groupType) : candidateName;
     },
     [getColumnPrefix, tableColumns]
