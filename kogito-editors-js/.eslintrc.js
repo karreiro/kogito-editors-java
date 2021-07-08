@@ -17,7 +17,14 @@
 module.exports = {
   root: true,
   parser: "@typescript-eslint/parser",
-  plugins: ["@typescript-eslint"],
+  plugins: ["@typescript-eslint", "react-hooks", "eslint-plugin-react-hooks", "prettier"],
+  parserOptions: {
+    tsx: true,
+    jsx: true,
+    js: true,
+    useJSXTextNode: true,
+    project: "./tsconfig.json",
+  },
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -44,5 +51,9 @@ module.exports = {
     react: {
       version: "detect",
     },
+  },
+  env: {
+    browser: true,
+    node: true,
   },
 };
