@@ -157,7 +157,7 @@ export const InvocationExpression: React.FunctionComponent<InvocationProps> = ({
   ]);
 
   const onColumnsUpdate = useCallback(
-    (expressionColumn) => {
+    ([expressionColumn]: any[]) => {
       onUpdatingNameAndDataType?.(expressionColumn.label as string, expressionColumn.dataType);
 
       const [updatedExpressionColumn] = columns.current;

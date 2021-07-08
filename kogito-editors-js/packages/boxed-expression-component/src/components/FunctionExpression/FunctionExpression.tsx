@@ -324,7 +324,7 @@ export const FunctionExpression: React.FunctionComponent<FunctionProps> = (props
   );
 
   const onColumnsUpdate = useCallback(
-    (expressionColumn) => {
+    ([expressionColumn]: any[]) => {
       props.onUpdatingNameAndDataType?.(expressionColumn.label as string, expressionColumn.dataType);
       setWidth(expressionColumn.width as number);
 
