@@ -123,7 +123,7 @@ export const LiteralExpression: React.FunctionComponent<LiteralExpressionProps> 
         onCellUpdate={(_number, _columnId, value) => onContentChange(value)}
       />
     ),
-    [onContentChange]
+    [uid, onContentChange]
   );
 
   useEffect(() => {

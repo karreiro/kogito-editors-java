@@ -118,6 +118,6 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
         </div>
       </>
     ),
-    [value, isSelected, mode]
+    [value, cssClass, onBlur, onChange, onDoubleClick, onKeyPress, onSelect]
   );
 };
