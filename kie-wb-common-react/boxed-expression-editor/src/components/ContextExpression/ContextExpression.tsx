@@ -16,7 +16,7 @@
 
 import "./ContextExpression.css";
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ContextEntries,
   ContextEntryRecord,
@@ -35,7 +35,7 @@ import {
 } from "../../api";
 import { Table } from "../Table";
 import { useBoxedExpressionEditorI18n } from "../../i18n";
-import { DataRecord } from "react-table";
+import { ColumnInstance, DataRecord } from "react-table";
 import { ContextEntryExpressionCell } from "./ContextEntryExpressionCell";
 import * as _ from "lodash";
 import { ContextEntryExpression } from "./ContextEntryExpression";
@@ -50,6 +50,7 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
   uid,
   name = DEFAULT_CONTEXT_ENTRY_NAME,
   dataType = DEFAULT_CONTEXT_ENTRY_DATA_TYPE,
+  onUpdatingNameAndDataType,
   contextEntries,
   result = {} as ExpressionProps,
   renderResult = true,
@@ -66,33 +67,30 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
   const [expressionWidth, setExpressionWidth] = useState(entryExpressionWidth);
   const { setSupervisorHash } = React.useContext(BoxedExpressionGlobalContext);
 
-  const columns = useMemo(
-    () => [
-      {
-        label: name,
-        accessor: name,
-        dataType,
-        disableHandlerOnHeader: true,
-        columns: [
-          {
-            accessor: "entryInfo",
-            disableHandlerOnHeader: true,
-            width: infoWidth,
-            setWidth: setInfoWidth,
-            minWidth: DEFAULT_ENTRY_INFO_MIN_WIDTH,
-          },
-          {
-            accessor: "entryExpression",
-            disableHandlerOnHeader: true,
-            width: expressionWidth,
-            setWidth: setExpressionWidth,
-            minWidth: DEFAULT_ENTRY_EXPRESSION_MIN_WIDTH,
-          },
-        ],
-      },
-    ],
-    [dataType, expressionWidth, infoWidth, name]
-  );
+  const [columns, setColumns] = useState([
+    {
+      label: name,
+      accessor: name,
+      dataType,
+      disableHandlerOnHeader: true,
+      columns: [
+        {
+          accessor: "entryInfo",
+          disableHandlerOnHeader: true,
+          width: infoWidth,
+          setWidth: setInfoWidth,
+          minWidth: DEFAULT_ENTRY_INFO_MIN_WIDTH,
+        },
+        {
+          accessor: "entryExpression",
+          disableHandlerOnHeader: true,
+          width: expressionWidth,
+          setWidth: setExpressionWidth,
+          minWidth: DEFAULT_ENTRY_EXPRESSION_MIN_WIDTH,
+        },
+      ],
+    },
+  ]);
 
   const [rows, setRows] = useState(
     contextEntries || [
@@ -109,6 +107,23 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
         nameAndDataTypeSynchronized: true,
       } as DataRecord,
     ]
+  );
+
+  const onColumnsUpdate = useCallback(
+    ([expressionColumn]: [ColumnInstance]) => {
+      const expressionColumnName = expressionColumn.label as string;
+      const expressionColumnDataType = expressionColumn.dataType;
+      onUpdatingNameAndDataType?.(expressionColumnName, expressionColumnDataType);
+      setColumns(([prevExpressionColumn]) => [
+        {
+          ...prevExpressionColumn,
+          label: expressionColumnName,
+          accessor: expressionColumnName,
+          dataType: expressionColumnDataType,
+        },
+      ]);
+    },
+    [onUpdatingNameAndDataType]
   );
 
   const onRowAdding = useCallback(() => {
@@ -174,6 +189,7 @@ export const ContextExpression: React.FunctionComponent<ContextProps> = ({
         defaultCell={{ entryInfo: ContextEntryInfoCell, entryExpression: ContextEntryExpressionCell }}
         columns={columns}
         rows={rows as DataRecord[]}
+        onColumnsUpdate={onColumnsUpdate}
         onRowAdding={onRowAdding}
         onRowsUpdate={setRows}
         handlerConfiguration={noHandlerMenu ? undefined : getHandlerConfiguration(i18n, i18n.contextEntry)}

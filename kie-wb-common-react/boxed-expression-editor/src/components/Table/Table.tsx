@@ -39,10 +39,13 @@ export const NO_TABLE_CONTEXT_MENU_CLASS = "no-table-context-menu";
 const NUMBER_OF_ROWS_COLUMN = "#";
 const NUMBER_OF_ROWS_SUBCOLUMN = "0";
 
-export const getColumnsAtLastLevel: (columns: ColumnInstance[] | Column[]) => ColumnInstance[] = (columns) =>
+export const getColumnsAtLastLevel: (columns: ColumnInstance[] | Column[], depth?: number) => ColumnInstance[] = (
+  columns,
+  depth = 0
+) =>
   _.flatMap(columns, (column: ColumnInstance) => {
     if (_.has(column, "columns")) {
-      return column.columns;
+      return depth > 0 ? getColumnsAtLastLevel(column.columns, depth - 1) : column.columns;
     }
     return column;
   });
@@ -232,7 +235,10 @@ export const Table: React.FunctionComponent<TableProps> = ({
 
   const getThProps = (column: ColumnInstance) => ({
     onContextMenu: (e: ContextMenuEvent) => {
-      const columnIndex = _.findIndex(getColumnsAtLastLevel(tableColumns.current), getColumnSearchPredicate(column));
+      const columnIndex = _.findIndex(
+        getColumnsAtLastLevel(tableColumns.current, column.depth),
+        getColumnSearchPredicate(column)
+      );
       const target = e.target as HTMLElement;
       const handlerOnHeaderIsAvailable = !column.disableHandlerOnHeader;
       if (contextMenuIsAvailable(target) && handlerOnHeaderIsAvailable) {
@@ -256,7 +262,7 @@ export const Table: React.FunctionComponent<TableProps> = ({
           TableOperation.RowClear,
           TableOperation.RowDuplicate,
         ]);
-        tableHandlerStateUpdate(target, getColumnsAtLastLevel(tableInstance.columns)[columnIndex]);
+        tableHandlerStateUpdate(target, getColumnsAtLastLevel(tableInstance.columns, headerLevels)[columnIndex]);
         setLastSelectedRowIndex(rowIndex);
       }
     },
