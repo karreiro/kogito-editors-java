@@ -53,7 +53,7 @@ export const EditTextInline: React.FunctionComponent<EditTextInlineProps> = ({ o
     []
   );
 
-  const onDoubleClick = useMemo(
+  const onClick = useMemo(
     () => () => {
       setToggle(false);
     },
@@ -61,7 +61,7 @@ export const EditTextInline: React.FunctionComponent<EditTextInlineProps> = ({ o
   );
 
   return toggle ? (
-    <p className="pf-u-text-truncate" onDoubleClick={onDoubleClick}>
+    <p className="pf-u-text-truncate" onClick={onClick}>
       {value}
     </p>
   ) : (

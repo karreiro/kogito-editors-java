@@ -38,7 +38,7 @@ describe("EditTextInline tests", () => {
     const { container } = render(
       usingTestingBoxedExpressionI18nContext(<EditTextInline value={value} onTextChange={_.identity} />).wrapper
     );
-    fireEvent.doubleClick(container.querySelector("p")!);
+    fireEvent.click(container.querySelector("p")!);
 
     expect(container.querySelector("input")).toBeTruthy();
     expect(container.querySelector("input")).toHaveValue(value);
@@ -56,7 +56,7 @@ describe("EditTextInline tests", () => {
         </div>
       ).wrapper
     );
-    fireEvent.doubleClick(container.querySelector("p")!);
+    fireEvent.click(container.querySelector("p")!);
     fireEvent.blur(changeInputValue(container, newValue));
 
     expect(mockedOnTextChange).toHaveBeenCalledWith(newValue);
@@ -74,7 +74,7 @@ describe("EditTextInline tests", () => {
         </div>
       ).wrapper
     );
-    fireEvent.doubleClick(container.querySelector("p")!);
+    fireEvent.click(container.querySelector("p")!);
     fireEvent.keyDown(changeInputValue(container, newValue), { key: "enter", keyCode: 13 });
 
     expect(mockedOnTextChange).toHaveBeenCalledWith(newValue);
@@ -92,7 +92,7 @@ describe("EditTextInline tests", () => {
         </div>
       ).wrapper
     );
-    fireEvent.doubleClick(container.querySelector("p")!);
+    fireEvent.click(container.querySelector("p")!);
     fireEvent.keyDown(changeInputValue(container, newValue), { key: "escape", keyCode: 27 });
 
     expect(mockedOnTextChange).toHaveBeenCalledTimes(0);
