@@ -82,3 +82,7 @@
 .expression-container .decision-table-expression table thead th.annotation.decision-table--annotation .react-resizable {
   background-color: #ffffff;
 }
+
+.expression-container .decision-table-expression table thead th.annotation.decision-table--annotation .header-cell-info {
+  width: 95%;
+}

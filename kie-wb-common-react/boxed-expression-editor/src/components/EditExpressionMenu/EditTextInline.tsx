@@ -61,14 +61,16 @@ export const EditTextInline: React.FunctionComponent<EditTextInlineProps> = ({ o
   );
 
   return toggle ? (
-    <p onDoubleClick={onDoubleClick}>{value}</p>
+    <p className="pf-u-text-truncate" onDoubleClick={onDoubleClick}>
+      {value}
+    </p>
   ) : (
     <input
       type="text"
       autoFocus
       defaultValue={value}
       onBlur={onValueBlur}
-      style={{ borderRadius: "0.5em" }}
+      style={{ borderRadius: "0.5em", width: "100%" }}
       onKeyDown={onKeyDown}
     />
   );
