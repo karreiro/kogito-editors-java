@@ -2,7 +2,6 @@
 build
 coverage
 dist
-dist
 local
 node_modules
 target

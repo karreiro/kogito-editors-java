@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *        http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,27 +14,14 @@
  * limitations under the License.
  */
 
-.showcase {
-  display: flex;
-  flex-direction: column;
-  padding: 1.5em;
-}
-
-.showcase .boxed-expression {
-  max-height: 55em;
-  overflow-y: auto;
-}
-
-.showcase .updated-json {
-  margin-top: 5em;
-  border-style: inset;
-  padding: 1em;
-  max-height: 30em;
-  overflow-y: auto;
-}
-
-.showcase .updated-json .disclaimer {
-  font-style: italic;
-  color: #4d5258;
-  margin: 0;
+/// <reference types="cypress" />
+declare namespace Cypress {
+  interface Chainable {
+    /**
+     * Search elements by data-ouia-component-id attribute.
+     * @param id string
+     * @param opts optional - config object
+     */
+    ouiaId(id: string, opts?: Record<string, any>): Chainable<Element>;
+  }
 }

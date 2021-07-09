@@ -14,27 +14,4 @@
  * limitations under the License.
  */
 
-.showcase {
-  display: flex;
-  flex-direction: column;
-  padding: 1.5em;
-}
-
-.showcase .boxed-expression {
-  max-height: 55em;
-  overflow-y: auto;
-}
-
-.showcase .updated-json {
-  margin-top: 5em;
-  border-style: inset;
-  padding: 1em;
-  max-height: 30em;
-  overflow-y: auto;
-}
-
-.showcase .updated-json .disclaimer {
-  font-style: italic;
-  color: #4d5258;
-  margin: 0;
-}
+module.exports = {};
