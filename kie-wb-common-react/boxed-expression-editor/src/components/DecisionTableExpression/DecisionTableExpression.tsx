@@ -209,6 +209,7 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
 
   const decisionName = useRef(name);
   const decisionDataType = useRef(dataType);
+  const singleOutputChildDataType = useRef(DataType.Undefined);
   const columns = useRef<ColumnInstance[]>(evaluateColumns() as ColumnInstance[]);
   const rows = useRef<DataRecord[]>(evaluateRows());
 
@@ -255,16 +256,40 @@ export const DecisionTableExpression: React.FunctionComponent<DecisionTableProps
     }
   }, [isHeadless, onUpdatingRecursiveExpression, selectedAggregation, selectedHitPolicy, setSupervisorHash, uid]);
 
+  const synchronizeDecisionNodeDataTypeWithSingleOutputColumnDataType = useCallback(
+    (decisionNodeColumn: ColumnInstance) => {
+      if (_.size(decisionNodeColumn.columns) === 1) {
+        const updatedSingleOutputChildDataType = (_.first(decisionNodeColumn.columns) as ColumnInstance).dataType;
+
+        if (updatedSingleOutputChildDataType !== singleOutputChildDataType.current) {
+          singleOutputChildDataType.current = updatedSingleOutputChildDataType;
+          decisionNodeColumn.dataType = updatedSingleOutputChildDataType;
+        } else if (decisionNodeColumn.dataType !== decisionDataType.current) {
+          singleOutputChildDataType.current = decisionNodeColumn.dataType;
+          (_.first(decisionNodeColumn.columns) as ColumnInstance).dataType = decisionNodeColumn.dataType;
+        }
+      }
+    },
+    []
+  );
+
   const onColumnsUpdate = useCallback(
     (updatedColumns) => {
-      columns.current = [...updatedColumns];
       const decisionNodeColumn = _.find(updatedColumns, { groupType: DecisionTableColumnType.OutputClause });
+
+      synchronizeDecisionNodeDataTypeWithSingleOutputColumnDataType(decisionNodeColumn);
+
+      columns.current = [...updatedColumns];
       decisionName.current = decisionNodeColumn.label;
       decisionDataType.current = decisionNodeColumn.dataType;
       onUpdatingNameAndDataType?.(decisionNodeColumn.label, decisionNodeColumn.dataType);
       spreadDecisionTableExpressionDefinition();
     },
-    [onUpdatingNameAndDataType, spreadDecisionTableExpressionDefinition]
+    [
+      onUpdatingNameAndDataType,
+      spreadDecisionTableExpressionDefinition,
+      synchronizeDecisionNodeDataTypeWithSingleOutputColumnDataType,
+    ]
   );
 
   const fillMissingCellValues = useCallback(
