@@ -31,37 +31,38 @@ export const ImportJavaClassesWizard: React.FunctionComponent<ImportJavaClassesW
   buttonDisabledStatus,
   buttonTooltipMessage,
 }: ImportJavaClassesWizardProps) => {
-  const [selectedClasses, setSelectedClasses] = useState<string[]>([]);
   const { i18n } = useImportJavaClassesWizardI18n();
+  const [selectedJavaClasses, setSelectedJavaClasses] = useState<string[]>([]);
   const updateSelectedClasses = (fullClassName: string, add: boolean) => {
     if (add) {
-      const classesSet = new Set(selectedClasses);
+      const classesSet = new Set(selectedJavaClasses);
       classesSet.add(fullClassName);
-      setSelectedClasses(Array.from(classesSet));
+      setSelectedJavaClasses(Array.from(classesSet));
     } else {
-      const classesSet = new Set(selectedClasses);
+      const classesSet = new Set(selectedJavaClasses);
       classesSet.delete(fullClassName);
-      setSelectedClasses(Array.from(classesSet));
+      setSelectedJavaClasses(Array.from(classesSet));
     }
   };
+
   const steps = [
     {
       name: i18n.modalWizard.firstStep.stepName,
       component: (
         <ImportJavaClassesWizardFirstStep
-          selectedJavaClasses={selectedClasses}
-          setSelectedJavaClasses={updateSelectedClasses}
+          selectedJavaClasses={selectedJavaClasses}
+          onSelectedJavaClassesUpdated={updateSelectedClasses}
         />
       ),
-      enableNext: selectedClasses.length > 0,
+      enableNext: selectedJavaClasses.length > 0,
       canJumpTo: true,
       hideBackButton: true,
     },
     {
       name: i18n.modalWizard.secondStep.stepName,
-      component: <p>Step 2 content</p>,
+      component: <p>You selected: {selectedJavaClasses.join(", ")}</p>,
       enableNext: false,
-      canJumpTo: selectedClasses.length > 0,
+      canJumpTo: selectedJavaClasses.length > 0,
     },
     {
       name: i18n.modalWizard.thirdStep.stepName,

@@ -18,15 +18,15 @@ import * as React from "react";
 import { EmptyState, EmptyStateBody, EmptyStateIcon, Title } from "@patternfly/react-core";
 
 export interface EmptyStateWidgetProps {
-  /** Text to apply to the Modal button */
-  emptyStateIcon: React.ComponentType<any>;
-  /** Button tooltip message */
+  /** Icon applied in the center of the Empty State Widget */
+  emptyStateIcon: React.ComponentType;
+  /** Empty State Widget title heading */
   emptyStateTitleHeading: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  /** Title of the Modal Wizard */
+  /** Empty State Widget title size */
   emptyStateTitleSize?: "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl";
-  /** Title of the Modal Wizard */
+  /** Empty State Widget title text */
   emptyStateTitleText: string;
-  /** Steps of the Modal Wizard */
+  /** Empty State Widget body text */
   emptyStateBodyText: string;
 }
 

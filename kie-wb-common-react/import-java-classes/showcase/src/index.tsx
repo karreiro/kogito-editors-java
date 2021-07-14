@@ -26,6 +26,28 @@ const Showcase: React.FunctionComponent = () => {
   const [buttonTooltipMessage, setButtonTooltipMessage] = useState(LSP_SERVER_NOT_AVAILABLE);
   const onSelectChange = useCallback((event) => setButtonDisableStatus(event.target.value === "true"), []);
   const onInputChange = useCallback((event) => setButtonTooltipMessage(event.target.value), []);
+  /* This function temporary mocks a call to the LSP service method getClasses */
+  const lspGetClassServiceMocked = (value: string) => {
+    /* Mocked data retrieved from LSP Service */
+    const booClassesList = ["org.kie.test.kogito.Book", "org.kie.test.kogito.Boom"];
+    const bookClassesList = ["org.kie.test.kogito.Book"];
+    const boomClassesList = ["org.kie.test.kogito.Boom"];
+
+    /* Temporary mocks managing */
+    if (value === "Boo") {
+      return booClassesList;
+    } else if (value === "Book") {
+      return bookClassesList;
+    } else if (value === "Boom") {
+      return boomClassesList;
+    } else {
+      return [];
+    }
+  };
+
+  window.envelopeMock = {
+    lspGetClassServiceMocked: (value: string) => lspGetClassServiceMocked(value),
+  };
 
   return (
     <div className="showcase">

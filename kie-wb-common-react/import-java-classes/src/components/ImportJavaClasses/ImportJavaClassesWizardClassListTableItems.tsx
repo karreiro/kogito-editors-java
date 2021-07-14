@@ -18,11 +18,11 @@ import * as React from "react";
 import { DataListCell, DataListCheck, DataListItem, DataListItemRow } from "@patternfly/react-core";
 
 export interface ImportJavaClassesWizardClassListTableItemsProps {
-  /** Text to apply to the Modal button */
+  /** Item class name */
   fullClassName: string;
-  /** Selected */
+  /** Item checkbox status */
   selected: boolean;
-  /** ads */
+  /** Function to call when an item related checkbox is pressed by the user */
   onJavaClassItemSelected: (fullClassName: string, add: boolean) => void;
 }
 

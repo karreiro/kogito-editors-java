@@ -26,34 +26,24 @@ export interface ImportJavaClassesWizardFirstStep {
   /** Text to apply to the Modal button */
   selectedJavaClasses: string[];
   /** Text to apply to the Modal button */
-  setSelectedJavaClasses: (fullClassName: string, add: boolean) => void;
+  onSelectedJavaClassesUpdated: (fullClassName: string, add: boolean) => void;
 }
 
 export const ImportJavaClassesWizardFirstStep: React.FunctionComponent<ImportJavaClassesWizardFirstStep> = ({
   selectedJavaClasses,
-  setSelectedJavaClasses,
+  onSelectedJavaClassesUpdated,
 }) => {
   const EMPTY_SEARCH_VALUE = "";
   const { i18n } = useImportJavaClassesWizardI18n();
   const [searchValue, setSearchValue] = useState(EMPTY_SEARCH_VALUE);
-  const [retrievedJavaClassesLSP, setRetrievedJavaClassesLSP] = useState<string[]>([]);
-  const onSearchValueChange = useCallback((value: string) => lspGetClassServiceMocked(value), []);
+  const [retrievedJavaClasses, setRetrievedJavaClasses] = useState<string[]>([]);
+  const onSearchValueChange = useCallback((value: string) => retrieveJavaClasses(value), []);
   /* This function temporary mocks a call to the LSP service method getClasses */
-  const lspGetClassServiceMocked = (value: string) => {
-    /* Mocked data retrieved from LSP Service */
-    const booClassesList = ["org.kie.test.kogito.Book", "org.kie.test.kogito.Boom"];
-    const bookClassesList = ["org.kie.test.kogito.Book"];
-    const boomClassesList = ["org.kie.test.kogito.Boom"];
-
+  const retrieveJavaClasses = (value: string) => {
     setSearchValue(value);
-    setRetrievedJavaClassesLSP([]);
-    /* Temporary mocks managing */
-    if (value === "Boo") {
-      setRetrievedJavaClassesLSP(booClassesList);
-    } else if (value === "Book") {
-      setRetrievedJavaClassesLSP(bookClassesList);
-    } else if (value === "Boom") {
-      setRetrievedJavaClassesLSP(boomClassesList);
+    const retrieved = window.envelopeMock.lspGetClassServiceMocked(value);
+    if (retrieved) {
+      setRetrievedJavaClasses(retrieved);
     }
   };
 
@@ -81,11 +71,11 @@ export const ImportJavaClassesWizardFirstStep: React.FunctionComponent<ImportJav
         onClear={() => onSearchValueChange(EMPTY_SEARCH_VALUE)}
         autoFocus
       />
-      {retrievedJavaClassesLSP.length > 0 || selectedJavaClasses.length > 0 ? (
+      {retrievedJavaClasses.length > 0 || selectedJavaClasses.length > 0 ? (
         <ImportJavaClassesWizardClassListTable
-          selectedData={selectedJavaClasses}
-          data={retrievedJavaClassesLSP}
-          onJavaClassItemSelected={setSelectedJavaClasses}
+          selectedJavaClasses={selectedJavaClasses}
+          retrievedJavaClasses={retrievedJavaClasses}
+          onJavaClassItemSelected={onSelectedJavaClassesUpdated}
         />
       ) : (
         <EmptyStep />

@@ -19,20 +19,24 @@ import { DataList } from "@patternfly/react-core";
 import { ImportJavaClassesWizardClassListTableItems } from "./ImportJavaClassesWizardClassListTableItems";
 
 export interface ImportJavaClassesWizardClassListTableProps {
-  /** Text to apply to the Modal button */
-  selectedData: string[];
-  /** Text to apply to the Modal button */
-  data: string[];
-  /** On */
+  /** Previously selected Java Classes from the user */
+  selectedJavaClasses: string[];
+  /** Retrieved JavaClasses from external service */
+  retrievedJavaClasses: string[];
+  /** Function to call when an item related checkbox is pressed by the user */
   onJavaClassItemSelected: (fullClassName: string, add: boolean) => void;
 }
 
 export const ImportJavaClassesWizardClassListTable: React.FunctionComponent<ImportJavaClassesWizardClassListTableProps> =
-  ({ selectedData, data, onJavaClassItemSelected }: ImportJavaClassesWizardClassListTableProps) => {
-    const classesSet = new Set(selectedData);
+  ({
+    selectedJavaClasses,
+    retrievedJavaClasses,
+    onJavaClassItemSelected,
+  }: ImportJavaClassesWizardClassListTableProps) => {
+    const classesSet = new Set(selectedJavaClasses);
     return (
       <DataList aria-label={"class-data-list"} isCompact>
-        {selectedData.map((value) => (
+        {selectedJavaClasses.map((value) => (
           <ImportJavaClassesWizardClassListTableItems
             key={value}
             fullClassName={value}
@@ -40,7 +44,7 @@ export const ImportJavaClassesWizardClassListTable: React.FunctionComponent<Impo
             onJavaClassItemSelected={onJavaClassItemSelected}
           />
         ))}
-        {data.map((value) => {
+        {retrievedJavaClasses.map((value) => {
           if (!classesSet.has(value)) {
             return (
               <ImportJavaClassesWizardClassListTableItems
