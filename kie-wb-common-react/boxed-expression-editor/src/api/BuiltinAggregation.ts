@@ -15,8 +15,9 @@
  */
 
 export enum BuiltinAggregation {
-  Sum = "+",
-  Count = "#",
-  Min = "<",
-  Max = ">",
+  "<None>" = "",
+  SUM = "+",
+  COUNT = "#",
+  MIN = "<",
+  MAX = ">",
 }
