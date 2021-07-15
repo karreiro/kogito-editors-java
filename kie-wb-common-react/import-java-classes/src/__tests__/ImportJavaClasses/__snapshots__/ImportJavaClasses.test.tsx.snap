@@ -158,9 +158,7 @@ exports[`ImportJavaClasses component tests Should show Modal after clicking on t
                     >
                       <button
                         aria-current="page"
-                        aria-disabled="true"
-                        class="pf-c-wizard__nav-link pf-m-current pf-m-disabled"
-                        disabled=""
+                        class="pf-c-wizard__nav-link pf-m-current"
                       >
                         Select Java classes
                       </button>
