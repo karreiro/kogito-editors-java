@@ -14,13 +14,6 @@
  * limitations under the License.
  */
 
-import * as React from "react";
-import "./ItWorks.css";
-
-export const ItWorks = () => {
-  return (
-    <div className="it-works">
-      <h1>It works!</h1>
-    </div>
-  );
-};
+export * from "./MonacoConfigs";
+export * from "./MonacoEditor";
+export * from "./MonacoFeelInitializer";

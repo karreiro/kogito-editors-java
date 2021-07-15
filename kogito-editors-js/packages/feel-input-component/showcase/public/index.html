@@ -23,11 +23,21 @@
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Showcase web app" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="stylesheet" href="%PUBLIC_URL%/normalize.css" />
     <title>Showcase web app</title>
   </head>
 
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <header>
+      <a href="https://kiegroup.github.io/kogito-online/#/">
+        <img width="295px" src="./feel_kogito_logo.svg" />
+      </a>
+    </header>
+    <div id="feel-editor"></div>
+    <script type="text/javascript">
+      erraiBusRemoteCommunicationEnabled = false;
+    </script>
+    <script type="text/javascript" src="%PUBLIC_URL%/FEELShowcaseWebapp.nocache.js"></script>
   </body>
 </html>

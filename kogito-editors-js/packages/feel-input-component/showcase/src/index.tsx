@@ -14,9 +14,82 @@
  * limitations under the License.
  */
 
-import React from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import ReactDOM from "react-dom";
+import { FeelService } from "./FeelService";
 import "./index.css";
-import { ItWorks } from "./lib";
+import { FeelInput } from "./lib";
 
-ReactDOM.render(<ItWorks />, document.getElementById("root"));
+const FeelEditor = () => {
+  const [feelExpression, setFeelExpression] = useState("");
+  const [feelResult, setFeelResult] = useState("");
+  const suggestionProvider = useCallback((text, row, col) => {
+    return FeelService.getInstance().getSuggestions(text, row, col);
+  }, []);
+
+  useEffect(() => {
+    const clientResult = FeelService.getInstance().evaluate(feelExpression);
+    if (clientResult !== "") {
+      setFeelResult(clientResult);
+    }
+
+    window.clearTimeout(window.__KIE__FEEL__THROTTLING___);
+    window.__KIE__FEEL__THROTTLING___ = window.setTimeout(() => {
+      const FEEL_SERVER = "https://piscine-madame-68280.herokuapp.com";
+      (async () => {
+        const resp = await fetch(
+          FEEL_SERVER +
+            "?" +
+            new URLSearchParams({
+              feel: feelExpression,
+              clientResult,
+            })
+        );
+        const result = await resp.text();
+        if (!result.includes("Server Error")) {
+          setFeelResult(result);
+        }
+      })();
+    }, 500);
+  }, [feelExpression]);
+
+  const feelInput = useMemo(() => {
+    return (
+      <FeelInput
+        suggestionProvider={suggestionProvider}
+        onChange={(_event, content) => {
+          setFeelExpression(content);
+        }}
+        options={{
+          lineNumbers: "on",
+        }}
+      />
+    );
+  }, [setFeelExpression, suggestionProvider]);
+
+  const feelOutput = useMemo(() => {
+    return (
+      <div className="feel-output">
+        <h3>FEEL output</h3>
+        {feelResult}
+      </div>
+    );
+  }, [feelResult]);
+
+  return (
+    <>
+      <div className="feel-editor">
+        {feelInput}
+        {feelOutput}
+      </div>
+    </>
+  );
+};
+
+declare global {
+  interface Window {
+    __KIE__FEEL__THROTTLING___: number;
+  }
+}
+
+ReactDOM.render(<FeelEditor />, document.getElementById("feel-editor"));

@@ -14,6 +14,100 @@
  * limitations under the License.
  */
 
-:root {
-  padding: 50px;
+body {
+  /* background-color: rgb(60, 63, 66); */
+  background-color: #f1f0f2;
+}
+
+header {
+  height: 85px;
+  text-align: left;
+  background-color: rgb(21, 21, 21);
+}
+
+header img {
+  max-width: 295px;
+  max-height: 85px;
+  padding: 20px 25px;
+}
+
+#FEELShowcaseWebapp + div {
+  display: none;
+}
+
+.feel-editor {
+  box-shadow: 0px 5px 20px #ccc;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.feel-input,
+.feel-output {
+  position: relative;
+  background: #fff;
+  padding: 20px 20px;
+  position: relative;
+}
+
+.feel-input {
+  margin-top: 80px;
+}
+
+.feel-input::after,
+.feel-input::before {
+  position: absolute;
+  color: #555559;
+}
+
+.feel-input::after {
+  content: "main.feel";
+  width: 150px;
+  height: 40px;
+  top: -40px;
+  left: 0;
+  background-color: #fff;
+  line-height: 42px;
+  padding-left: 20px;
+}
+.feel-input::before {
+  content: "✕";
+  z-index: 1;
+  top: -25px;
+  left: 147px;
+  opacity: 0.5;
+  font-size: 12px;
+}
+
+.feel-input > div {
+  height: 400px;
+}
+
+.line-numbers {
+  opacity: 0.2;
+}
+
+.active-line-number.line-numbers {
+  opacity: 0.4;
+}
+
+.feel-output {
+  position: relative;
+  z-index: 1;
+  font-family: Menlo, Monaco, "Courier New", monospace;
+  color: #717175;
+  border-top: 1px solid #dadadf;
+  min-height: 200px;
+  margin-top: 0;
+}
+
+.feel-output h3 {
+  margin: 0;
+  opacity: 0.5;
+  user-select: none;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: -0.1px;
 }

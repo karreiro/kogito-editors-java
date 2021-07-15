@@ -11,6 +11,7 @@
     "build:watch": "webpack --config webpack.development.js --watch"
   },
   "peerDependencies": {
+    "monaco-editor": "^0.25.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "style-loader": "^2.0.0",
