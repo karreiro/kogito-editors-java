@@ -17,6 +17,7 @@
 import * as React from "react";
 import { useState } from "react";
 import * as ReactDOM from "react-dom";
+import { ExpressionProps } from "../../src/api/ExpressionProps";
 import "./index.css";
 // noinspection ES6PreferShortImport
 import {
@@ -25,7 +26,6 @@ import {
   DataType,
   DecisionTableProps,
   ExpressionContainerProps,
-  ExpressionProps,
   FunctionProps,
   InvocationProps,
   ListProps,
@@ -36,9 +36,33 @@ import {
 export const App: React.FunctionComponent = () => {
   //This definition comes directly from the decision node
   const selectedExpression: ExpressionProps = {
+    uid: "id1",
     name: "Expression Name",
-    dataType: DataType.Undefined,
-  };
+    dataType: "<Undefined>",
+    logicType: "Relation",
+    isHeadless: false,
+    columns: [
+      {
+        name: "column-1",
+        dataType: "<Undefined>",
+        width: 371,
+      },
+      {
+        name: "column-3",
+        dataType: "<Undefined>",
+        width: 150,
+      },
+      {
+        name: "column-2",
+        dataType: "<Undefined>",
+      },
+    ],
+    rows: [
+      ["aaaa", "bbb", "cc"],
+      ["ddd", "eee", "fff"],
+      ["ggg", "hhh", "iii"],
+    ],
+  } as ExpressionProps;
 
   const pmmlParams = [
     {
