@@ -14,6 +14,5 @@
  * limitations under the License.
  */
 
-import "./index.css";
-
 export * from "./FeelInput";
+export * from "./Monaco";

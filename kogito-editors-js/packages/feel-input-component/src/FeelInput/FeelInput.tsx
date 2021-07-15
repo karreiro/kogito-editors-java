@@ -18,7 +18,6 @@ import * as Monaco from "monaco-editor";
 import * as React from "react";
 import { useEffect, useMemo, useRef } from "react";
 import { FEELMonacoEditor, SuggestionProvider } from "../Monaco";
-import "./FeelInput.css";
 
 export interface FeelInputProps {
   suggestionProvider?: SuggestionProvider;
