@@ -21,7 +21,7 @@ import CubesIcon from "@patternfly/react-icons/dist/js/icons/cubes-icon";
 
 describe("EmptyStateWidget component tests", () => {
 
-  describe("EmptyStateWidget component tests", () => {
+  test("EmptyStateWidget component tests", () => {
     const { container } = render(<EmptyStateWidget emptyStateTitleHeading={"h6"} emptyStateTitleSize={"md"}
                                                    emptyStateIcon={CubesIcon} emptyStateBodyText={"Body Text"}
                                                    emptyStateTitleText={"Title Text"} />)

@@ -17,6 +17,7 @@
 import * as React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import { ImportJavaClasses } from "../../components";
+import * as _ from "lodash";
 
 describe("ImportJavaClasses component tests", () => {
 
@@ -35,6 +36,8 @@ describe("ImportJavaClasses component tests", () => {
     });
 
     test("Should search box works", () => {
+      const mockedLSPGetClassService = jest.fn();
+      lspGetClassServiceMock(mockedLSPGetClassService);
       const { baseElement, getByText } = render(<ImportJavaClasses buttonDisabledStatus={false} />);
       const modalWizardButton = getByText("Import Java classes")! as HTMLButtonElement;
       modalWizardButton.click();
@@ -58,5 +61,12 @@ describe("ImportJavaClasses component tests", () => {
 
         expect(baseElement).toMatchSnapshot();
     });
+
+  function lspGetClassServiceMock(mockedBroadcastDefinition: jest.Mock) {
+    window.envelopeMock = _.extend(window.envelopeMock  || {}, {
+      lspGetClassServiceMocked: (value :string) =>
+        mockedBroadcastDefinition(value),
+    });
+  }
 
 });
