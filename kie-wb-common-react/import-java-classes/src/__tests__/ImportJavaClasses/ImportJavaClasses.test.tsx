@@ -18,6 +18,7 @@ import * as React from "react";
 import { fireEvent, render } from "@testing-library/react";
 import { ImportJavaClasses } from "../../components";
 import * as _ from "lodash";
+import { act } from "react-dom/test-utils";
 
 describe("ImportJavaClasses component tests", () => {
 
@@ -51,6 +52,43 @@ describe("ImportJavaClasses component tests", () => {
       resetButton.click();
       expect(baseElement.querySelector('[aria-label="Reset"]')! as HTMLButtonElement).not.toBeInTheDocument();
     });
+
+  test("Should search box with results works", async () => {
+    const mockedLSPGetClassService = jest.fn(value => ["com.Book", "com.Author"]);
+    lspGetClassServiceMock(mockedLSPGetClassService);
+    const { baseElement, getByText } = render(<ImportJavaClasses buttonDisabledStatus={false} />);
+    const modalWizardButton = getByText("Import Java classes")! as HTMLButtonElement;
+    modalWizardButton.click();
+    const inputElement = baseElement.querySelector('[aria-label="Search input"]')! as HTMLInputElement;
+    expect(inputElement).toHaveValue("");
+    expect(baseElement.querySelector('[aria-label="Reset"]')! as HTMLButtonElement).not.toBeInTheDocument();
+    fireEvent.change(inputElement, { target: { value: "test" } });
+    expect(inputElement).toHaveValue("test");
+    const firstElement = baseElement.querySelector('[id="com.Book"]')! as HTMLSpanElement;
+    expect(firstElement).toBeInTheDocument();
+    const secondElement = baseElement.querySelector('[id="com.Author"]')! as HTMLSpanElement;
+    expect(secondElement).toBeInTheDocument();
+    let checkFirstElement = baseElement.querySelector('[aria-labelledby="com.Book"]')! as HTMLInputElement;
+    expect(checkFirstElement).toBeInTheDocument();
+    expect(checkFirstElement).not.toBeChecked()
+    let checkSecondElement = baseElement.querySelector('[aria-labelledby="com.Author"]')! as HTMLInputElement;
+    expect(checkSecondElement).toBeInTheDocument();
+    expect(checkSecondElement).not.toBeChecked()
+    fireEvent.click(checkFirstElement);
+    checkFirstElement = baseElement.querySelector('[aria-labelledby="com.Book"]')! as HTMLInputElement;
+    expect(checkFirstElement).toBeChecked()
+    expect(checkSecondElement).not.toBeChecked()
+    await fireEvent.click(checkSecondElement);
+    checkSecondElement = baseElement.querySelector('[aria-labelledby="com.Author"]')! as HTMLInputElement;
+    expect(checkFirstElement).toBeChecked()
+    expect(checkSecondElement).toBeChecked()
+    await fireEvent.click(checkSecondElement);
+    checkSecondElement = baseElement.querySelector('[aria-labelledby="com.Author"]')! as HTMLInputElement;
+    expect(checkFirstElement).toBeChecked()
+    expect(checkSecondElement).not.toBeChecked()
+
+    expect(baseElement).toMatchSnapshot();
+  });
 
     test("Should close Modal after opening it and clicking on the Cancel button", () => {
         const { baseElement, getByText } = render(<ImportJavaClasses buttonDisabledStatus={false} />);

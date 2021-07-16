@@ -16,6 +16,7 @@
 
 import * as React from "react";
 import { DataListCell, DataListCheck, DataListItem, DataListItemRow } from "@patternfly/react-core";
+import { useCallback, useState } from "react";
 
 export interface ImportJavaClassesWizardClassListTableItemsProps {
   /** Item class name */
@@ -28,14 +29,16 @@ export interface ImportJavaClassesWizardClassListTableItemsProps {
 
 export const ImportJavaClassesWizardClassListTableItems: React.FunctionComponent<ImportJavaClassesWizardClassListTableItemsProps> =
   ({ fullClassName, selected, onJavaClassItemSelected }: ImportJavaClassesWizardClassListTableItemsProps) => {
+    const [itemChecked, setItemChecked] = useState(selected);
+    const onDataListCheckChange = useCallback(() => {
+      onJavaClassItemSelected(fullClassName, !itemChecked);
+      setItemChecked(!itemChecked);
+    }, [fullClassName, itemChecked, onJavaClassItemSelected]);
+
     return (
       <DataListItem name={fullClassName}>
         <DataListItemRow>
-          <DataListCheck
-            aria-labelledby={fullClassName}
-            defaultChecked={selected}
-            onChange={(checked) => onJavaClassItemSelected(fullClassName, checked)}
-          />
+          <DataListCheck aria-labelledby={fullClassName} checked={itemChecked} onChange={onDataListCheckChange} />
           <DataListCell>
             <span id={fullClassName}>{fullClassName}</span>
           </DataListCell>
