@@ -56,6 +56,7 @@ const FeelEditor = () => {
   const feelInput = useMemo(() => {
     return (
       <FeelInput
+        enabled={true}
         suggestionProvider={suggestionProvider}
         onChange={(_event, content) => {
           setFeelExpression(content);

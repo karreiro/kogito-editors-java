@@ -16,41 +16,76 @@
 
 import * as Monaco from "monaco-editor";
 import * as React from "react";
-import { useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { FEELMonacoEditor, SuggestionProvider } from "../Monaco";
 
 export interface FeelInputProps {
+  enabled: boolean;
+  value?: string;
   suggestionProvider?: SuggestionProvider;
-  onBlur?: () => void;
-  onChange?: (event: Monaco.editor.IModelContentChangedEvent, content: string) => void;
+  onBlur?: (value: string) => void;
+  onKeyDown?: (event: Monaco.IKeyboardEvent, value: string) => void;
+  onChange?: (event: Monaco.editor.IModelContentChangedEvent, value: string) => void;
   options?: Monaco.editor.IStandaloneEditorConstructionOptions;
 }
 
 export const FeelInput: React.FunctionComponent<FeelInputProps> = ({
+  enabled,
+  value,
   suggestionProvider,
   onBlur,
+  onKeyDown,
   onChange,
   options,
 }: FeelInputProps) => {
-  const textarea = useRef(null);
+  const monacoContainer = useRef<HTMLDivElement>(null);
+
+  const calculatePosition = useCallback((value: string) => {
+    const lines = value.split("\n");
+    const lineNumber = lines.length;
+    const column = lines[lineNumber - 1].length + 1;
+
+    return { lineNumber, column };
+  }, []);
+
+  const initializeEditor = useCallback(
+    (value: string) => {
+      const editor = FEELMonacoEditor.getEditorBuilder(suggestionProvider)
+        .withDomElement(monacoContainer.current!)
+        .withOnBlur(onBlur)
+        .withOnChange(onChange)
+        .withOptions(options)
+        .withOnKeyDown(onKeyDown)
+        .createEditor();
+
+      editor?.setValue(value);
+      editor?.setPosition(calculatePosition(value));
+      editor?.focus();
+    },
+    [suggestionProvider, monacoContainer, onBlur, onChange, options, onKeyDown]
+  );
 
   useEffect(() => {
-    const monacoElement = textarea.current!;
+    const isInitialized = FEELMonacoEditor.isInitialized();
 
-    FEELMonacoEditor.getEditorBuilder(suggestionProvider)
-      .withDomElement(monacoElement)
-      .withOnBlur(onBlur)
-      .withOnChange(onChange)
-      .withOptions(options)
-      .createEditor();
-  }, [suggestionProvider, onBlur, onChange, options]);
+    if (enabled) {
+      if (!isInitialized) {
+        initializeEditor(value || "");
+      }
+      return;
+    }
+
+    if (isInitialized) {
+      FEELMonacoEditor.dispose();
+    }
+  }, [enabled, initializeEditor]);
 
   return useMemo(
     () => (
       <div className="feel-input">
-        <div ref={textarea}></div>
+        <div ref={monacoContainer}></div>
       </div>
     ),
-    []
+    [monacoContainer]
   );
 };

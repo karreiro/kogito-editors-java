@@ -20,16 +20,12 @@ export const MONACO_FEEL_LANGUAGE = "feel-language";
 
 export const MONACO_FEEL_THEME = "feel-theme";
 
-export const createConfig = (options?: Monaco.editor.IStandaloneEditorConstructionOptions): Monaco.editor.IStandaloneEditorConstructionOptions => {
+export const createConfig = (
+  options?: Monaco.editor.IStandaloneEditorConstructionOptions
+): Monaco.editor.IStandaloneEditorConstructionOptions => {
   return {
-
     language: MONACO_FEEL_LANGUAGE,
     theme: MONACO_FEEL_THEME,
-
-    // renderLineHighlight: "none",
-    // lineDecorationsWidth: 1,
-    // lineNumbers: "off",
-
     fontSize: 15,
     contextmenu: false,
     useTabStops: false,
@@ -46,10 +42,9 @@ export const createConfig = (options?: Monaco.editor.IStandaloneEditorConstructi
       enabled: false,
     },
 
-    ...options
+    ...options,
   };
 };
-
 
 export const tokensConfig = (): Monaco.languages.IMonarchLanguage => {
   return {
@@ -60,14 +55,16 @@ export const tokensConfig = (): Monaco.languages.IMonarchLanguage => {
         [/(?:"(?:.*?)")/, "feel-string"],
         [/(?:(?:[a-z ]+\()|(?:\()|(?:\)))/, "feel-function"],
         [/(?:if|then|else)/, "feel-keyword"],
-        [/(?:for|in|return|if|then|else|some|every|satisfies|instance|of|function|external|or|and|between|not|null)/, "feel-keyword"],
+        [
+          /(?:for|in|return|if|then|else|some|every|satisfies|instance|of|function|external|or|and|between|not|null)/,
+          "feel-keyword",
+        ],
       ],
     },
   };
 };
 
 export const defaultSuggestions = (): Monaco.languages.CompletionItem[] => {
-
   const suggestions: Monaco.languages.CompletionItem[] = [];
 
   const suggestionTypes = {
@@ -133,10 +130,10 @@ export const defaultSuggestions = (): Monaco.languages.CompletionItem[] => {
 
   for (const suggestion of suggestionTypes.Snippet) {
     suggestions.push({
-      kind: Monaco.languages.CompletionItemKind.Snippet,
+      kind: Monaco.languages.CompletionItemKind.Keyword,
       insertTextRules: Monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
       label: suggestion[0],
-      insertText: suggestion[1]
+      insertText: suggestion[1],
     } as Monaco.languages.CompletionItem);
   }
 
@@ -145,7 +142,7 @@ export const defaultSuggestions = (): Monaco.languages.CompletionItem[] => {
       kind: Monaco.languages.CompletionItemKind.Function,
       insertTextRules: Monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
       label: suggestion[0],
-      insertText: suggestion[1]
+      insertText: suggestion[1],
     } as Monaco.languages.CompletionItem);
   }
 

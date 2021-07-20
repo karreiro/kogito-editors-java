@@ -15,7 +15,13 @@
  */
 
 import * as Monaco from "monaco-editor";
-import { initializeFeelCompletionItemProvider, initializeMonacoTheme, initializeFeelLanguage, initializeFeelTokensProvider, SuggestionProvider } from ".";
+import {
+  initializeFeelCompletionItemProvider,
+  initializeMonacoTheme,
+  initializeFeelLanguage,
+  initializeFeelTokensProvider,
+  SuggestionProvider,
+} from ".";
 import { createConfig } from "./MonacoConfigs";
 
 declare global {
@@ -25,16 +31,17 @@ declare global {
 }
 
 export class FEELMonacoEditor {
-
   private standaloneEditor?: Monaco.editor.IStandaloneCodeEditor;
 
   private domElement?: HTMLElement;
 
-  private onChange?: (event: Monaco.editor.IModelContentChangedEvent, content: string) => void;
+  private onChange?: (event: Monaco.editor.IModelContentChangedEvent, value: string) => void;
+
+  private onKeyDown?: (event: Monaco.IKeyboardEvent, value: string) => void;
 
   private options?: Monaco.editor.IStandaloneEditorConstructionOptions;
 
-  private onBlur?: () => void;
+  private onBlur?: (value: string) => void;
 
   static getEditorBuilder(suggestionProvider?: SuggestionProvider) {
     if (window.__KIE__MONACO__EDITOR__ === undefined) {
@@ -47,6 +54,19 @@ export class FEELMonacoEditor {
     return window.__KIE__MONACO__EDITOR__;
   }
 
+  static getStandaloneEditor() {
+    return this.getEditorBuilder().standaloneEditor;
+  }
+
+  static dispose() {
+    this.getEditorBuilder().standaloneEditor?.dispose();
+    this.getEditorBuilder().standaloneEditor = undefined;
+  }
+
+  static isInitialized() {
+    return this.getEditorBuilder().standaloneEditor !== undefined;
+  }
+
   withDomElement(domElement: HTMLElement) {
     this.domElement = domElement;
     return this;
@@ -57,8 +77,12 @@ export class FEELMonacoEditor {
     return this;
   }
 
+  withOnKeyDown(onKeyDown?: (event: Monaco.IKeyboardEvent, value: string) => void) {
+    this.onKeyDown = onKeyDown;
+    return this;
+  }
 
-  withOnBlur(onBlur?: () => void) {
+  withOnBlur(onBlur?: (value: string) => void) {
     this.onBlur = onBlur;
     return this;
   }
@@ -70,10 +94,10 @@ export class FEELMonacoEditor {
 
   createEditor() {
     this.dispose();
-    this.createStandaloneEditor();
+    return this.createStandaloneEditor();
   }
 
-  dispose() {
+  private dispose() {
     this.standaloneEditor?.dispose();
   }
 
@@ -89,7 +113,17 @@ export class FEELMonacoEditor {
     }
 
     if (this.onBlur) {
-      this.standaloneEditor.onDidBlurEditorText(this.onBlur);
+      this.standaloneEditor.onDidBlurEditorText(() => {
+        this.onBlur!(this.standaloneEditor?.getValue() || "");
+      });
     }
+
+    if (this.onKeyDown) {
+      this.standaloneEditor.onKeyDown((e) => this.onKeyDown!(e, this.standaloneEditor?.getValue() || ""));
+    }
+
+    this.standaloneEditor.focus();
+
+    return this.standaloneEditor!;
   }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import * as Monaco from 'monaco-editor';
+import * as Monaco from "monaco-editor";
 
 declare global {
   interface Window {
@@ -29,7 +29,7 @@ declare namespace org {
         namespace client {
           namespace showcase {
             class FeelJS {
-              getSuggestions: (feelExpression: string, row: number, col: number) => { toArray: () => string[]; };
+              getSuggestions: (feelExpression: string, row: number, col: number) => { toArray: () => string[] };
               evaluate(expression: string): string;
             }
           }
@@ -40,7 +40,6 @@ declare namespace org {
 }
 
 export class FeelService {
-
   private feelGwt?: org.kie.dmn.feel.client.showcase.FeelJS;
 
   constructor(feelGwt?: org.kie.dmn.feel.client.showcase.FeelJS) {
@@ -63,19 +62,21 @@ export class FeelService {
     let sortValue = 0;
     try {
       const suggestions = this.feelGwt?.getSuggestions(feelExpression, row, col).toArray() || [];
-      return suggestions
-        .filter((value, index, self) => {
-          return self.indexOf(value) === index;
-        })
-        .map((s) => {
-          return {
-            kind: Monaco.languages.CompletionItemKind.Function,
-            insertTextRules: Monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
-            label: s,
-            insertText: s,
-            sortText: String(++sortValue).padStart(5, "0"),
-          } as Monaco.languages.CompletionItem;
-        }) || [];
+      return (
+        suggestions
+          .filter((value, index, self) => {
+            return self.indexOf(value) === index;
+          })
+          .map((s) => {
+            return {
+              kind: Monaco.languages.CompletionItemKind.Function,
+              insertTextRules: Monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet,
+              label: s,
+              insertText: s,
+              sortText: String(++sortValue).padStart(5, "0"),
+            } as Monaco.languages.CompletionItem;
+          }) || []
+      );
     } catch (e) {
       return [];
     }

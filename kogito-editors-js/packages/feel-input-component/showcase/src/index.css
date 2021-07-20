@@ -31,8 +31,13 @@ header img {
   padding: 20px 25px;
 }
 
-#FEELShowcaseWebapp + div {
+body #FEELShowcaseWebapp + div,
+body #FEELShowcaseWebapp + .monaco-aria-container + div {
   display: none;
+}
+
+#feel-editor {
+  padding: 0 20px;
 }
 
 .feel-editor {
@@ -80,6 +85,18 @@ header img {
 
 .feel-input > div {
   height: 400px;
+}
+
+@media (max-width: 800px) {
+  .feel-input > div {
+    height: 300px;
+  }
+}
+
+@media (max-width: 400px) {
+  .feel-input > div {
+    height: 200px;
+  }
 }
 
 .line-numbers {

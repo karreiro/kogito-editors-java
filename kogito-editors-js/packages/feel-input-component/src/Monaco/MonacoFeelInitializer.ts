@@ -15,10 +15,14 @@
  */
 
 import * as Monaco from "monaco-editor";
-import "monaco-editor/min/vs/editor/editor.main.css";
+import "monaco-editor/dev/vs/editor/editor.main.css";
 import { MONACO_FEEL_LANGUAGE, MONACO_FEEL_THEME, defaultSuggestions, tokensConfig } from ".";
 
-export type SuggestionProvider = (feelExpression: string, row: number, col: number) => Monaco.languages.CompletionItem[];
+export type SuggestionProvider = (
+  feelExpression: string,
+  row: number,
+  col: number
+) => Monaco.languages.CompletionItem[];
 
 export const initializeFeelLanguage = () => {
   Monaco.languages.register({ id: MONACO_FEEL_LANGUAGE });
@@ -26,18 +30,18 @@ export const initializeFeelLanguage = () => {
 
 export const initializeMonacoTheme = () => {
   Monaco.editor.defineTheme(MONACO_FEEL_THEME, {
-    base: 'vs',
+    base: "vs",
     inherit: true,
     rules: [
-      { token: 'feel-keyword', foreground: '26268C', fontStyle: 'bold' },
-      { token: 'feel-numeric', foreground: '3232E7' },
-      { token: 'feel-boolean', foreground: '26268D', fontStyle: 'bold' },
-      { token: 'feel-string', foreground: '2A9343' },
-      { token: 'feel-function', foreground: '3232E8' },
+      { token: "feel-keyword", foreground: "26268C", fontStyle: "bold" },
+      { token: "feel-numeric", foreground: "3232E7" },
+      { token: "feel-boolean", foreground: "26268D", fontStyle: "bold" },
+      { token: "feel-string", foreground: "2A9343" },
+      { token: "feel-function", foreground: "3232E8" },
     ],
     colors: {
-      'editorLineNumber.foreground': '#000000',
-    }
+      "editorLineNumber.foreground": "#000000",
+    },
   });
 };
 
@@ -48,7 +52,6 @@ export const initializeFeelTokensProvider = () => {
 export const initializeFeelCompletionItemProvider = (suggestionProvider?: SuggestionProvider) => {
   Monaco.languages.registerCompletionItemProvider(MONACO_FEEL_LANGUAGE, {
     provideCompletionItems: function (model, position) {
-
       let completionItems = defaultSuggestions();
 
       if (suggestionProvider) {

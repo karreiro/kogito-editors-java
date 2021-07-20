@@ -9,7 +9,7 @@
     "react-scripts": "^4.0.3",
     "customize-cra": "^1.0.0",
     "react-app-rewired": "^2.1.8",
-    "monaco-editor": "^0.25.2",
+    "monaco-editor": "^0.26.1",
     "feel-input-component": "^0.0.0"
   },
   "devDependencies": {
