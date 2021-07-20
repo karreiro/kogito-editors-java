@@ -25,7 +25,7 @@ export interface FeelInputProps {
   suggestionProvider?: SuggestionProvider;
   onBlur?: (value: string) => void;
   onKeyDown?: (event: Monaco.IKeyboardEvent, value: string) => void;
-  onChange?: (event: Monaco.editor.IModelContentChangedEvent, value: string) => void;
+  onChange?: (event: Monaco.editor.IModelContentChangedEvent, value: string, preview: string) => void;
   options?: Monaco.editor.IStandaloneEditorConstructionOptions;
 }
 
@@ -58,9 +58,9 @@ export const FeelInput: React.FunctionComponent<FeelInputProps> = ({
         .withOnKeyDown(onKeyDown)
         .createEditor();
 
-      editor?.setValue(value);
-      editor?.setPosition(calculatePosition(value));
-      editor?.focus();
+      editor.setValue(value);
+      editor.setPosition(calculatePosition(value));
+      editor.focus();
     },
     [suggestionProvider, monacoContainer, onBlur, onChange, options, onKeyDown]
   );

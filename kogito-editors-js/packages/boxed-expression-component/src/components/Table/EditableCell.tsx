@@ -38,6 +38,11 @@ const focusTextArea = (textarea?: HTMLTextAreaElement | null) => {
   textarea?.setSelectionRange(value.length, value.length);
 };
 
+const blurActiveElement = () => {
+  const activeElement = document.activeElement ? (document.activeElement as HTMLElement) : null;
+  activeElement?.blur();
+};
+
 const focusNextTextArea = (currentTextArea: HTMLTextAreaElement | null) => {
   if (!currentTextArea) {
     return;
@@ -64,6 +69,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
   onCellUpdate,
 }: EditableCellProps) => {
   const [value, setValue] = useState(initialValue);
+  const [preview, setPreview] = useState("");
   const [previousValue, setPreviousValue] = useState("");
   const [isSelected, setIsSelected] = useState(false);
   const [mode, setMode] = useState(READ_MODE);
@@ -72,14 +78,6 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
   // Common Handlers ===========================================================
 
   const isEditMode = useCallback(() => mode === EDIT_MODE, [mode]);
-
-  // const updateValue = useCallback(
-  //   (newValue: string) => {
-  //     setValue(newValue);
-  //     onCellUpdate(index, id, value);
-  //   },
-  //   [value, setValue, index, id, onCellUpdate]
-  // );
 
   const triggerReadMode = useCallback(
     (newValue?: string) => {
@@ -94,15 +92,9 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
   );
 
   const triggerEditMode = useCallback(() => {
-    // if (isEditMode()) {
-    //   return;
-    // }
-    // console.log("edit");
     setPreviousValue(value);
-    (document.activeElement as HTMLElement).blur();
+    blurActiveElement();
     setMode(EDIT_MODE);
-    // setIsSelected(true);
-    // updateValue(value);
   }, [setPreviousValue, value, setMode]);
 
   const cssClass = useCallback(() => {
@@ -132,12 +124,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
 
   const onTextAreaFocus = useCallback(focus, [focus]);
 
-  const onTextAreaBlur = useCallback(
-    (_e) => {
-      setIsSelected(false);
-    },
-    [setIsSelected]
-  );
+  const onTextAreaBlur = useCallback(() => setIsSelected(false), [setIsSelected]);
 
   const onTextAreaChange = useCallback(
     (event) => {
@@ -186,11 +173,28 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
     [triggerReadMode, setValue, previousValue]
   );
 
+  const onFeelChange = useCallback(
+    (e, v, p) => {
+      setPreview(p);
+    },
+    [setPreview]
+  );
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     console.log(Monaco.languages.getLanguages().length);
+  //     Monaco.editor.colorize(value, "feel-language", {}).then((result: string) => {
+  //       setPreview(result);
+  //       console.log(result);
+  //     });
+  //   }, 1);
+  // }, [value]);
+
   // Sub Components ============================================================
 
   const readOnlyElement = useMemo(() => {
-    return <span className="editable-cell-value">{value}</span>;
-  }, [value]);
+    return <span className="editable-cell-value" dangerouslySetInnerHTML={{ __html: preview }}></span>;
+  }, [preview]);
 
   const eventHandlerElement = useMemo(() => {
     return (
@@ -211,6 +215,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
         enabled={isEditMode()}
         value={value}
         onKeyDown={onFeelKeyDown}
+        onChange={onFeelChange}
         options={MONACO_OPTIONS}
         onBlur={onFeelBlur}
       />

@@ -21,6 +21,7 @@ import {
   initializeFeelLanguage,
   initializeFeelTokensProvider,
   SuggestionProvider,
+  MONACO_FEEL_LANGUAGE
 } from ".";
 import { createConfig } from "./MonacoConfigs";
 
@@ -35,7 +36,7 @@ export class FEELMonacoEditor {
 
   private domElement?: HTMLElement;
 
-  private onChange?: (event: Monaco.editor.IModelContentChangedEvent, value: string) => void;
+  private onChange?: (event: Monaco.editor.IModelContentChangedEvent, value: string, preview: string) => void;
 
   private onKeyDown?: (event: Monaco.IKeyboardEvent, value: string) => void;
 
@@ -67,12 +68,16 @@ export class FEELMonacoEditor {
     return this.getEditorBuilder().standaloneEditor !== undefined;
   }
 
+  mo() {
+    return Monaco;
+  }
+
   withDomElement(domElement: HTMLElement) {
     this.domElement = domElement;
     return this;
   }
 
-  withOnChange(onChange?: (event: Monaco.editor.IModelContentChangedEvent, content: string) => void) {
+  withOnChange(onChange?: (event: Monaco.editor.IModelContentChangedEvent, content: string, preview: string) => void) {
     this.onChange = onChange;
     return this;
   }
@@ -97,11 +102,24 @@ export class FEELMonacoEditor {
     return this.createStandaloneEditor();
   }
 
+  colorize(value: string) {
+    return Monaco.editor.colorize(value, MONACO_FEEL_LANGUAGE, {});
+  }
+
   private dispose() {
     this.standaloneEditor?.dispose();
   }
 
   private createStandaloneEditor() {
+
+    const onChange = (event: Monaco.editor.IModelContentChangedEvent) => {
+      const value = this.standaloneEditor?.getValue() || "";
+      this.colorize(value).then((preview) => {
+        console.log("---- ojceca8s");
+        this.onChange!(event, value, preview);
+      });
+    };
+
     if (!this.domElement) {
       throw new Error("FEEL Monaco editor cannot be created without a 'domElement'.");
     }
@@ -109,7 +127,15 @@ export class FEELMonacoEditor {
     this.standaloneEditor = Monaco.editor.create(this.domElement!, createConfig(this.options));
 
     if (this.onChange) {
-      this.standaloneEditor.onDidChangeModelContent((e) => this.onChange!(e, this.standaloneEditor?.getValue() || ""));
+      this.standaloneEditor.onDidChangeModelContent(onChange);
+      onChange({
+        changes: [],
+        eol: "",
+        versionId: 0,
+        isUndoing: false,
+        isRedoing: false,
+        isFlush: false
+      });
     }
 
     if (this.onBlur) {

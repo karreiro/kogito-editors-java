@@ -58,7 +58,7 @@ export const App: React.FunctionComponent = () => {
       },
     ],
     rows: [
-      ["aaaa", "bbb", "cc"],
+      ['"sasasasa"', 'every 1 2 3 ["aaaa"]', "cc"],
       ["ddd", "eee", "fff"],
       ["ggg", "hhh", "iii"],
     ],

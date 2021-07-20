@@ -25,7 +25,11 @@ export type SuggestionProvider = (
 ) => Monaco.languages.CompletionItem[];
 
 export const initializeFeelLanguage = () => {
-  Monaco.languages.register({ id: MONACO_FEEL_LANGUAGE });
+  Monaco.languages.register({
+    id: MONACO_FEEL_LANGUAGE,
+    aliases: [MONACO_FEEL_LANGUAGE, "feel", "feel-dmn"],
+    mimetypes: ["text/feel"],
+  });
 };
 
 export const initializeMonacoTheme = () => {

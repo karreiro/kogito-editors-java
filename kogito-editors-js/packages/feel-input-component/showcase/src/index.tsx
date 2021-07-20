@@ -58,7 +58,7 @@ const FeelEditor = () => {
       <FeelInput
         enabled={true}
         suggestionProvider={suggestionProvider}
-        onChange={(_event, content) => {
+        onChange={(_event, content, _preview) => {
           setFeelExpression(content);
         }}
         options={{
