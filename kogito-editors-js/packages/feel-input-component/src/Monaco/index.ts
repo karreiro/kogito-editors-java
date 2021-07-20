@@ -14,6 +14,6 @@
  * limitations under the License.
  */
 
-export * from "./MonacoConfigs";
-export * from "./MonacoEditor";
-export * from "./MonacoFeelInitializer";
+export * from "./FeelConfigs";
+export * from "./FeelEditorService";
+export * from "./FeelInitializer";

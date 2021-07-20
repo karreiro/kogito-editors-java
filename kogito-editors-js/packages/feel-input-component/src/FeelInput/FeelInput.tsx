@@ -17,13 +17,14 @@
 import * as Monaco from "monaco-editor";
 import * as React from "react";
 import { useCallback, useEffect, useMemo, useRef } from "react";
-import { FEELMonacoEditor, SuggestionProvider } from "../Monaco";
+import { FeelEditorService, SuggestionProvider } from "../Monaco";
 
 export interface FeelInputProps {
   enabled: boolean;
   value?: string;
   suggestionProvider?: SuggestionProvider;
   onBlur?: (value: string) => void;
+  onLoad?: (preview: string) => void;
   onKeyDown?: (event: Monaco.IKeyboardEvent, value: string) => void;
   onChange?: (event: Monaco.editor.IModelContentChangedEvent, value: string, preview: string) => void;
   options?: Monaco.editor.IStandaloneEditorConstructionOptions;
@@ -34,11 +35,16 @@ export const FeelInput: React.FunctionComponent<FeelInputProps> = ({
   value,
   suggestionProvider,
   onBlur,
+  onLoad,
   onKeyDown,
   onChange,
   options,
 }: FeelInputProps) => {
   const monacoContainer = useRef<HTMLDivElement>(null);
+
+  const editorService = useCallback(() => FeelEditorService.getEditorBuilder(suggestionProvider), [suggestionProvider]);
+  const dispose = useCallback(() => FeelEditorService.dispose(), []);
+  const isInitialized = useCallback(() => FeelEditorService.isInitialized(), []);
 
   const calculatePosition = useCallback((value: string) => {
     const lines = value.split("\n");
@@ -48,9 +54,22 @@ export const FeelInput: React.FunctionComponent<FeelInputProps> = ({
     return { lineNumber, column };
   }, []);
 
+  const colorizeOnLoad = useCallback(() => {
+    if (!value || !onLoad) {
+      return;
+    }
+    editorService()
+      .withDomElement(monacoContainer.current!)
+      .colorize(value)
+      .then((preview: string) => {
+        console.log(preview);
+        onLoad(preview);
+      });
+  }, [editorService, value]);
+
   const initializeEditor = useCallback(
     (value: string) => {
-      const editor = FEELMonacoEditor.getEditorBuilder(suggestionProvider)
+      const editor = editorService()
         .withDomElement(monacoContainer.current!)
         .withOnBlur(onBlur)
         .withOnChange(onChange)
@@ -66,17 +85,17 @@ export const FeelInput: React.FunctionComponent<FeelInputProps> = ({
   );
 
   useEffect(() => {
-    const isInitialized = FEELMonacoEditor.isInitialized();
-
     if (enabled) {
-      if (!isInitialized) {
+      if (!isInitialized()) {
         initializeEditor(value || "");
       }
       return;
     }
 
-    if (isInitialized) {
-      FEELMonacoEditor.dispose();
+    colorizeOnLoad();
+
+    if (isInitialized()) {
+      dispose();
     }
   }, [enabled, initializeEditor]);
 

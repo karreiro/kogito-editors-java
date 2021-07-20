@@ -39,12 +39,13 @@
 
 .expression-container .editable-cell .feel-input,
 .expression-container .editable-cell .feel-input > div {
-  height: 100%;
+  min-height: 100%;
   text-align: left;
 }
 
 .expression-container .editable-cell .editable-cell-value {
   padding: 0 5px;
+  font-family: Menlo, Monaco, "Courier New", monospace;
   white-space: pre-line;
 }
 

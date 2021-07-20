@@ -173,22 +173,8 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
     [triggerReadMode, setValue, previousValue]
   );
 
-  const onFeelChange = useCallback(
-    (e, v, p) => {
-      setPreview(p);
-    },
-    [setPreview]
-  );
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     console.log(Monaco.languages.getLanguages().length);
-  //     Monaco.editor.colorize(value, "feel-language", {}).then((result: string) => {
-  //       setPreview(result);
-  //       console.log(result);
-  //     });
-  //   }, 1);
-  // }, [value]);
+  const onFeelChange = useCallback((_e, _v, preview) => setPreview(preview), [setPreview]);
+  const onFeelLoad = useCallback((preview) => setPreview(preview), [setPreview]);
 
   // Sub Components ============================================================
 
@@ -216,6 +202,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
         value={value}
         onKeyDown={onFeelKeyDown}
         onChange={onFeelChange}
+        onLoad={onFeelLoad}
         options={MONACO_OPTIONS}
         onBlur={onFeelBlur}
       />

@@ -23,15 +23,16 @@ import {
   SuggestionProvider,
   MONACO_FEEL_LANGUAGE
 } from ".";
-import { createConfig } from "./MonacoConfigs";
+import { createConfig } from ".";
+
 
 declare global {
   interface Window {
-    __KIE__MONACO__EDITOR__?: FEELMonacoEditor;
+    __KIE__MONACO__EDITOR__?: FeelEditorService;
   }
 }
 
-export class FEELMonacoEditor {
+export class FeelEditorService {
   private standaloneEditor?: Monaco.editor.IStandaloneCodeEditor;
 
   private domElement?: HTMLElement;
@@ -50,7 +51,7 @@ export class FEELMonacoEditor {
       initializeMonacoTheme();
       initializeFeelTokensProvider();
       initializeFeelCompletionItemProvider(suggestionProvider);
-      window.__KIE__MONACO__EDITOR__ = new FEELMonacoEditor();
+      window.__KIE__MONACO__EDITOR__ = new FeelEditorService();
     }
     return window.__KIE__MONACO__EDITOR__;
   }
@@ -66,10 +67,6 @@ export class FEELMonacoEditor {
 
   static isInitialized() {
     return this.getEditorBuilder().standaloneEditor !== undefined;
-  }
-
-  mo() {
-    return Monaco;
   }
 
   withDomElement(domElement: HTMLElement) {
@@ -103,6 +100,11 @@ export class FEELMonacoEditor {
   }
 
   colorize(value: string) {
+    // Monaco can only colorize elements with a custom language after the first setup
+    if (!FeelEditorService.isInitialized()) {
+      this.createEditor();
+      this.dispose();
+    }
     return Monaco.editor.colorize(value, MONACO_FEEL_LANGUAGE, {});
   }
 
@@ -110,15 +112,11 @@ export class FEELMonacoEditor {
     this.standaloneEditor?.dispose();
   }
 
-  private createStandaloneEditor() {
+  private getValue() {
+    return this.standaloneEditor?.getValue() || "";
+  }
 
-    const onChange = (event: Monaco.editor.IModelContentChangedEvent) => {
-      const value = this.standaloneEditor?.getValue() || "";
-      this.colorize(value).then((preview) => {
-        console.log("---- ojceca8s");
-        this.onChange!(event, value, preview);
-      });
-    };
+  private createStandaloneEditor() {
 
     if (!this.domElement) {
       throw new Error("FEEL Monaco editor cannot be created without a 'domElement'.");
@@ -127,14 +125,13 @@ export class FEELMonacoEditor {
     this.standaloneEditor = Monaco.editor.create(this.domElement!, createConfig(this.options));
 
     if (this.onChange) {
-      this.standaloneEditor.onDidChangeModelContent(onChange);
-      onChange({
-        changes: [],
-        eol: "",
-        versionId: 0,
-        isUndoing: false,
-        isRedoing: false,
-        isFlush: false
+      this.standaloneEditor.onDidChangeModelContent((event) => {
+        const value = this.getValue();
+
+        this.colorize(value).then((preview) => {
+          console.log(preview);
+          this.onChange!(event, value, preview);
+        });
       });
     }
 
