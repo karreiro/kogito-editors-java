@@ -30,6 +30,7 @@ const MONACO_OPTIONS: Monaco.editor.IStandaloneEditorConstructionOptions = {
   fontSize: 13,
   renderLineHighlight: "none",
   lineDecorationsWidth: 1,
+  automaticLayout: true,
 };
 
 const focusTextArea = (textarea?: HTMLTextAreaElement | null) => {
@@ -69,6 +70,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
   onCellUpdate,
 }: EditableCellProps) => {
   const [value, setValue] = useState(initialValue);
+  const [cellHeight, setCellHeight] = useState(45);
   const [preview, setPreview] = useState("");
   const [previousValue, setPreviousValue] = useState("");
   const [isSelected, setIsSelected] = useState(false);
@@ -120,6 +122,13 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
 
   const onDoubleClick = useCallback(triggerEditMode, [triggerEditMode]);
 
+  const height = useCallback((value: string) => {
+    const numberOfLines = value.split("\n").length + 1;
+    const lines = numberOfLines > 3 ? numberOfLines : 3;
+
+    setCellHeight(lines * 15);
+  }, []);
+
   // TextArea Handlers =========================================================
 
   const onTextAreaFocus = useCallback(focus, [focus]);
@@ -169,6 +178,8 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
       if (isTab) {
         focusNextTextArea(textarea.current);
       }
+
+      height(newValue);
     },
     [triggerReadMode, setValue, previousValue]
   );
@@ -211,7 +222,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
 
   return (
     <>
-      <div onDoubleClick={onDoubleClick} onClick={onClick} className={cssClass()}>
+      <div onDoubleClick={onDoubleClick} onClick={onClick} style={{ height: `${cellHeight}px` }} className={cssClass()}>
         {readOnlyElement}
         {eventHandlerElement}
         {feelInputElement}
