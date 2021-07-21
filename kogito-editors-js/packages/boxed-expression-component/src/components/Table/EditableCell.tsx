@@ -24,6 +24,8 @@ import "./EditableCell.css";
 export const READ_MODE = "editable-cell--read-mode";
 export const EDIT_MODE = "editable-cell--edit-mode";
 
+const CELL_LINE_HEIGHT = 20;
+
 const MONACO_OPTIONS: Monaco.editor.IStandaloneEditorConstructionOptions = {
   fixedOverflowWidgets: true,
   lineNumbers: "off",
@@ -70,7 +72,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
   onCellUpdate,
 }: EditableCellProps) => {
   const [value, setValue] = useState(initialValue);
-  const [cellHeight, setCellHeight] = useState(45);
+  const [cellHeight, setCellHeight] = useState(CELL_LINE_HEIGHT * 3);
   const [preview, setPreview] = useState("");
   const [previousValue, setPreviousValue] = useState("");
   const [isSelected, setIsSelected] = useState(false);
@@ -122,12 +124,14 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
 
   const onDoubleClick = useCallback(triggerEditMode, [triggerEditMode]);
 
-  const height = useCallback((value: string) => {
-    const numberOfLines = value.split("\n").length + 1;
-    const lines = numberOfLines > 3 ? numberOfLines : 3;
-
-    setCellHeight(lines * 15);
-  }, []);
+  const height = useCallback(
+    (value: string) => {
+      const numberOfValueLines = `${value}`.split("\n").length + 1;
+      const numberOfLines = numberOfValueLines < 3 ? 3 : numberOfValueLines;
+      setCellHeight(numberOfLines * CELL_LINE_HEIGHT);
+    },
+    [setCellHeight]
+  );
 
   // TextArea Handlers =========================================================
 
@@ -178,13 +182,17 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = ({
       if (isTab) {
         focusNextTextArea(textarea.current);
       }
-
-      height(newValue);
     },
     [triggerReadMode, setValue, previousValue]
   );
 
-  const onFeelChange = useCallback((_e, _v, preview) => setPreview(preview), [setPreview]);
+  const onFeelChange = useCallback(
+    (_e, newValue, preview) => {
+      height(newValue);
+      setPreview(preview);
+    },
+    [setPreview]
+  );
   const onFeelLoad = useCallback((preview) => setPreview(preview), [setPreview]);
 
   // Sub Components ============================================================
