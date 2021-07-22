@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.5b26a344.chunk.css",
-    "main.js": "/static/js/main.a20be1d8.chunk.js",
-    "main.js.map": "/static/js/main.a20be1d8.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.18cf6eea.js",
-    "runtime-main.js.map": "/static/js/runtime-main.18cf6eea.js.map",
-    "static/css/2.9de05823.chunk.css": "/static/css/2.9de05823.chunk.css",
-    "static/js/2.f179d443.chunk.js": "/static/js/2.f179d443.chunk.js",
-    "static/js/2.f179d443.chunk.js.map": "/static/js/2.f179d443.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/2.9de05823.chunk.css.map": "/static/css/2.9de05823.chunk.css.map",
-    "static/css/main.5b26a344.chunk.css.map": "/static/css/main.5b26a344.chunk.css.map",
-    "static/js/2.f179d443.chunk.js.LICENSE.txt": "/static/js/2.f179d443.chunk.js.LICENSE.txt",
-    "static/media/base-no-reset.css": "/static/media/pficon.f30ba6d4.woff",
-    "static/media/editor.main.css": "/static/media/codicon.00aa018e.ttf",
-    "static/media/background-image.css": "/static/media/pfbg_768@2x.eea28e73.jpg",
-    "static/media/about-modal-box.css": "/static/media/pfbg_992@2x.30e8d31f.jpg"
+    "main.css": "https://karreiro.com/kogito-editors-java/static/css/main.5b26a344.chunk.css",
+    "main.js": "https://karreiro.com/kogito-editors-java/static/js/main.df9d4eb0.chunk.js",
+    "main.js.map": "https://karreiro.com/kogito-editors-java/static/js/main.df9d4eb0.chunk.js.map",
+    "runtime-main.js": "https://karreiro.com/kogito-editors-java/static/js/runtime-main.4f7b08bb.js",
+    "runtime-main.js.map": "https://karreiro.com/kogito-editors-java/static/js/runtime-main.4f7b08bb.js.map",
+    "static/css/2.d4b2a3a1.chunk.css": "https://karreiro.com/kogito-editors-java/static/css/2.d4b2a3a1.chunk.css",
+    "static/js/2.f179d443.chunk.js": "https://karreiro.com/kogito-editors-java/static/js/2.f179d443.chunk.js",
+    "static/js/2.f179d443.chunk.js.map": "https://karreiro.com/kogito-editors-java/static/js/2.f179d443.chunk.js.map",
+    "index.html": "https://karreiro.com/kogito-editors-java/index.html",
+    "static/css/2.d4b2a3a1.chunk.css.map": "https://karreiro.com/kogito-editors-java/static/css/2.d4b2a3a1.chunk.css.map",
+    "static/css/main.5b26a344.chunk.css.map": "https://karreiro.com/kogito-editors-java/static/css/main.5b26a344.chunk.css.map",
+    "static/js/2.f179d443.chunk.js.LICENSE.txt": "https://karreiro.com/kogito-editors-java/static/js/2.f179d443.chunk.js.LICENSE.txt",
+    "static/media/base-no-reset.css": "https://karreiro.com/kogito-editors-java/static/media/pficon.f30ba6d4.woff",
+    "static/media/editor.main.css": "https://karreiro.com/kogito-editors-java/static/media/codicon.00aa018e.ttf",
+    "static/media/background-image.css": "https://karreiro.com/kogito-editors-java/static/media/pfbg_768@2x.eea28e73.jpg",
+    "static/media/about-modal-box.css": "https://karreiro.com/kogito-editors-java/static/media/pfbg_992@2x.30e8d31f.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.18cf6eea.js",
-    "static/css/2.9de05823.chunk.css",
+    "static/js/runtime-main.4f7b08bb.js",
+    "static/css/2.d4b2a3a1.chunk.css",
     "static/js/2.f179d443.chunk.js",
     "static/css/main.5b26a344.chunk.css",
-    "static/js/main.a20be1d8.chunk.js"
+    "static/js/main.df9d4eb0.chunk.js"
   ]
 }
