@@ -27,5 +27,6 @@ module.exports = {
   },
   moduleNameMapper: {
     "\\.(css|less|sass|scss)$": "identity-obj-proxy",
+    "monaco-editor": "<rootDir>/src/__mocks__/monacoMock.js",
   },
 };

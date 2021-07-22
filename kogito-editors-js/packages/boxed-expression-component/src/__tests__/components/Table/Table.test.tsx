@@ -15,6 +15,12 @@
  */
 
 import { fireEvent, render } from "@testing-library/react";
+import * as _ from "lodash";
+import * as React from "react";
+import { act } from "react-dom/test-utils";
+import { Column, ColumnInstance, DataRecord } from "react-table";
+import { DataType, TableHandlerConfiguration, TableOperation } from "../../../api";
+import { Table } from "../../../components/Table";
 import {
   activateNameAndDataTypePopover,
   EDIT_EXPRESSION_DATA_TYPE,
@@ -23,12 +29,6 @@ import {
   updateElementViaPopover,
   usingTestingBoxedExpressionI18nContext,
 } from "../test-utils";
-import { Table } from "../../../components/Table";
-import * as _ from "lodash";
-import * as React from "react";
-import { DataType, TableHandlerConfiguration, TableOperation } from "../../../api";
-import { Column, ColumnInstance, DataRecord } from "react-table";
-import { act } from "react-dom/test-utils";
 
 jest.useFakeTimers();
 
@@ -278,11 +278,8 @@ describe("Table tests", () => {
   describe("when interacting with body", () => {
     test("should trigger onRowsUpdate, when changing cell value", async () => {
       const row: DataRecord = {};
-      const newRow: DataRecord = {};
-      const rowValue = "value";
-      const newRowValue = "new value";
-      row[columnName] = rowValue;
-      newRow[columnName] = newRowValue;
+      const value = "value";
+      row[columnName] = value;
       const orRowsUpdate = (rows: DataRecord[]) => {
         _.identity(rows);
       };
@@ -299,13 +296,14 @@ describe("Table tests", () => {
           />
         ).wrapper
       );
-      fireEvent.change(container.querySelector("table tbody tr td textarea")! as HTMLTextAreaElement, {
-        target: { value: newRowValue },
-      });
-      fireEvent.blur(container.querySelector("table tbody tr td textarea")! as HTMLTextAreaElement);
+
+      const textarea = container.querySelector("table tbody tr td textarea") as HTMLTextAreaElement;
+
+      fireEvent.change(textarea, { target: { value: `${value}\t` } });
+      // onblur is triggered by Monaco (mock), and the new value relies on Monaco implementation
 
       expect(mockedOnRowsUpdate).toHaveBeenCalled();
-      expect(mockedOnRowsUpdate).toHaveBeenCalledWith([newRow]);
+      expect(mockedOnRowsUpdate).toHaveBeenCalledWith([row]);
     });
   });
 
