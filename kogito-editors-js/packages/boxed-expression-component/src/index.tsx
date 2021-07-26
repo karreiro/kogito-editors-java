@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { BoxedExpressionEditor } from "./components";
 import * as React from "react";
-import { ExpressionProps } from "./api";
 import * as ReactDOM from "react-dom";
+import { ExpressionProps } from "./api";
+import { BoxedExpressionEditor } from "./components";
 
-export * from "./components";
 export * from "./api";
+export * from "./components";
 
 window.renderBoxedExpressionEditor = (selector: string, definition: ExpressionProps) => {
   ReactDOM.render(
@@ -28,3 +28,10 @@ window.renderBoxedExpressionEditor = (selector: string, definition: ExpressionPr
     document.getElementById(selector)
   );
 };
+
+document.body.ondrag = (e) => console.log(e);
+document.body.ondragend = (e) => console.log(e);
+document.body.ondragenter = (e) => console.log(e);
+document.body.ondragleave = (e) => console.log(e);
+document.body.ondragover = (e) => console.log(e);
+document.body.ondragstart = (e) => console.log(e);
