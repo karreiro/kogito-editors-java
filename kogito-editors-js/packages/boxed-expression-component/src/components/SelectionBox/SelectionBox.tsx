@@ -19,7 +19,13 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "reac
 import "./SelectionBox.css";
 
 export interface SelectionBoxProps {
+  /** CSS classes of elements that must not trigger the selection box */
+  ignoredElements?: string[];
+
+  /** Handler executed when the drag starts */
   onDragStart?: (startPosition: SelectionStart) => void;
+
+  /** Handler executed when the drag stops */
   onDragStop?: (endRect: SelectionReact) => void;
 }
 
@@ -38,6 +44,7 @@ type SelectionReactState = SelectionReact | null;
 type SelectionStyleState = React.CSSProperties | null;
 
 export const SelectionBox: React.FunctionComponent<SelectionBoxProps> = ({
+  ignoredElements,
   onDragStart,
   onDragStop,
 }: SelectionBoxProps) => {
@@ -59,29 +66,55 @@ export const SelectionBox: React.FunctionComponent<SelectionBoxProps> = ({
     setSelectionBoxStyle(style);
   }, [selectionRect]);
 
+  const getCoordinate = useCallback((event: MouseEvent | TouchEvent): SelectionStart => {
+    if ("touches" in event) {
+      return {
+        x: event.touches[0].clientX,
+        y: event.touches[0].clientY,
+      };
+    }
+
+    return {
+      x: event.clientX,
+      y: event.clientY,
+    };
+  }, []);
+
   const moveHandler = useCallback(
-    (event: MouseEvent) => {
+    (event: MouseEvent | TouchEvent) => {
       if (!selectionStart) {
         return;
       }
 
-      const x = Math.min(selectionStart.x, event.clientX);
-      const y = Math.min(selectionStart.y, event.clientY);
-      const width = Math.abs(event.clientX - selectionStart.x);
-      const height = Math.abs(event.clientY - selectionStart.y);
+      const mouseCoordinate = getCoordinate(event);
+      const x = Math.min(selectionStart.x, mouseCoordinate.x);
+      const y = Math.min(selectionStart.y, mouseCoordinate.y);
+
+      const width = Math.abs(mouseCoordinate.x - selectionStart.x);
+      const height = Math.abs(mouseCoordinate.y - selectionStart.y);
 
       setSelectionRect({ x, y, width, height });
+
+      event.preventDefault();
+      event.stopPropagation();
     },
     [selectionStart, setSelectionRect]
   );
 
   const downHandler = useCallback(
-    (event: MouseEvent) => {
-      const startPosition = { x: event.clientX, y: event.clientY };
+    (event: MouseEvent | TouchEvent) => {
+      const targetElement = event.target as Element;
+      const isIgnoredTarget = ignoredElements?.some((e) => targetElement.classList.contains(e)) || false;
+
+      if (isIgnoredTarget) {
+        return;
+      }
+
+      const startPosition = getCoordinate(event);
       setSelectionStart(startPosition);
       onDragStart?.(startPosition);
     },
-    [setSelectionStart]
+    [setSelectionStart, ignoredElements]
   );
 
   const upHandler = useCallback(() => {
@@ -94,14 +127,23 @@ export const SelectionBox: React.FunctionComponent<SelectionBoxProps> = ({
     const mouseMoveType = "mousemove";
     const mouseDownType = "mousedown";
     const mouseUpType = "mouseup";
+    const touchMoveType = "touchmove";
+    const touchStartType = "touchstart";
+    const touchEndType = "touchend";
 
     document.addEventListener(mouseMoveType, moveHandler);
     document.addEventListener(mouseDownType, downHandler);
     document.addEventListener(mouseUpType, upHandler);
+    document.addEventListener(touchMoveType, moveHandler);
+    document.addEventListener(touchStartType, downHandler);
+    document.addEventListener(touchEndType, upHandler);
     return () => {
       document.removeEventListener(mouseMoveType, moveHandler);
       document.removeEventListener(mouseDownType, downHandler);
       document.removeEventListener(mouseUpType, upHandler);
+      document.removeEventListener(touchMoveType, moveHandler);
+      document.removeEventListener(touchStartType, downHandler);
+      document.removeEventListener(touchEndType, upHandler);
     };
   }, [moveHandler, downHandler, upHandler]);
 

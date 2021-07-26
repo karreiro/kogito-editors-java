@@ -34,6 +34,7 @@ const MONACO_OPTIONS: Monaco.editor.IStandaloneEditorConstructionOptions = {
   fontSize: 13,
   renderLineHighlight: "none",
   lineDecorationsWidth: 1,
+  disableLayerHinting: false,
   automaticLayout: true,
 };
 

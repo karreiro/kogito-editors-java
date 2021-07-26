@@ -35,13 +35,16 @@ export const CellSelectionBox: React.FunctionComponent = () => {
   }, []);
 
   const findCell = useCallback((x: number, y: number): Element | null => {
-    const refElement = document.elementFromPoint(x, y);
-    const closest = refElement?.closest(CELL_CSS_SELECTOR);
-
-    if (closest) {
-      return closest;
+    let refElement = null;
+    try {
+      refElement = document.elementFromPoint(x, y);
+      const closest = refElement?.closest(CELL_CSS_SELECTOR);
+      if (closest) {
+        return closest;
+      }
+    } catch (e) {
+      return null;
     }
-
     return refElement?.closest("td")?.querySelector(CELL_CSS_SELECTOR) || null;
   }, []);
 
@@ -99,10 +102,12 @@ export const CellSelectionBox: React.FunctionComponent = () => {
 
   const disableSelection = useCallback(() => lowlightCells(), [lowlightCells]);
 
+  const ignoredElements = useMemo(() => ["pf-c-drawer__splitter", "pf-m-vertical"], []);
+
   return useMemo(
     () => (
       <div className="kie-cell-selection-box">
-        <SelectionBox onDragStop={enableSelection} />
+        <SelectionBox ignoredElements={ignoredElements} onDragStop={enableSelection} />
         <textarea ref={textarea} onBlur={disableSelection}></textarea>
       </div>
     ),
