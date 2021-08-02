@@ -17,6 +17,22 @@
 <div class="kie-dmn-container">
     <div class="kie-dmn-return-to-link">
         <i class="fa fa-angle-double-left" aria-hidden="true"></i><a href="#" data-field="returnToLink"></a>
+
+        <div data-field="beta-boxed-expression-toggle" class="kie-beta-boxed-expression-editor">
+            <span class="beta-dash"></span>
+            <span class="beta-badge">Beta</span>
+            <span class="beta-description beta-description--enabled">
+                Do want to try the new Boxed Expression editor?
+                <a href="#" data-field="try-it">Click here</a>!
+            </span>
+            <span class="beta-description beta-description--disabled">
+                You're using the new Boxed Expression editor. How do you like it? Leave
+                <a href="https://gist.githubusercontent.com/karreiro/bc58a0b72be5dd2c93479fd5940c771e/raw/531771c74847f27b5b73b520c678b806fdcb7173/todo.txt" target="_blank">feedback here</a>
+                or
+                <a href="#" data-field="switch-back">switch back</a>
+                to the old editor.
+            </span>
+        </div>
     </div>
     <div class="kie-dmn-expression-type">
         <span id="name" data-field="expressionName"></span>
@@ -25,4 +41,56 @@
     <div class="kie-dmn-expression-editor">
         <div data-field="dmn-table"></div>
     </div>
+    <style type="text/css">
+
+        .kie-beta-boxed-expression-editor,
+        .kie-beta-boxed-expression-editor .beta-dash,
+        .kie-beta-boxed-expression-editor .beta-badge,
+        .kie-beta-boxed-expression-editor .beta-description {
+            color: #555555;
+            user-select: none;
+            display: inline-block;
+        }
+
+        .kie-beta-boxed-expression-editor .beta-description--disabled,
+        .kie-beta-boxed-expression-editor.kie-beta-boxed-expression-editor--enabled .beta-description--enabled {
+            display: none;
+        }
+
+        .kie-beta-boxed-expression-editor.kie-beta-boxed-expression-editor--enabled .beta-description--disabled {
+            display: inline-block;
+        }
+
+        .kie-beta-boxed-expression-editor a,
+        .kie-beta-boxed-expression-editor .beta-badge {
+            color: #06c;
+        }
+
+        .kie-beta-boxed-expression-editor {
+            font-family: RedHatDisplay, Overpass, overpass, helvetica, arial, sans-serif;
+            font-size: 13px;
+            padding: 4px;
+            border-radius: 14px;
+        }
+
+        .kie-beta-boxed-expression-editor .beta-badge {
+            border: 1px solid #06c;
+            border-radius: 20px;
+            padding: 0 8px;
+        }
+
+        .kie-beta-boxed-expression-editor .beta-dash {
+            border-top: 1px solid #CCC;
+            width: 22px;
+            height: 4px;
+            margin: 0 8px;
+        }
+
+        .kie-beta-boxed-expression-editor .beta-description {
+            left: 45px;
+            padding: 0 3px;
+
+        }
+
+    </style>
 </div>
