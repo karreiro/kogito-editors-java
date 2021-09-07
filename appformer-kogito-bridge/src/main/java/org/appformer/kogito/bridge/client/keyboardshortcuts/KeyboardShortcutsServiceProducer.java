@@ -16,26 +16,35 @@
 
 package org.appformer.kogito.bridge.client.keyboardshortcuts;
 
-import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 
 import elemental2.dom.DomGlobal;
 import org.appformer.kogito.bridge.client.interop.WindowRef;
+import org.jboss.errai.ioc.client.api.ManagedInstance;
 
 /**
  * Produces {@link KeyboardShortcutsService} beans according to whether the envelope API is available or not
  */
 public class KeyboardShortcutsServiceProducer {
 
+    @Inject
+    @KogitoKeyboardShortcutsApi
+    private ManagedInstance<KeyboardShortcutsApi> customKeyboardShortcutsInstances;
+
     @Produces
-    @ApplicationScoped
     public KeyboardShortcutsApi produce() {
 
         if (WindowRef.isEnvelopeAvailable()) {
             return new KeyboardShortcutsService();
         }
 
-        DomGlobal.console.debug("[KeyboardShortcutsServiceProducer] Envelope API is not available. Producing NoOpKeyboardShortcutsService");
-        return new NoOpKeyboardShortcutsService();
+        DomGlobal.console.debug("[KeyboardShortcutsServiceProducer] Envelope API is not available.");
+
+        if (this.customKeyboardShortcutsInstances.isUnsatisfied()) {
+            return new NoOpKeyboardShortcutsService();
+        }
+
+        return this.customKeyboardShortcutsInstances.get();
     }
 }
