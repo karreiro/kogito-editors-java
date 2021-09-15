@@ -50,6 +50,7 @@ export class Cell {
   }
 
   setWidth(width: number): void {
+    console.log(">>>>>>>>>>>>>>>>>>>>>> this line is not being called infinitely :(");
     const cellWidth = widthValue(width);
     notifyCell(this.getId(), cellWidth);
     this.element.style.width = cellWidth + "px";

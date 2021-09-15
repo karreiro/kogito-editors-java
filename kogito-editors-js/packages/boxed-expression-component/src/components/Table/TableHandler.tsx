@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
+import { Popover } from "@patternfly/react-core";
+import * as _ from "lodash";
 import * as React from "react";
 import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { Column, ColumnInstance, DataRecord } from "react-table";
 import {
   DataType,
   GroupOperations,
@@ -23,12 +26,10 @@ import {
   TableHandlerConfiguration,
   TableOperation,
 } from "../../api";
-import * as _ from "lodash";
-import { Column, ColumnInstance, DataRecord } from "react-table";
-import { Popover } from "@patternfly/react-core";
-import { TableHandlerMenu } from "./TableHandlerMenu";
 import { BoxedExpressionGlobalContext } from "../../context";
+import { DEFAULT_MIN_WIDTH } from "../Resizer/common";
 import { getColumnsAtLastLevel, getColumnSearchPredicate } from "./Table";
+import { TableHandlerMenu } from "./TableHandlerMenu";
 
 export interface TableHandlerProps {
   /** Gets the prefix to be used for the next column name */
@@ -90,15 +91,20 @@ export const TableHandler: React.FunctionComponent<TableHandlerProps> = ({
     setSelectedRowIndex(lastSelectedRowIndex);
   }, [lastSelectedRowIndex]);
 
+  const withDefaultValues = <T extends unknown>(element: T) => ({
+    width: DEFAULT_MIN_WIDTH,
+    ...(element as any),
+  });
+
   const insertBefore = <T extends unknown>(elements: T[], index: number, element: T) => [
     ...elements.slice(0, index),
-    element,
+    withDefaultValues(element),
     ...elements.slice(index),
   ];
 
   const insertAfter = <T extends unknown>(elements: T[], index: number, element: T) => [
     ...elements.slice(0, index + 1),
-    element,
+    withDefaultValues(element),
     ...elements.slice(index + 1),
   ];
 

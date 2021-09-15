@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { Button, Modal } from "@patternfly/react-core";
+import { CopyIcon, PenIcon } from "@patternfly/react-icons";
 import * as React from "react";
 import { useCallback, useState } from "react";
 import * as ReactDOM from "react-dom";
@@ -32,15 +34,34 @@ import {
   LogicType,
   RelationProps,
 } from "./lib";
-import { Button, Modal } from "@patternfly/react-core";
-import { CopyIcon, PenIcon } from "@patternfly/react-icons";
 
 export const App: React.FunctionComponent = () => {
   //This definition comes directly from the decision node
   const selectedExpression: ExpressionProps = {
-    name: "Expression Name",
-    dataType: DataType.Undefined,
-  };
+    name: "Decision-1",
+    dataType: "<Undefined>",
+    logicType: "Context",
+    contextEntries: [
+      {
+        entryInfo: {
+          name: "ContextEntry-1",
+          dataType: "<Undefined>",
+        },
+        entryExpression: {
+          name: "ContextEntry-1",
+          dataType: "<Undefined>",
+          logicType: null,
+        },
+      },
+    ],
+    result: {
+      name: "Result Expression",
+      dataType: "<Undefined>",
+      logicType: null,
+    },
+    entryInfoWidth: 626,
+    entryExpressionWidth: 741,
+  } as ExpressionProps;
 
   const pmmlParams = [
     {
