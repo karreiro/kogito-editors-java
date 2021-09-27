@@ -17,6 +17,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CompressionPlugin = require("compression-webpack-plugin");
 
 const commonConfig = (name, devMode, options = {}) => {
   const wire = process.env["wire"];
@@ -46,6 +47,12 @@ const commonConfig = (name, devMode, options = {}) => {
       }),
       new webpack.DefinePlugin({
         __IS_WIRED__: JSON.stringify(!!wire),
+      }),
+      new CompressionPlugin({
+        test: /\.js?$/i,
+      }),
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1,
       }),
     ],
 
