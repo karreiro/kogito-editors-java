@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "https://karreiro.github.io/import-java-classes/static/css/main.9ca68df8.chunk.css",
-    "main.js": "https://karreiro.github.io/import-java-classes/static/js/main.1c9f0ee4.chunk.js",
-    "main.js.map": "https://karreiro.github.io/import-java-classes/static/js/main.1c9f0ee4.chunk.js.map",
-    "runtime-main.js": "https://karreiro.github.io/import-java-classes/static/js/runtime-main.96656e63.js",
-    "runtime-main.js.map": "https://karreiro.github.io/import-java-classes/static/js/runtime-main.96656e63.js.map",
-    "static/css/2.a0c6a27d.chunk.css": "https://karreiro.github.io/import-java-classes/static/css/2.a0c6a27d.chunk.css",
-    "static/js/2.19014acd.chunk.js": "https://karreiro.github.io/import-java-classes/static/js/2.19014acd.chunk.js",
-    "static/js/2.19014acd.chunk.js.map": "https://karreiro.github.io/import-java-classes/static/js/2.19014acd.chunk.js.map",
-    "index.html": "https://karreiro.github.io/import-java-classes/index.html",
-    "static/css/2.a0c6a27d.chunk.css.map": "https://karreiro.github.io/import-java-classes/static/css/2.a0c6a27d.chunk.css.map",
-    "static/css/main.9ca68df8.chunk.css.map": "https://karreiro.github.io/import-java-classes/static/css/main.9ca68df8.chunk.css.map",
-    "static/js/2.19014acd.chunk.js.LICENSE.txt": "https://karreiro.github.io/import-java-classes/static/js/2.19014acd.chunk.js.LICENSE.txt",
-    "static/media/base-no-reset.css": "https://karreiro.github.io/import-java-classes/static/media/pficon.f30ba6d4.woff",
-    "static/media/editor.main.css": "https://karreiro.github.io/import-java-classes/static/media/codicon.00aa018e.ttf",
-    "static/media/background-image.css": "https://karreiro.github.io/import-java-classes/static/media/pfbg_768@2x.eea28e73.jpg",
-    "static/media/about-modal-box.css": "https://karreiro.github.io/import-java-classes/static/media/pfbg_992@2x.30e8d31f.jpg"
+    "main.css": "https://karreiro.github.io/kogito-editors-java/static/css/main.9ca68df8.chunk.css",
+    "main.js": "https://karreiro.github.io/kogito-editors-java/static/js/main.acb3b694.chunk.js",
+    "main.js.map": "https://karreiro.github.io/kogito-editors-java/static/js/main.acb3b694.chunk.js.map",
+    "runtime-main.js": "https://karreiro.github.io/kogito-editors-java/static/js/runtime-main.9aafc766.js",
+    "runtime-main.js.map": "https://karreiro.github.io/kogito-editors-java/static/js/runtime-main.9aafc766.js.map",
+    "static/css/2.d6f38e9f.chunk.css": "https://karreiro.github.io/kogito-editors-java/static/css/2.d6f38e9f.chunk.css",
+    "static/js/2.19014acd.chunk.js": "https://karreiro.github.io/kogito-editors-java/static/js/2.19014acd.chunk.js",
+    "static/js/2.19014acd.chunk.js.map": "https://karreiro.github.io/kogito-editors-java/static/js/2.19014acd.chunk.js.map",
+    "index.html": "https://karreiro.github.io/kogito-editors-java/index.html",
+    "static/css/2.d6f38e9f.chunk.css.map": "https://karreiro.github.io/kogito-editors-java/static/css/2.d6f38e9f.chunk.css.map",
+    "static/css/main.9ca68df8.chunk.css.map": "https://karreiro.github.io/kogito-editors-java/static/css/main.9ca68df8.chunk.css.map",
+    "static/js/2.19014acd.chunk.js.LICENSE.txt": "https://karreiro.github.io/kogito-editors-java/static/js/2.19014acd.chunk.js.LICENSE.txt",
+    "static/media/base-no-reset.css": "https://karreiro.github.io/kogito-editors-java/static/media/pficon.f30ba6d4.woff",
+    "static/media/editor.main.css": "https://karreiro.github.io/kogito-editors-java/static/media/codicon.00aa018e.ttf",
+    "static/media/background-image.css": "https://karreiro.github.io/kogito-editors-java/static/media/pfbg_768@2x.eea28e73.jpg",
+    "static/media/about-modal-box.css": "https://karreiro.github.io/kogito-editors-java/static/media/pfbg_992@2x.30e8d31f.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.96656e63.js",
-    "static/css/2.a0c6a27d.chunk.css",
+    "static/js/runtime-main.9aafc766.js",
+    "static/css/2.d6f38e9f.chunk.css",
     "static/js/2.19014acd.chunk.js",
     "static/css/main.9ca68df8.chunk.css",
-    "static/js/main.1c9f0ee4.chunk.js"
+    "static/js/main.acb3b694.chunk.js"
   ]
 }
