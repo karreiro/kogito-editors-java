@@ -52,6 +52,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = React.me
     const [cellHeight, setCellHeight] = useState(CELL_LINE_HEIGHT * 3);
     const [preview, setPreview] = useState(initialValue || "");
     const [previousValue, setPreviousValue] = useState("");
+    const container = useRef<HTMLDivElement>(null);
 
     // Common Handlers =========================================================
 
@@ -135,6 +136,57 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = React.me
     // TextArea Handlers =======================================================
 
     const onTextAreaFocus = useCallback(focus, [focus]);
+
+    const onTextAreaKeyDown = useCallback((event) => {
+      const key = event?.code.toLowerCase() || "";
+      // const directionMap = {
+      //   arrowup: { x: 0, y: -1 },
+      //   arrowdown: { x: 0, y: 1 },
+      //   arrowright: { x: -1, y: 0 },
+      //   arrowleft: { x: 1, y: 0 },
+      // };
+      // const direction = (directionMap as any)[key];
+      const currentCell = container.current?.getBoundingClientRect();
+
+      if (!currentCell) {
+        return;
+      }
+
+      let x = 0;
+      let y = 0;
+
+      switch (key) {
+        case "arrowup":
+          y = currentCell.top - 20;
+          x = currentCell.left + 10;
+          break;
+        case "arrowdown":
+          y = currentCell.bottom + 10;
+          x = currentCell.left + 10;
+          break;
+        case "arrowright":
+          y = currentCell.top + 10;
+          x = currentCell.right + 10;
+          break;
+        case "arrowleft":
+          y = currentCell.top + 10;
+          x = currentCell.left - 20;
+          break;
+      }
+
+      // DEBUG - (uncomment to debug)
+      // const div = document.createElement("div");
+      // document.body.appendChild(div);
+      // div.style.background = "red";
+      // div.style.position = "absolute";
+      // div.style.width = `${10}px`;
+      // div.style.height = `${10}px`;
+      // div.style.top = `${y}px`;
+      // div.style.left = `${x}px`;
+
+      const cell = document.elementFromPoint(x, y)?.closest(".react-resizable");
+      cell?.querySelector("textarea")?.focus();
+    }, []);
 
     const onTextAreaBlur = useCallback(() => setIsSelected(false), [setIsSelected]);
 
@@ -222,6 +274,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = React.me
           onChange={onTextAreaChange}
           onFocus={onTextAreaFocus}
           onBlur={onTextAreaBlur}
+          onKeyDown={onTextAreaKeyDown}
         />
       );
     }, [textarea, value, onTextAreaFocus, onTextAreaBlur, onTextAreaChange]);
@@ -248,6 +301,7 @@ export const EditableCell: React.FunctionComponent<EditableCellProps> = React.me
             onClick={onClick}
             style={{ height: `${cellHeight}px` }}
             className={cssClass()}
+            ref={container}
           >
             {readOnlyElement}
             {eventHandlerElement}

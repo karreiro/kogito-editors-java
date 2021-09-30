@@ -39,8 +39,22 @@ export const App: React.FunctionComponent = () => {
   //This definition comes directly from the decision node
   const selectedExpression: ExpressionProps = {
     name: "Expression Name",
-    dataType: DataType.Undefined,
-  };
+    dataType: "<Undefined>",
+    uid: "id1",
+    isHeadless: false,
+    logicType: "Relation",
+    columns: [
+      { name: "column-3", dataType: "<Undefined>", width: 100 },
+      { name: "column-1", dataType: "<Undefined>", width: 100 },
+      { name: "column-2", dataType: "<Undefined>", width: 100 },
+    ],
+    rows: [
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+      ["", "", ""],
+    ],
+  } as ExpressionProps;
 
   const pmmlParams = [
     {
